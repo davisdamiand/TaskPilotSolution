@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="TaskPilot.Client/TaskPilot.Client.csproj" />
+  <Project Path="TaskPilot.Server/TaskPilot.Server.csproj" />
+</Solution>
