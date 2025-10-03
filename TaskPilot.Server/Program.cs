@@ -1,6 +1,12 @@
+using Microsoft.EntityFrameworkCore;
+using TaskPilot.Server.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+//Register context
+builder.Services.AddDbContext<TaskPilotContext>(options =>
+options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="Shared/Shared.csproj" Id="e689650e-2d84-4eba-9c2a-9dd473494322" />
   <Project Path="TaskPilot.Client/TaskPilot.Client.csproj" />
   <Project Path="TaskPilot.Server/TaskPilot.Server.csproj" />
 </Solution>
