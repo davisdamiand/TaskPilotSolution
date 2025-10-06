@@ -7,8 +7,9 @@
     Title="TaskPilot.Client">
 
     <ShellContent
-        Title="Home"
         ContentTemplate="{DataTemplate local:MainPage}"
         Route="MainPage" />
-
+    <ShellContent
+        ContentTemplate="{DataTemplate local:Home}"
+        Route="Home" />
 </Shell>
