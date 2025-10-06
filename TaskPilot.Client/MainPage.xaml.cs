@@ -56,7 +56,7 @@ namespace TaskPilot.Client
             var storedID = Preferences.Get("UserID", null);
             if (!string.IsNullOrEmpty(storedID))
             {
-                await Shell.Current.GoToAsync("//Home");
+               await Shell.Current.GoToAsync("//Home");
             }
         }
 

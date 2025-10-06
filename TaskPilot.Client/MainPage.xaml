@@ -2,21 +2,22 @@
 <ContentPage BackgroundColor="White" xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              Loaded="OnPageLoad"
+             Shell.NavBarIsVisible="False"
              x:Class="TaskPilot.Client.MainPage">
-    
+
 
     <ScrollView>
         <VerticalStackLayout
             Padding="20,40,20,20"
             Spacing="10">
-            
+
             <Label
                 TextColor="Black"
                 Text="Take control of your study"
                 Style="{StaticResource Headline}" />
-            
+
             <Image
-                Source="task_pilot.png"
+                Source="task_pilot_icon.jpg"
                 HeightRequest="185"
                 Aspect="AspectFit"
                 SemanticProperties.Description="TaskPilot icon" />
@@ -28,7 +29,7 @@
                 SemanticProperties.HeadingLevel="Level2"
                 HorizontalOptions="Start"
                 SemanticProperties.Description="name"/>
-                
+
             <Entry
                 x:Name="EntryName"
                 Placeholder="Enter Name:"
@@ -107,7 +108,7 @@
                 TextColor="White"
                 Padding="0,20"
                 BackgroundColor="#3193f8"/>
-            
+
         </VerticalStackLayout>
     </ScrollView>
 
