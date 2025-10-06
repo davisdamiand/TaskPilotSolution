@@ -56,7 +56,9 @@ namespace TaskPilot.Client
             var storedID = Preferences.Get("UserID", null);
             if (!string.IsNullOrEmpty(storedID))
             {
-               await Shell.Current.GoToAsync("//Home");
+             // This will be used to nagigate to home if they have logined in the past
+             // This will be moved to the Login form itself
+              // await Shell.Current.GoToAsync("//Home");
             }
         }
 
@@ -94,5 +96,6 @@ namespace TaskPilot.Client
                 await DisplayAlertAsync("Error", $"{ex.Message}", "OK");
             }
         }
+
     }
 }

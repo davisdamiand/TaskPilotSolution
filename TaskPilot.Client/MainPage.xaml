@@ -1,113 +1,123 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage BackgroundColor="White" xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TaskPilot.Client.MainPage"
              Loaded="OnPageLoad"
              Shell.NavBarIsVisible="False"
-             x:Class="TaskPilot.Client.MainPage">
-
+             BackgroundColor="White">
 
     <ScrollView>
         <VerticalStackLayout
-            Padding="20,40,20,20"
-            Spacing="10">
+            Padding="30,60,30,60"
+            Spacing="20"
+            VerticalOptions="Center"
+            HorizontalOptions="Center">
 
+            <!-- Title -->
             <Label
-                TextColor="Black"
-                Text="Take control of your study"
-                Style="{StaticResource Headline}" />
+                Text="Take control of your studying"
+                FontSize="22"
+                FontAttributes="Bold"
+                TextColor="#1E1E5A"
+                HorizontalOptions="Center"
+                HorizontalTextAlignment="Center"/>
 
+            <!-- Logo -->
             <Image
                 Source="task_pilot_icon.jpg"
-                HeightRequest="185"
+                HeightRequest="140"
                 Aspect="AspectFit"
-                SemanticProperties.Description="TaskPilot icon" />
+                Margin="0,10,0,20"/>
 
+            <!-- Already Registered -->
             <Label
-                TextColor="Black"
-                Text="Name:"
-                Style="{StaticResource SubHeadline}"
-                SemanticProperties.HeadingLevel="Level2"
-                HorizontalOptions="Start"
-                SemanticProperties.Description="name"/>
+                Text="Already Registered? Log in here."
+                FontSize="13"
+                TextColor="#555"
+                HorizontalOptions="Center"
+                Margin="0,0,0,10"/>
 
-            <Entry
-                x:Name="EntryName"
-                Placeholder="Enter Name:"
-                TextColor="Black"
-                PlaceholderColor="White"
-                BackgroundColor="#3193f8"/>
+            <!-- Name -->
+            <Frame
+                BackgroundColor="#F2F2F7"
+                CornerRadius="10"
+                HasShadow="False"
+                Padding="10,5">
+                <Entry
+                    x:Name="EntryName"
+                    Placeholder="Name"
+                    TextColor="#1E1E5A"
+                    PlaceholderColor="#9FA4B2"
+                    BackgroundColor="Transparent"/>
+            </Frame>
 
-            <Label
-                TextColor="Black"
-                Text="Surname:"
-                Style="{StaticResource SubHeadline}"
-                SemanticProperties.HeadingLevel="Level2"
-                HorizontalOptions="Start"
-                SemanticProperties.Description="surname"/>
-
-            <Entry
-                x:Name="EntrySurname"
-                Placeholder="Enter Surname:"
-                TextColor="Black"
-                PlaceholderColor="White"
-                BackgroundColor="#3193f8"/>
-
-
-            <Label
-                TextColor="Black"
-                Text="Email:"
-                Style="{StaticResource SubHeadline}"
-                SemanticProperties.HeadingLevel="Level2"
-                HorizontalOptions="Start"
-                SemanticProperties.Description="Email" />
-
-            <Entry
-                x:Name="EntryEmail"
-                Placeholder="Enter Email:"
-                TextColor="Black"
-                PlaceholderColor="White"
-                BackgroundColor="#3193f8"/>
+            <!-- Surname -->
+            <Frame
+                BackgroundColor="#F2F2F7"
+                CornerRadius="10"
+                HasShadow="False"
+                Padding="10,5">
+                <Entry
+                    x:Name="EntrySurname"
+                    Placeholder="Surname"
+                    TextColor="#1E1E5A"
+                    PlaceholderColor="#9FA4B2"
+                    BackgroundColor="Transparent"/>
+            </Frame>
 
 
-            <Label
-                TextColor="Black"
-                Text="Password:"
-                Style="{StaticResource SubHeadline}"
-                SemanticProperties.HeadingLevel="Level2"
-                HorizontalOptions="Start"
-                SemanticProperties.Description="Password" />
+            <!-- Email -->
+            <Frame
+                BackgroundColor="#F2F2F7"
+                CornerRadius="10"
+                HasShadow="False"
+                Padding="10,5">
+                <Entry
+                    x:Name="EntryEmail"
+                    Placeholder="Email"
+                    TextColor="#1E1E5A"
+                    PlaceholderColor="#9FA4B2"
+                    BackgroundColor="Transparent"/>
+            </Frame>
 
-            <Entry
-                x:Name="EntryPassword"
-                Placeholder="Enter password:"
-                TextColor="Black"
-                PlaceholderColor="White"
-                BackgroundColor="#3193f8"/>
+            <!-- Password -->
+            <Frame
+                BackgroundColor="#F2F2F7"
+                CornerRadius="10"
+                HasShadow="False"
+                Padding="10,5">
+                <Entry
+                    x:Name="EntryPassword"
+                    Placeholder="Password"
+                    IsPassword="True"
+                    TextColor="#1E1E5A"
+                    PlaceholderColor="#9FA4B2"
+                    BackgroundColor="Transparent"/>
+            </Frame>
 
-            <Label
-                TextColor="Black"
-                Text="Date of birth:"
-                Style="{StaticResource SubHeadline}"
-                SemanticProperties.HeadingLevel="Level2"
-                HorizontalOptions="Start"
-                SemanticProperties.Description="Date of birth" />
+            <!-- Date of Birth -->
+            <Frame
+                BackgroundColor="#F2F2F7"
+                CornerRadius="10"
+                HasShadow="False"
+                Padding="10,5">
+                <DatePicker
+                    x:Name="DatePickerDOB"
+                    TextColor="#1E1E5A"
+                    BackgroundColor="Transparent"/>
+            </Frame>
 
-            <DatePicker
-                x:Name="DatePickerDOB"
-                TextColor="Black"
-                FontSize="18"
-                BackgroundColor="White"
-                HorizontalOptions="Center"/>
-
+            <!-- Sign Up Button -->
             <Button
                 x:Name="ButtonRegister"
-                Text="Sign Up" 
-                SemanticProperties.Hint="Register Student"
-                Clicked="OnRegisterClicked"
-                HorizontalOptions="Fill"
+                Text="Sign Up"
+                FontAttributes="Bold"
+                FontSize="16"
                 TextColor="White"
-                Padding="0,20"
-                BackgroundColor="#3193f8"/>
+                BackgroundColor="#1E1E5A"
+                CornerRadius="10"
+                Padding="0,14"
+                Clicked="OnRegisterClicked"/>
 
         </VerticalStackLayout>
     </ScrollView>
