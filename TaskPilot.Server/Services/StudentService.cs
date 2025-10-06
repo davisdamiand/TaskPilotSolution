@@ -45,7 +45,7 @@ namespace TaskPilot.Server.Services
             catch (Exception ex)
             {
                 // Log the exception (ex) here if needed
-
+                Console.WriteLine(ex.Message);
                 throw;
             }
             

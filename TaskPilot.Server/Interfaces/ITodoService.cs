@@ -3,6 +3,6 @@ namespace TaskPilot.Server.Interfaces
 {
     public interface ITodoService
     {
-        Task CreateTodoAsync(TodoCreateDto todoCreateDto);
+        Task<int> CreateTodoAsync(TodoCreateDto todoCreateDto);
     }
 }

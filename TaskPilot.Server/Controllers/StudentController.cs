@@ -29,7 +29,7 @@ namespace TaskPilot.Server.Controllers
                      .Select(x => x.ErrorMessage)
                      .ToList();
 
-                    return BadRequest(new { errors = errors });
+                    return BadRequest(new { errors = errors } );
                 }
 
                 var id = await _studentService.CreateStudentAsync(studentCreateDto);
@@ -43,6 +43,7 @@ namespace TaskPilot.Server.Controllers
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return BadRequest("Student creation failed — ID was not generated.");
             }
         }
@@ -76,8 +77,8 @@ namespace TaskPilot.Server.Controllers
             }
             catch (Exception ex)
             {
-
-                return BadRequest($"{ex.Message}");
+                Console.WriteLine(ex.Message);
+                return BadRequest($"Authenticating student failed");
             }
         }
 

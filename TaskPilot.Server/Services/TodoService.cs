@@ -1,6 +1,6 @@
 ﻿using TaskPilot.Server.Interfaces;
 using Shared.DTOs;
-
+using TaskPilot.Server.Models;
 using TaskPilot.Server.Data;
 using Microsoft.EntityFrameworkCore;
 namespace TaskPilot.Server.Services
@@ -14,7 +14,7 @@ namespace TaskPilot.Server.Services
             _context = context;
         }
 
-        public async Task CreateTodoAsync(TodoCreateDto todoCreateDto)
+        public async Task<int> CreateTodoAsync(TodoCreateDto todoCreateDto)
         {
             try
             {
@@ -22,26 +22,64 @@ namespace TaskPilot.Server.Services
                 var student = await _context.Students.FirstOrDefaultAsync(s => s.Id == todoCreateDto.StudentId);
 
                 if (student == null)
-                    throw new Exception($"There is no student with the {todoCreateDto.StudentId} in the database");
+                    throw new InvalidOperationException($"There is no student with the {todoCreateDto.StudentId} in the database");
 
+                var newTodo = new Todo
+                {
+                    StudentID = student.Id,
+                    Title = todoCreateDto.Name,
+                    Description = todoCreateDto.Description,
+                    DueDate = todoCreateDto.DueDate,
+                    StartTime = todoCreateDto.StartTime,
+                    EndTime = todoCreateDto.EndTime,
+                    PriorityLevel = todoCreateDto.PriorityLevel,
+                };
 
+                
+
+                await _context.Todos.AddAsync(newTodo);
+                await _context.SaveChangesAsync();
+
+                return newTodo.Id;
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                Console.WriteLine(ex);
+                return -1;
             }
+
             
+
         }
 
-        public int PriorityEngine(int currentLevel, DateOnly DueDate)
+        public double CalculatePriority(Todo todo)
         {
-            // Required code
-            return 0;
+            // Base score from user
+            double score = todo.PriorityLevel;
 
+            // Days until due
+            var dueDateTime = todo.DueDate.ToDateTime(todo.EndTime);
+            double daysUntilDue = (dueDateTime - DateTime.Now).TotalDays;
 
-       
+            // Duration in hours
+            double durationHours = todo.EndTime.ToTimeSpan().TotalHours - todo.StartTime.ToTimeSpan().TotalHours;
+            if (durationHours < 0) durationHours += 24; // handle overnight
+
+            // Adjust based on due date
+            if (daysUntilDue <= 1) score -= 1.0;
+            else if (daysUntilDue <= 3) score -= 0.5;
+
+            // Adjust based on task length
+            if (durationHours < 1) score -= 0.5;
+
+            // Store the calculated value
+            todo.PrioritySelection = score;
+
+            return score;
         }
+
+
     }
 }
