@@ -9,7 +9,7 @@
 
         public void OnRegisterClicked(object sender, EventArgs e)
         {
-
+            var name = EntryName.Text;
         }
     }
 }
