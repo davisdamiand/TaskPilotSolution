@@ -36,14 +36,48 @@ namespace TaskPilot.Server.Controllers
 
                 if (id <= 0)
                 {
-                    return BadRequest( new { error = "Student creation failed — ID was not generated." });
+                    return BadRequest("Student creation failed — ID was not generated.");
                 }
 
                 return Ok(id);
             }
             catch (Exception ex)
             {
-                return BadRequest(new { error = "Student creation failed — ID was not generated." });
+                return BadRequest("Student creation failed — ID was not generated.");
+            }
+        }
+
+        [HttpPost]
+        [Route("ValidateStudent")]
+
+        public async Task<IActionResult> ValidateStudent([FromBody] StudentValidationDto studentValidationDto)
+        {
+            try
+            {
+                // Check for any errors
+                if (!ModelState.IsValid)
+                {
+                    var errors = ModelState
+                    .SelectMany(x => x.Value.Errors)
+                    .Select(x => x.ErrorMessage)
+                    .ToList();
+
+                    return BadRequest(new { errors = errors });
+                }
+
+                var id = await _studentService.ValidateStudentAsync(studentValidationDto);
+
+                if (id <= 0)
+                {
+                    return BadRequest("student needs to register" );
+                }
+
+                return Ok(id);
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest($"{ex.Message}");
             }
         }
 

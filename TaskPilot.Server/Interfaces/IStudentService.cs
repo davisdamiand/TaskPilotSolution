@@ -6,6 +6,6 @@ namespace TaskPilot.Server.Interfaces
     {
         Task<int> CreateStudentAsync(StudentCreateDto studentCreateDto);
 
-        Task<bool> ValidateStudentAsync(StudentValidationDto studentValidationDto);
+        Task<int> ValidateStudentAsync(StudentValidationDto studentValidationDto);
     }
 }

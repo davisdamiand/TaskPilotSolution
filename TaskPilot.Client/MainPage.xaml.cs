@@ -71,8 +71,6 @@ namespace TaskPilot.Client
                 var response = await _httpClient.PostAsJsonAsync("api/Student/CreateStudent", studentCreateDto);
 
 
-                await DisplayAlertAsync("Debug", $"Status Code: {response.StatusCode}", "OK");
-
                 if (response.IsSuccessStatusCode)
                 {
                     var id = await response.Content.ReadFromJsonAsync<int>();
