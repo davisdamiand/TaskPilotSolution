@@ -1,7 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage BackgroundColor="White" xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Loaded="OnPageLoad"
              x:Class="TaskPilot.Client.MainPage">
+    
 
     <ScrollView>
         <VerticalStackLayout
@@ -33,7 +35,23 @@
                 TextColor="Black"
                 PlaceholderColor="White"
                 BackgroundColor="#3193f8"/>
-              
+
+            <Label
+                TextColor="Black"
+                Text="Surname:"
+                Style="{StaticResource SubHeadline}"
+                SemanticProperties.HeadingLevel="Level2"
+                HorizontalOptions="Start"
+                SemanticProperties.Description="surname"/>
+
+            <Entry
+                x:Name="EntrySurname"
+                Placeholder="Enter Surname:"
+                TextColor="Black"
+                PlaceholderColor="White"
+                BackgroundColor="#3193f8"/>
+
+
             <Label
                 TextColor="Black"
                 Text="Email:"
