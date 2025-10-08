@@ -8,8 +8,30 @@
 
     <ShellContent
         ContentTemplate="{DataTemplate local:MainPage}"
+        Title="Main"
         Route="MainPage" />
     <ShellContent
-        ContentTemplate="{DataTemplate local:Home}"
-        Route="Home" />
+        ContentTemplate="{DataTemplate local:RegisterPage}"
+        Title="Register"
+        Route="RegisterPage" />
+    <ShellContent
+        ContentTemplate="{DataTemplate local:LoginPage}"
+        Title="Login"
+        Route="LoginPage"/>
+    <ShellContent
+        ContentTemplate="{DataTemplate local:TodoPage}"
+        Title="Todo"
+        Route="TodoPage"/>
+    <ShellContent
+        ContentTemplate="{DataTemplate local:StatsPage}"
+        Title="Stats"
+        Route="StatsPage"/>
+    <ShellContent
+        ContentTemplate="{DataTemplate local:ProfilePage}"
+        Title="Profile"
+        Route="ProfilePage"/>
+    <ShellContent
+        ContentTemplate="{DataTemplate local:CalendarPage}"
+        Title="Calendar"
+        Route="CalendarPage"/>
 </Shell>

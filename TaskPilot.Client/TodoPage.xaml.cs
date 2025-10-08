@@ -1,8 +1,8 @@
 namespace TaskPilot.Client;
 
-public partial class MainPage : ContentPage
+public partial class TodoPage : ContentPage
 {
-	public MainPage()
+	public TodoPage()
 	{
 		InitializeComponent();
 	}
