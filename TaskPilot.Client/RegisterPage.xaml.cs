@@ -56,9 +56,10 @@ namespace TaskPilot.Client
             var storedID = Preferences.Get("UserID", null);
             if (!string.IsNullOrEmpty(storedID))
             {
-             // This will be used to nagigate to home if they have logined in the past
-             // This will be moved to the Login form itself
-              // await Shell.Current.GoToAsync("//Home");
+                // This will be used to nagigate to home if they have logined in the past
+                // This will be moved to the Login form itself
+                // await Shell.Current.GoToAsync("//MainPage");
+
             }
         }
 
@@ -79,7 +80,7 @@ namespace TaskPilot.Client
                     Preferences.Set("UserID", id.ToString());
 
                     //Navigate to the home page
-                    await Shell.Current.GoToAsync("//Home");
+                    await Shell.Current.GoToAsync("//MainPage");
                 }
                 else
                 {
