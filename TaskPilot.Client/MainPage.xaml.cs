@@ -6,4 +6,9 @@ public partial class MainPage : ContentPage
 	{
 		InitializeComponent();
 	}
+
+	public void TodoRedirect()
+	{
+		Shell.Current.GoToAsync("//TodoPage");
+	}
 }
