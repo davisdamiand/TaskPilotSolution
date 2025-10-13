@@ -9,6 +9,11 @@
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
         <Label
-            Text="Hello World Long Day"
+            Text="Hello World Long Day" 
+            />
+
+        <Label 
+            Text="This is my first Label"
+        />
     </VerticalStackLayout>
 </ContentPage>
