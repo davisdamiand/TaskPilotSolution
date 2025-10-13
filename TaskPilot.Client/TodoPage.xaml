@@ -2,7 +2,6 @@
 <ContentPage 
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     x:Class="TaskPilot.Client.TodoPage"
     Shell.NavBarIsVisible="False"
     BackgroundColor="White">
@@ -18,31 +17,28 @@
 
             <!-- Search Bar -->
             <Frame BackgroundColor="#F3F3F3"
-       CornerRadius="8"
-       Padding="10,5"
-       HasShadow="False"
-       HeightRequest="50">
+                   CornerRadius="25"
+                   Padding="10,5"
+                   HasShadow="False"
+                   HeightRequest="50">
                 <Grid ColumnDefinitions="*,Auto">
                     <Entry x:Name="SearchBar"
-               Placeholder="Search"
-               FontSize="14"
-               BackgroundColor="Transparent"
-               TextColor="Black"
-               PlaceholderColor="#999"
-               Margin="10,0"
-               VerticalOptions="Center"
-               HorizontalOptions="FillAndExpand"
-               Visual="Material"/>
+                           Placeholder="Search tasks"
+                           FontSize="14"
+                           BackgroundColor="Transparent"
+                           TextColor="Black"
+                           PlaceholderColor="#999"
+                           Margin="10,0"
+                           VerticalOptions="Center"
+                           HorizontalOptions="FillAndExpand" />
                     <Image Source="search.png"
-               WidthRequest="20"
-               HeightRequest="20"
-               VerticalOptions="Center"
-               HorizontalOptions="End"
-               Margin="0,0,10,0"/>
+                           WidthRequest="20"
+                           HeightRequest="20"
+                           VerticalOptions="Center"
+                           HorizontalOptions="End"
+                           Margin="0,0,10,0"/>
                 </Grid>
             </Frame>
-
-
 
             <!-- Date & Greeting -->
             <Label x:Name="DayLabel"
@@ -83,43 +79,31 @@
                 <Frame BackgroundColor="#E8E2FF" CornerRadius="12" Padding="12">
                     <Grid ColumnDefinitions="*,Auto">
                         <VerticalStackLayout>
-                            <Label Text="Finish UI Design" FontAttributes="Bold" FontSize="16" TextColor="#1E1E5A"/>
+                            <Label Text="Finish UI Design for ITMDA" FontAttributes="Bold" FontSize="16" TextColor="#1E1E5A"/>
                             <Label Text="11:00 - 13:00" FontSize="12" TextColor="#555"/>
                         </VerticalStackLayout>
-                        <Label Grid.Column="1" Text="" FontSize="20" VerticalOptions="Center"/>
                     </Grid>
                 </Frame>
 
                 <Frame BackgroundColor="#DCE6FF" CornerRadius="12" Padding="12">
                     <Grid ColumnDefinitions="*,Auto">
                         <VerticalStackLayout>
-                            <Label Text="Team Meeting" FontAttributes="Bold" FontSize="16" TextColor="#1E1E5A"/>
+                            <Label Text="Teams Meeting" FontAttributes="Bold" FontSize="16" TextColor="#1E1E5A"/>
                             <Label Text="14:00 - 15:30" FontSize="12" TextColor="#555"/>
                         </VerticalStackLayout>
-                        <Label Grid.Column="1" Text="" FontSize="20" VerticalOptions="Center"/>
                     </Grid>
                 </Frame>
 
                 <Frame BackgroundColor="#FCEED8" CornerRadius="12" Padding="12">
                     <Grid ColumnDefinitions="*,Auto">
                         <VerticalStackLayout>
-                            <Label Text="Submit Assignment" FontAttributes="Bold" FontSize="16" TextColor="#1E1E5A"/>
+                            <Label Text="Submit ITBEA Assignment" FontAttributes="Bold" FontSize="16" TextColor="#1E1E5A"/>
                             <Label Text="17:00" FontSize="12" TextColor="#555"/>
                         </VerticalStackLayout>
-                        <Label Grid.Column="1" Text="" FontSize="20" VerticalOptions="Center"/>
                     </Grid>
                 </Frame>
             </VerticalStackLayout>
 
-            <!-- Add New Task Button -->
-            <Button Text="+ New Task"
-                    BackgroundColor="#1E1E5A"
-                    TextColor="White"
-                    FontAttributes="Bold"
-                    CornerRadius="15"
-                    HeightRequest="50"
-                    Clicked="OnNewTaskClicked"
-                    Margin="0,10,0,0"/>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
