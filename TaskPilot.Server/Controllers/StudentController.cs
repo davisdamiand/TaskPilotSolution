@@ -29,21 +29,56 @@ namespace TaskPilot.Server.Controllers
                      .Select(x => x.ErrorMessage)
                      .ToList();
 
-                    return BadRequest(new { errors = errors });
+                    return BadRequest(new { errors = errors } );
                 }
 
                 var id = await _studentService.CreateStudentAsync(studentCreateDto);
 
                 if (id <= 0)
                 {
-                    return BadRequest( new { error = "Student creation failed — ID was not generated." });
+                    return BadRequest("Student creation failed — ID was not generated.");
                 }
 
                 return Ok(id);
             }
             catch (Exception ex)
             {
-                return BadRequest(new { error = "Student creation failed — ID was not generated." });
+                Console.WriteLine(ex.Message);
+                return BadRequest("Student creation failed — ID was not generated.");
+            }
+        }
+
+        [HttpPost]
+        [Route("ValidateStudent")]
+
+        public async Task<IActionResult> ValidateStudent([FromBody] StudentValidationDto studentValidationDto)
+        {
+            try
+            {
+                // Check for any errors
+                if (!ModelState.IsValid)
+                {
+                    var errors = ModelState
+                    .SelectMany(x => x.Value.Errors)
+                    .Select(x => x.ErrorMessage)
+                    .ToList();
+
+                    return BadRequest(new { errors = errors });
+                }
+
+                var id = await _studentService.ValidateStudentAsync(studentValidationDto);
+
+                if (id <= 0)
+                {
+                    return BadRequest("student needs to register" );
+                }
+
+                return Ok(id);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest($"Authenticating student failed");
             }
         }
 

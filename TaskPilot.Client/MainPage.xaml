@@ -1,123 +1,103 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TaskPilot.Client.MainPage"
-             Loaded="OnPageLoad"
              Shell.NavBarIsVisible="False"
              BackgroundColor="White">
 
     <ScrollView>
-        <VerticalStackLayout
-            Padding="30,60,30,60"
-            Spacing="20"
-            VerticalOptions="Center"
-            HorizontalOptions="Center">
+        <VerticalStackLayout Padding="20" Spacing="25">
 
-            <!-- Title -->
-            <Label
-                Text="Take control of your studying"
-                FontSize="22"
-                FontAttributes="Bold"
-                TextColor="#1E1E5A"
-                HorizontalOptions="Center"
-                HorizontalTextAlignment="Center"/>
+            <!-- Header -->
+            <HorizontalStackLayout VerticalOptions="Start" Spacing="10">
+                <Label Text="Hi, Jarren"
+                       FontSize="24"
+                       FontAttributes="Bold"
+                       TextColor="#1E1E5A"
+                       VerticalOptions="Center" />
 
-            <!-- Logo -->
-            <Image
-                Source="task_pilot_icon.jpg"
-                HeightRequest="140"
-                Aspect="AspectFit"
-                Margin="0,10,0,20"/>
+                <SearchBar Placeholder="Search"
+                           PlaceholderColor="#A0A0A0"
+                           TextColor="#1E1E5A"
+                           BackgroundColor="#F2F2F7"
+                           HorizontalOptions="FillAndExpand"
+                           Margin="10,0,0,0"
+                           HeightRequest="40" />
+            </HorizontalStackLayout>
 
-            <!-- Already Registered -->
-            <Label
-                Text="Already Registered? Log in here."
-                FontSize="13"
-                TextColor="#555"
-                HorizontalOptions="Center"
-                Margin="0,0,0,10"/>
-
-            <!-- Name -->
-            <Frame
-                BackgroundColor="#F2F2F7"
-                CornerRadius="10"
-                HasShadow="False"
-                Padding="10,5">
-                <Entry
-                    x:Name="EntryName"
-                    Placeholder="Name"
-                    TextColor="#1E1E5A"
-                    PlaceholderColor="#9FA4B2"
-                    BackgroundColor="Transparent"/>
+            <!-- Description -->
+            <Frame BackgroundColor="#F9F9FB"
+                   CornerRadius="12"
+                   Padding="15"
+                   HasShadow="False">
+                <Label Text="“Stay focused. Keep working towards your goals — one task at a time.”"
+                       FontSize="14"
+                       TextColor="#4A4A6A" />
             </Frame>
 
-            <!-- Surname -->
-            <Frame
-                BackgroundColor="#F2F2F7"
-                CornerRadius="10"
-                HasShadow="False"
-                Padding="10,5">
-                <Entry
-                    x:Name="EntrySurname"
-                    Placeholder="Surname"
-                    TextColor="#1E1E5A"
-                    PlaceholderColor="#9FA4B2"
-                    BackgroundColor="Transparent"/>
-            </Frame>
+            <!-- Ongoing Projects Header -->
+            <HorizontalStackLayout>
+                <Label Text="Ongoing Projects"
+                       FontSize="18"
+                       FontAttributes="Bold"
+                       TextColor="#1E1E5A"
+                       HorizontalOptions="StartAndExpand" />
+                <Label Text="View all"
+                       FontSize="13"
+                       TextColor="#5A5AFF"
+                       HorizontalOptions="End" />
+            </HorizontalStackLayout>
 
+            <!-- Ongoing Projects List -->
+            <VerticalStackLayout Spacing="12">
+                <!-- Project 1 -->
+                <Frame BackgroundColor="#F2F2F7"
+                       CornerRadius="10"
+                       HasShadow="False"
+                       Padding="12">
+                    <VerticalStackLayout>
+                        <Label Text="ITEPA-34 Assignment"
+                               FontSize="15"
+                               FontAttributes="Bold"
+                               TextColor="#1E1E5A" />
+                        <Label Text="Due: 15 June 2025"
+                               FontSize="13"
+                               TextColor="#666" />
+                    </VerticalStackLayout>
+                </Frame>
 
-            <!-- Email -->
-            <Frame
-                BackgroundColor="#F2F2F7"
-                CornerRadius="10"
-                HasShadow="False"
-                Padding="10,5">
-                <Entry
-                    x:Name="EntryEmail"
-                    Placeholder="Email"
-                    TextColor="#1E1E5A"
-                    PlaceholderColor="#9FA4B2"
-                    BackgroundColor="Transparent"/>
-            </Frame>
+                <!-- Project 2 -->
+                <Frame BackgroundColor="#F2F2F7"
+                       CornerRadius="10"
+                       HasShadow="False"
+                       Padding="12">
+                    <VerticalStackLayout>
+                        <Label Text="ITPMA-33 Research"
+                               FontSize="15"
+                               FontAttributes="Bold"
+                               TextColor="#1E1E5A" />
+                        <Label Text="Due: 18 June 2025"
+                               FontSize="13"
+                               TextColor="#666" />
+                    </VerticalStackLayout>
+                </Frame>
 
-            <!-- Password -->
-            <Frame
-                BackgroundColor="#F2F2F7"
-                CornerRadius="10"
-                HasShadow="False"
-                Padding="10,5">
-                <Entry
-                    x:Name="EntryPassword"
-                    Placeholder="Password"
-                    IsPassword="True"
-                    TextColor="#1E1E5A"
-                    PlaceholderColor="#9FA4B2"
-                    BackgroundColor="Transparent"/>
-            </Frame>
-
-            <!-- Date of Birth -->
-            <Frame
-                BackgroundColor="#F2F2F7"
-                CornerRadius="10"
-                HasShadow="False"
-                Padding="10,5">
-                <DatePicker
-                    x:Name="DatePickerDOB"
-                    TextColor="#1E1E5A"
-                    BackgroundColor="Transparent"/>
-            </Frame>
-
-            <!-- Sign Up Button -->
-            <Button
-                x:Name="ButtonRegister"
-                Text="Sign Up"
-                FontAttributes="Bold"
-                FontSize="16"
-                TextColor="White"
-                BackgroundColor="#1E1E5A"
-                CornerRadius="10"
-                Padding="0,14"
-                Clicked="OnRegisterClicked"/>
+                <!-- Project 3 -->
+                <Frame BackgroundColor="#F2F2F7"
+                       CornerRadius="10"
+                       HasShadow="False"
+                       Padding="12">
+                    <VerticalStackLayout>
+                        <Label Text="Study: Project management Chapter 13"
+                               FontSize="15"
+                               FontAttributes="Bold"
+                               TextColor="#1E1E5A" />
+                        <Label Text="Due: 20 June 2025"
+                               FontSize="13"
+                               TextColor="#666" />
+                    </VerticalStackLayout>
+                </Frame>
+            </VerticalStackLayout>
 
         </VerticalStackLayout>
     </ScrollView>

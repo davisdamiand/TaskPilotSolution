@@ -45,20 +45,27 @@ namespace TaskPilot.Server.Services
             catch (Exception ex)
             {
                 // Log the exception (ex) here if needed
-
+                Console.WriteLine(ex.Message);
                 throw;
             }
             
         }
 
-        public async Task<bool> ValidateStudentAsync(StudentValidationDto studentValidationDto)
+        public async Task<int> ValidateStudentAsync(StudentValidationDto studentValidationDto)
         {
             var student = await _context.Students.FirstOrDefaultAsync(s => s.Email == FormatEmail(studentValidationDto.Email));
             if (student == null)
             {
-                return false; // Student not found
+                return -1; // Student not found
             }
-            return PasswordHelper.VerifyPassword(studentValidationDto.Password, student.Password);
+
+            if (PasswordHelper.VerifyPassword(student.Password, studentValidationDto.Password))
+            {
+                return student.Id;
+            }
+
+            return -1;
+            
         }
 
         private static string FormatEmail(string email) => email.Trim().ToLowerInvariant();

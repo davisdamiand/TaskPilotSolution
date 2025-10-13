@@ -6,7 +6,7 @@ namespace TaskPilot.Server.Models
     {
         [Key]
         public int Id { get; set; }
-        public TimeOnly TotalPomoTotalPomodoroSessions { get; set; }
+        public int TotalPomodoroSessions { get; set; }
         public int Streak { get; set; }
         public int TotalCompletedTasks { get; set; }
 
