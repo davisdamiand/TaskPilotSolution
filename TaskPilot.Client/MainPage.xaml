@@ -25,7 +25,7 @@
                            HeightRequest="40" />
             </HorizontalStackLayout>
 
-            <!-- Quote / Description -->
+            <!-- Description -->
             <Frame BackgroundColor="#F9F9FB"
                    CornerRadius="12"
                    Padding="15"
