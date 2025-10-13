@@ -2,16 +2,108 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TaskPilot.Client.LoginPage"
-             Title="LoginPage">
-    <VerticalStackLayout>
-        <Label 
-            x:Name="NameLabel"
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-        <Button
-            x:Name="Run"
-            Text="Run"
-            Clicked="RunOnClick"/>
-    </VerticalStackLayout>
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="White">
+
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="30,80,30,60"
+            Spacing="25"
+            VerticalOptions="Center"
+            HorizontalOptions="Center">
+
+            <!-- Title -->
+            <Label
+                Text="Welcome back!"
+                FontSize="26"
+                FontAttributes="Bold"
+                TextColor="#1E1E5A"
+                HorizontalOptions="Center"
+                HorizontalTextAlignment="Center" />
+
+            <!-- Subtitle -->
+            <Label
+                Text="Log in to continue your journey"
+                FontSize="14"
+                TextColor="#555"
+                HorizontalOptions="Center"
+                HorizontalTextAlignment="Center"
+                Margin="0,0,0,10"/>
+
+            <!-- Logo -->
+            <Image
+                Source="task_pilot_icon.jpg"
+                HeightRequest="140"
+                Aspect="AspectFit"
+                Margin="0,0,0,20"/>
+
+            <!-- Email -->
+            <Frame
+                BackgroundColor="#F2F2F7"
+                CornerRadius="10"
+                HasShadow="False"
+                Padding="10,5">
+                <Entry
+                    x:Name="EntryEmail"
+                    Placeholder="Email"
+                    Keyboard="Email"
+                    TextColor="#1E1E5A"
+                    PlaceholderColor="#9FA4B2"
+                    BackgroundColor="Transparent"/>
+            </Frame>
+
+            <!-- Password -->
+            <Frame
+                BackgroundColor="#F2F2F7"
+                CornerRadius="10"
+                HasShadow="False"
+                Padding="10,5">
+                <Entry
+                    x:Name="EntryPassword"
+                    Placeholder="Password"
+                    IsPassword="True"
+                    TextColor="#1E1E5A"
+                    PlaceholderColor="#9FA4B2"
+                    BackgroundColor="Transparent"/>
+            </Frame>
+
+            <!-- Forgot Password -->
+            <Label
+                Text="Forgot your password?"
+                FontSize="13"
+                TextColor="#1E1E5A"
+                HorizontalOptions="End"
+                Margin="0,-10,0,0">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnForgotPasswordTapped"/>
+                </Label.GestureRecognizers>
+            </Label>
+
+            <!-- Login Button -->
+            <Button
+                x:Name="ButtonLogin"
+                Text="Login"
+                FontAttributes="Bold"
+                FontSize="16"
+                TextColor="White"
+                BackgroundColor="#1E1E5A"
+                CornerRadius="10"
+                Padding="0,14"
+                Clicked="OnLoginClicked"/>
+
+            <!-- Register Navigation -->
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="5" Margin="0,10,0,0">
+                <Label Text="Don't have an account?" FontSize="13" TextColor="#555"/>
+                <Label Text="Sign up"
+                       FontSize="13"
+                       FontAttributes="Bold"
+                       TextColor="#1E1E5A">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnSignUpTapped"/>
+                    </Label.GestureRecognizers>
+                </Label>
+            </HorizontalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>
