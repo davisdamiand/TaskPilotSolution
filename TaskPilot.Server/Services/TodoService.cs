@@ -20,7 +20,7 @@ namespace TaskPilot.Server.Services
             {
                 // check if student exist to assign the task to that student
                 var student = await _context.Students.FirstOrDefaultAsync(s => s.Id == todoCreateDto.StudentId);
-
+                Console.WriteLine(student);
                 if (student == null)
                     throw new InvalidOperationException($"There is no student with the {todoCreateDto.StudentId} in the database");
 

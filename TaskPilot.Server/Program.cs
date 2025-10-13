@@ -11,6 +11,7 @@ builder.Services.AddDbContext<TaskPilotContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<ITodoService, TodoService>();
 
 
 builder.Services.AddControllers();
