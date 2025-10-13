@@ -35,7 +35,7 @@ namespace TaskPilot.Server.Services
                     PriorityLevel = todoCreateDto.PriorityLevel,
                 };
 
-                
+                newTodo.PrioritySelection = CalculatePriority(newTodo);
 
                 await _context.Todos.AddAsync(newTodo);
                 await _context.SaveChangesAsync();
@@ -49,8 +49,6 @@ namespace TaskPilot.Server.Services
                 Console.WriteLine(ex);
                 return -1;
             }
-
-            
 
         }
 

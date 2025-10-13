@@ -29,6 +29,7 @@ namespace TaskPilot.Server.Controllers
                         .SelectMany(x => x.Value.Errors)
                         .Select(x =>  x.ErrorMessage)
                         .ToList();
+                    Console.WriteLine("Validation errors: " + string.Join(", ", errors));
                     return BadRequest(errors);
                 }
 
@@ -36,6 +37,7 @@ namespace TaskPilot.Server.Controllers
 
                 if(id < 0)
                 {
+                    Console.WriteLine("Todo creation failed - student not found or invalid data");
                     return BadRequest("Todo creation failed - student not found or invalid data");
 
                 }
