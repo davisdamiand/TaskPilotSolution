@@ -5,15 +5,13 @@
              Title="LoginPage">
     <VerticalStackLayout>
         <Label 
+            x:Name="NameLabel"
             Text="Welcome to .NET MAUI!"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
-        <Label
-            Text="Hello World Long Day" 
-            />
-
-        <Label 
-            Text="This is my first Label"
-        />
+        <Button
+            x:Name="Run"
+            Text="Run"
+            Clicked="RunOnClick"/>
     </VerticalStackLayout>
 </ContentPage>

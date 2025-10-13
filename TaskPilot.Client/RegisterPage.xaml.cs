@@ -91,7 +91,7 @@ namespace TaskPilot.Client
             }
             catch (Exception ex)
             {
-
+                // Only for debugging
                 await DisplayAlertAsync("Error", $"{ex.Message}", "OK");
             }
         }
