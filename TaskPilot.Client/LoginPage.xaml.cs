@@ -1,6 +1,7 @@
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Shared.DTOs;
+using Shared.Security;
 
 namespace TaskPilot.Client;
 
@@ -60,20 +61,48 @@ public partial class LoginPage : ContentPage
             {
                 var id = await response.Content.ReadFromJsonAsync<int>();
 
-                Preferences.Set("UserID", id.ToString());
+                if (id < 0)
+                {
+                    ShowError("Invalid email or password");
+                    return;
+                }
 
+                Preferences.Set("UserID", id.ToString());
                 await Shell.Current.GoToAsync("//MainPage");
             }
             else
             {
-                throw new Exception("Failed to login student");
+                var errorResponse = await response.Content.ReadFromJsonAsync<ErrorResponse>();
+                if (errorResponse?.Errors != null && errorResponse.Errors.Any())
+                {
+                    // Show field-specific errors
+                    if (errorResponse.Errors.ContainsKey("Email"))
+                        EmailErrorLabel.Text = string.Join("\n", errorResponse.Errors["Email"]);
+
+                    if (errorResponse.Errors.ContainsKey("Password"))
+                        PasswordErrorLabel.Text = string.Join("\n", errorResponse.Errors["Password"]);
+
+                    EmailErrorLabel.IsVisible = errorResponse.Errors.ContainsKey("Email");
+                    PasswordErrorLabel.IsVisible = errorResponse.Errors.ContainsKey("Password");
+                }
+                else
+                {
+                    // Fallback to general message
+                    ShowError(errorResponse?.Message ?? "An unknown error occurred");
+                }
             }
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-
-          await  DisplayAlertAsync("Error", "Failed to login student", "Ok");
+            ShowError(ex.Message);
         }
     }
+
+    private void ShowError(string message)
+    {
+        GeneralErrorLabel.Text = message;
+        GeneralErrorLabel.IsVisible = true;
+    }
+
 
 }

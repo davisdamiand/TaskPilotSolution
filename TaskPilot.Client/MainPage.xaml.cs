@@ -5,8 +5,6 @@ public partial class MainPage : ContentPage
 	public MainPage()
 	{
 		InitializeComponent();
-        Preferences.Remove("UserID");
-
     }
 
 	public async void OnLoad(object sender, EventArgs e)
