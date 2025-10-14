@@ -68,17 +68,16 @@
             </Frame>
 
             <!-- Forgot Password -->
-            <Label
+            <Button 
                 Text="Forgot your password?"
                 FontSize="13"
                 TextColor="#1E1E5A"
+                BackgroundColor="Transparent"
+                BorderWidth="0"
+                Padding="0"
                 HorizontalOptions="End"
-                Margin="0,-10,0,0">
-                <Label.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="OnForgotPasswordTapped"/>
-                </Label.GestureRecognizers>
-            </Label>
-
+                Clicked="OnForgotPasswordClicked"
+                />
             <!-- Login Button -->
             <Button
                 x:Name="ButtonLogin"
@@ -94,14 +93,19 @@
             <!-- Register Navigation -->
             <HorizontalStackLayout HorizontalOptions="Center" Spacing="5" Margin="0,10,0,0">
                 <Label Text="Don't have an account?" FontSize="13" TextColor="#555"/>
-                <Label Text="Sign up"
-                       FontSize="13"
-                       FontAttributes="Bold"
-                       TextColor="#1E1E5A">
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnSignUpTapped"/>
-                    </Label.GestureRecognizers>
-                </Label>
+
+                <Button 
+                    x:Name="ButtonSignUp"
+                    Text="Sign up"
+                    FontSize="13"
+                    FontAttributes="Bold"
+                    TextColor="#1E1E5A"
+                    HeightRequest="20"
+                    BackgroundColor="Transparent"
+                    BorderWidth="0"
+                    Padding="0"
+                    HorizontalOptions="Start"
+                    Clicked="OnSignUpClicked"/> 
             </HorizontalStackLayout>
 
         </VerticalStackLayout>

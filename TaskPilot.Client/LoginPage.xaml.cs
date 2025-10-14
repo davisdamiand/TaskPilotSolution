@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using System.Threading.Tasks;
 using Shared.DTOs;
 
 namespace TaskPilot.Client;
@@ -7,41 +8,72 @@ public partial class LoginPage : ContentPage
 {
     private readonly HttpClient _httpClient;
 
-    // Add a reference to the NameLabel control
-    private Label NameLabel;
-
     public LoginPage()
 	{
-        // Ensure the correct namespace is used for InitializeComponent
-        // If this is a .NET MAUI or Xamarin.Forms project, this method is auto-generated
-        // and should be available in the partial class.
-        this.InitializeComponent(); // Add 'this.' to call the method from the partial class
+        InitializeComponent(); 
 
         _httpClient = new HttpClient
         {
             BaseAddress = new Uri(Config.BaseUrl)
         };
 
-        // Find the NameLabel control from the XAML by its name
-        NameLabel = this.FindByName<Label>("NameLabel");
     }
 
-    private async void RunOnClick(object sender, EventArgs e)
-	{
+    //Navigate to forget password page
+    private void OnForgotPasswordClicked(object sender, EventArgs e)
+    {
+        Shell.Current.GoToAsync("//ForgotPasswordPage");
+    }
+
+    private async void OnLoginClicked(object sender, EventArgs e)
+    {
+        //Set the values
+        string email = EntryEmail.Text?.Trim();
+        string password = EntryPassword.Text?.Trim();
+
+        var loginStudent = new StudentValidationDto
+        {
+            Email = email,
+            Password = password
+        };
+
+        ButtonSignUp.IsEnabled = false;
+
+        await ValidateStudent(loginStudent);
+
+        ButtonSignUp.IsEnabled = true;
+    }
+
+    // Navigation 
+    private void OnSignUpClicked(object sender, EventArgs e)
+    {
+        Shell.Current.GoToAsync("//RegisterPage");
+    }
+
+    private async Task ValidateStudent(StudentValidationDto studentValidationDto)
+    {
         try
         {
-            var student = new StudentValidationDto
-            {
-                Email = "steve@gmail.com",
-                Password = "122445456456546",
-            };
-            var response = await _httpClient.PostAsJsonAsync("api/Student/ValidateStudent", student);
+            var response = await _httpClient.PostAsJsonAsync("api/Student/ValidateStudent", studentValidationDto);
 
-            NameLabel.Text = response.StatusCode.ToString();
+            if (response.IsSuccessStatusCode)
+            {
+                var id = await response.Content.ReadFromJsonAsync<int>();
+
+                Preferences.Set("UserID", id.ToString());
+
+                await Shell.Current.GoToAsync("//MainPage");
+            }
+            else
+            {
+                throw new Exception("Failed to login student");
+            }
         }
         catch (Exception)
         {
-            NameLabel.Text = "Server offline";
-        }  
+
+          await  DisplayAlertAsync("Error", "Failed to login student", "Ok");
+        }
     }
+
 }

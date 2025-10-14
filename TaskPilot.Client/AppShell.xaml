@@ -34,4 +34,8 @@
         ContentTemplate="{DataTemplate local:CalendarPage}"
         Title="Calendar"
         Route="CalendarPage"/>
+    <ShellContent
+        ContentTemplate="{DataTemplate local:ForgotPasswordPage}"
+        Title="Forgot Password"
+        Route="ForgotPasswordPage"/>
 </Shell>
