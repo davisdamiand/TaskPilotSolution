@@ -66,7 +66,7 @@ public partial class LoginPage : ContentPage
                     ShowError("Invalid email or password");
                     return;
                 }
-
+                await GetStudentInformation(id);
                 Preferences.Set("UserID", id.ToString());
                 await Shell.Current.GoToAsync("//MainPage");
             }
@@ -102,6 +102,37 @@ public partial class LoginPage : ContentPage
     {
         GeneralErrorLabel.Text = message;
         GeneralErrorLabel.IsVisible = true;
+    }
+
+    private async Task GetStudentInformation(int id)
+    {
+        try
+        {
+            var response = await _httpClient.PostAsJsonAsync("api/Student/GetStudentById", id);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var student = await response.Content.ReadFromJsonAsync<StudentGetDto>();
+                if (student != null)
+                {
+                    Preferences.Set("StudentName", student.Name);
+                    Preferences.Set("StudentSurname", student.Surname);
+                }
+                else
+                {
+                    ShowError("Failed to retrieve student information.");
+                }
+            }
+            else
+            {
+                ShowError("Failed to retrieve student information.");
+            }
+        }
+        catch (Exception)
+        {
+
+            ButtonLogin.BackgroundColor = Colors.Red;
+        }
     }
 
 

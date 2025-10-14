@@ -98,5 +98,30 @@ namespace TaskPilot.Server.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("GetStudentById")]
+        public async Task<IActionResult> GetStudentById([FromBody] int id)
+        {
+            try
+            {
+                var student = await _studentService.GetStudentByIdAsync(id);
+                if (student == null)
+                {
+                    return NotFound(new ErrorResponse
+                    {
+                        Message = "Student not found"
+                    });
+                }
+                return Ok(student);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest(new ErrorResponse
+                {
+                    Message = "Failed to retrieve student"
+                });
+            }
+        }
     }
 }

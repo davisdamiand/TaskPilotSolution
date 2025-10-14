@@ -6,7 +6,7 @@ namespace TaskPilot.Client
 {
     public partial class RegisterPage : ContentPage
     {
-        private int studentID;
+        string name = "";
 
         private readonly HttpClient _httpClient;
 
@@ -25,7 +25,7 @@ namespace TaskPilot.Client
         public async void OnRegisterClicked(object sender, EventArgs e)
         {
             //Get the values form the Page
-            string name = EntryName.Text?.Trim();
+            name = EntryName.Text?.Trim();
             string email = EntryEmail.Text?.Trim();
             string password = EntryPassword.Text;
             DateOnly dob = DateOnly.FromDateTime((DateTime)DatePickerDOB.Date);
@@ -78,6 +78,7 @@ namespace TaskPilot.Client
 
                     //Store the ID of the created student locally for quick logins 
                     Preferences.Set("UserID", id.ToString());
+                    Preferences.Set("UserName", name);
 
                     //Navigate to the home page
                     await Shell.Current.GoToAsync("//MainPage");

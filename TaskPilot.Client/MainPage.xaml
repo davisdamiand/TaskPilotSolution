@@ -12,7 +12,8 @@
 
             <!-- Header -->
             <HorizontalStackLayout VerticalOptions="Start" Spacing="10">
-                <Label Text="Hi, Jarren"
+                <Label Text="Name"
+                       x:Name="LabelStudentName"
                        FontSize="24"
                        FontAttributes="Bold"
                        TextColor="#1E1E5A"
