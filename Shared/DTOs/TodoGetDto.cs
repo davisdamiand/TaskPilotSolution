@@ -16,15 +16,14 @@ namespace Shared.DTOs
         [StringLength(500, ErrorMessage = "Description cannot exceed 500 characters")]
         public string Description { get; set; } = string.Empty;
 
-        [Range(1, 3, ErrorMessage = "Priority must be between 1 (Low), 2 (Medium), 3 (High)")]
-        public int PrioritySelection { get; set; }
+        public double PrioritySelection { get; set; }
 
-        [Range(1, int.MaxValue, ErrorMessage = "Time spent must be greater than 0 minutes")]
-        public TimeOnly TimeSpent { get; set; }   // e.g. 100 = 100 minutes
+        public int TimeSpentMinutes { get; set; }
+
 
         [Required(ErrorMessage = "Due date is required")]
         public DateOnly DueDate { get; set; }
-
+        
         [Required(ErrorMessage = "Start time is required")]
         public TimeOnly StartTime { get; set; }
 
@@ -40,6 +39,16 @@ namespace Shared.DTOs
                 return new ValidationResult("End time must be later than start time");
             }
             return ValidationResult.Success!;
+        }
+
+        public double Progress
+        {
+            get
+            {
+                var totalMinutes = EndTime.ToTimeSpan().TotalMinutes - StartTime.ToTimeSpan().TotalMinutes;
+                if (totalMinutes <= 0) return 0;
+                return Math.Clamp(TimeSpentMinutes / totalMinutes, 0, 1);
+            }
         }
     }
 }

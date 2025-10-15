@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Shared.DTOs;
 using TaskPilot.Server.Interfaces;
+using Shared.Security;
 
 
 namespace TaskPilot.Server.Controllers
@@ -48,6 +49,44 @@ namespace TaskPilot.Server.Controllers
             {
                 Console.WriteLine(ex);
                 return BadRequest("Todo creation failed -Id was not generated");
+            }
+        }
+
+        [HttpPost]
+        [Route("GetTodos")]
+        public async Task<IActionResult> GetTodos([FromBody] int studentId)
+        {
+            try
+            {
+                //If something went wrong
+                if (!ModelState.IsValid)
+                {
+                    var errors = ModelState
+                       .SelectMany(x => x.Value.Errors)
+                       .Select(x => x.ErrorMessage)
+                       .ToList();
+
+                    Console.WriteLine("Validation errors: " + string.Join(", ", errors));
+
+                    return BadRequest(new ErrorResponse
+                    {
+                        Message = "Failed to get Todos"
+                    });
+                }
+
+                var listOfTodos = await _todoService.GetTodosByStudentIdAsync(studentId);
+
+                return Ok(listOfTodos);
+
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+                return BadRequest(new ErrorResponse
+                {
+                    Message = "Failed to get todos"
+                });
             }
         }
     }

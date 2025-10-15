@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TaskPilot.Client.MainPage"
              Shell.NavBarIsVisible="False"
-             Loaded="OnLoad"
              BackgroundColor="White">
              
 
@@ -51,56 +50,73 @@
                        HorizontalOptions="End" />
             </HorizontalStackLayout>
 
-            <!-- Ongoing Projects List -->
-            <VerticalStackLayout Spacing="12">
-                <!-- Project 1 -->
-                <Frame BackgroundColor="#F2F2F7"
-                       CornerRadius="10"
-                       HasShadow="False"
-                       Padding="12">
-                    <VerticalStackLayout>
-                        <Label Text="ITEPA-34 Assignment"
-                               FontSize="15"
-                               FontAttributes="Bold"
-                               TextColor="#1E1E5A" />
-                        <Label Text="Due: 15 June 2025"
-                               FontSize="13"
-                               TextColor="#666" />
-                    </VerticalStackLayout>
-                </Frame>
+            <CollectionView x:Name="TodosCollection"
+                ItemsSource="{Binding listOfTodos}"
+                SelectionMode="None"
+                Margin="0,10,0,0">
 
-                <!-- Project 2 -->
-                <Frame BackgroundColor="#F2F2F7"
-                       CornerRadius="10"
-                       HasShadow="False"
-                       Padding="12">
-                    <VerticalStackLayout>
-                        <Label Text="ITPMA-33 Research"
-                               FontSize="15"
-                               FontAttributes="Bold"
-                               TextColor="#1E1E5A" />
-                        <Label Text="Due: 18 June 2025"
-                               FontSize="13"
-                               TextColor="#666" />
-                    </VerticalStackLayout>
-                </Frame>
+                <!-- Use GridItemsLayout for tile format -->
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical"
+                         Span="2"
+                         HorizontalItemSpacing="12"
+                         VerticalItemSpacing="12"/>
+                </CollectionView.ItemsLayout>
 
-                <!-- Project 3 -->
-                <Frame BackgroundColor="#F2F2F7"
-                       CornerRadius="10"
-                       HasShadow="False"
-                       Padding="12">
-                    <VerticalStackLayout>
-                        <Label Text="Study: Project management Chapter 13"
-                               FontSize="15"
-                               FontAttributes="Bold"
-                               TextColor="#1E1E5A" />
-                        <Label Text="Due: 20 June 2025"
-                               FontSize="13"
-                               TextColor="#666" />
+                <!-- Empty state -->
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout Padding="20"
+                             HorizontalOptions="Center"
+                             VerticalOptions="Center">
+                        <Label Text="No tasks yet 🎉"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   TextColor="#1E1E5A"
+                   HorizontalOptions="Center"/>
+                        <Label Text="Add your first task to get started."
+                   FontSize="14"
+                   TextColor="#666"
+                   HorizontalOptions="Center"/>
                     </VerticalStackLayout>
-                </Frame>
-            </VerticalStackLayout>
+                </CollectionView.EmptyView>
+
+                <!-- Template for each todo -->
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame BackgroundColor="#F2F2F7"
+                   CornerRadius="10"
+                   HasShadow="True"
+                   Padding="12"
+                   Margin="4">
+                            <VerticalStackLayout Spacing="6">
+
+                                <!-- Title -->
+                                <Label Text="{Binding Title}"
+                           FontSize="15"
+                           FontAttributes="Bold"
+                           TextColor="#1E1E5A" />
+
+                                <!-- Due Date -->
+                                <Label Text="{Binding DueDate, StringFormat='Due: {0:dd MMM yyyy}'}"
+                           FontSize="13"
+                           TextColor="#666" />
+
+                                <!-- Progress -->
+                                <ProgressBar Progress="{Binding Progress}"
+                                 ProgressColor="#4CAF50"
+                                 HeightRequest="6"
+                                 VerticalOptions="Center"
+                                 Margin="0,4,0,0"/>
+
+                                <!-- Time Spent -->
+                                <Label Text="{Binding TimeSpentMinutes, StringFormat='Time Spent: {0} min'}"
+                           FontSize="12"
+                           TextColor="#555"/>
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
 
         </VerticalStackLayout>
     </ScrollView>

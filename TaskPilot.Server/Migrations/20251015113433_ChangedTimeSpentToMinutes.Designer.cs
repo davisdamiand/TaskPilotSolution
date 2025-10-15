@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TaskPilot.Server.Data;
 
@@ -11,9 +12,11 @@ using TaskPilot.Server.Data;
 namespace TaskPilot.Server.Migrations
 {
     [DbContext(typeof(TaskPilotContext))]
-    partial class TaskPilotContextModelSnapshot : ModelSnapshot
+    [Migration("20251015113433_ChangedTimeSpentToMinutes")]
+    partial class ChangedTimeSpentToMinutes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

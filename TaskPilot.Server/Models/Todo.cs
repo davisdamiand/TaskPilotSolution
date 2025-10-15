@@ -13,7 +13,7 @@ namespace TaskPilot.Server.Models
         public TimeOnly EndTime { get; set; }
         public int PriorityLevel { get; set; }
         public double PrioritySelection { get; set; }
-        public TimeOnly TimeSpent { get; set; }
+        public int TimeSpentMinutes { get; set; }
         public bool IsCompleted { get; set; }
 
         public int StudentID { get; set; }

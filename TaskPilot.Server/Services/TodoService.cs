@@ -78,6 +78,26 @@ namespace TaskPilot.Server.Services
             return score;
         }
 
+        public async Task<List<TodoGetDto>> GetTodosByStudentIdAsync(int studentID)
+        {
+            var listOfTodos = await _context.Todos
+            .Where(s => s.StudentID == studentID)
+            .OrderBy(t => t.PrioritySelection)
+            .Select(t => new TodoGetDto
+            {
+                Id = t.Id,
+                Title = t.Title,
+                Description = t.Description,
+                PrioritySelection = t.PrioritySelection,
+                TimeSpentMinutes = t.TimeSpentMinutes,
+                DueDate = t.DueDate,
+                StartTime = t.StartTime,
+                EndTime = t.EndTime
 
+            })
+            .ToListAsync();
+
+            return listOfTodos;
+        }
     }
 }

@@ -84,7 +84,8 @@ namespace TaskPilot.Server.Services
         {
             var totalMinutes = await _context.Todos
                 .Where(t => t.StudentID == statsCalculateDto.StudentID)
-                .SumAsync(t => t.TimeSpent.Hour * 60 + t.TimeSpent.Minute);
+                .SumAsync(t => t.TimeSpentMinutes);
+
 
             stats.TotalPomodoroSessions = totalMinutes / 25;
 
