@@ -6,105 +6,95 @@
     Shell.NavBarIsVisible="False"
     BackgroundColor="White">
 
+    <ContentPage.Resources>
+        <!-- Global Styles -->
+        <Style TargetType="Label">
+            <Setter Property="TextColor" Value="Black"/>
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+
+        <Style TargetType="Entry">
+            <Setter Property="TextColor" Value="Black"/>
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+
+        <Style TargetType="RadioButton">
+            <Setter Property="TextColor" Value="Black"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Margin" Value="0,0"/>
+        </Style>
+
+        <Style TargetType="Button">
+            <Setter Property="TextColor" Value="White"/>
+            <Setter Property="BackgroundColor" Value="#0078D7"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Margin" Value="20,10"/>
+            <Setter Property="HorizontalOptions" Value="Fill"/>
+        </Style>
+    </ContentPage.Resources>
+
     <ScrollView>
-        <VerticalStackLayout Padding="20,40,20,30" Spacing="15">
+        <StackLayout Padding="20" Spacing="12">
 
-            <!-- HEADER -->
-            <Label Text="Jarren"
-                   FontSize="28"
-                   FontAttributes="Bold"
-                   TextColor="#1E1E5A"/>
+            <Label x:Name="LableStudentName" Text="Name here"/>
 
-            <!-- Search Bar -->
-            <Frame BackgroundColor="#F3F3F3"
-                   CornerRadius="25"
-                   Padding="10,5"
-                   HasShadow="False"
-                   HeightRequest="50">
-                <Grid ColumnDefinitions="*,Auto">
-                    <Entry x:Name="SearchBar"
-                           Placeholder="Search tasks"
-                           FontSize="14"
-                           BackgroundColor="Transparent"
-                           TextColor="Black"
-                           PlaceholderColor="#999"
-                           Margin="10,0"
-                           VerticalOptions="Center"
-                           HorizontalOptions="FillAndExpand" />
-                    <Image Source="search.png"
-                           WidthRequest="20"
-                           HeightRequest="20"
-                           VerticalOptions="Center"
-                           HorizontalOptions="End"
-                           Margin="0,0,10,0"/>
-                </Grid>
+            <Entry x:Name="EntryTodoName"
+                   Placeholder="Enter task name"
+                   HorizontalOptions="Fill"/>
+
+            <Label Text="Time"/>
+            <Frame
+                BackgroundColor="#F2F2F7"
+                CornerRadius="10"
+                HasShadow="False"
+                Padding="10,5"
+                HorizontalOptions="Center">
+                <TimePicker x:Name="TimePickerStart"
+                        Format="HH:mm"
+                        Time="00:00:00"
+                        TextColor="Black"/>
+            </Frame>
+            <Frame
+                BackgroundColor="#F2F2F7"
+                CornerRadius="10"
+                HasShadow="False"
+                Padding="10,5"
+                HorizontalOptions="Center">
+                <TimePicker x:Name="TimePickerEnd"
+                        Format="HH:mm"
+                        Time="23:59:00"
+                        TextColor="Black"/>
             </Frame>
 
-            <!-- Date & Greeting -->
-            <Label x:Name="DayLabel"
-                   FontSize="16"
-                   TextColor="#555"
-                   Text="Today, Monday 13 October 2025" />
-            <Label Text="Your Tasks for Today"
-                   FontAttributes="Bold"
-                   FontSize="20"
-                   TextColor="#1E1E5A"/>
 
-            <!-- Summary Stats -->
-            <HorizontalStackLayout Spacing="10">
-                <Frame BackgroundColor="#E8E2FF" CornerRadius="15" Padding="10" WidthRequest="100">
-                    <VerticalStackLayout>
-                        <Label Text="Ongoing" FontAttributes="Bold" TextColor="#1E1E5A" FontSize="12"/>
-                        <Label Text="3" FontSize="20" FontAttributes="Bold" TextColor="#1E1E5A"/>
-                    </VerticalStackLayout>
-                </Frame>
+            <Label Text="Due Date"/>
+            <DatePicker x:Name="DatePickerDueDate"
+                        TextColor="Black"/>
+            <Label Text="Priority"/>
+            <FlexLayout Wrap="Wrap" JustifyContent="Start" AlignItems="Center">
+                <RadioButton Content="1" GroupName="PriorityGroup" Value="1"/>
+                <RadioButton Content="2" GroupName="PriorityGroup" Value="2"/>
+                <RadioButton Content="3" GroupName="PriorityGroup" Value="3"/>
+                <RadioButton Content="4" GroupName="PriorityGroup" Value="4"/>
+                <RadioButton Content="5" GroupName="PriorityGroup" Value="5" IsChecked="True"/>
+            </FlexLayout>
 
-                <Frame BackgroundColor="#DCE6FF" CornerRadius="15" Padding="10" WidthRequest="100">
-                    <VerticalStackLayout>
-                        <Label Text="Completed" FontAttributes="Bold" TextColor="#1E1E5A" FontSize="12"/>
-                        <Label Text="5" FontSize="20" FontAttributes="Bold" TextColor="#1E1E5A"/>
-                    </VerticalStackLayout>
-                </Frame>
 
-                <Frame BackgroundColor="#FCEED8" CornerRadius="15" Padding="10" WidthRequest="100">
-                    <VerticalStackLayout>
-                        <Label Text="Upcoming" FontAttributes="Bold" TextColor="#1E1E5A" FontSize="12"/>
-                        <Label Text="2" FontSize="20" FontAttributes="Bold" TextColor="#1E1E5A"/>
-                    </VerticalStackLayout>
-                </Frame>
-            </HorizontalStackLayout>
+            <Label Text="Description"/>
+            <Frame
+                BackgroundColor="#F2F2F7"
+                CornerRadius="10"
+                HasShadow="False"
+                Padding="10,5">
+                <Entry x:Name="EntryDescription"
+                       Placeholder="Enter description"
+                       TextColor="Black"/>
+            </Frame>
 
-            <!-- Task List -->
-            <VerticalStackLayout x:Name="TaskList" Spacing="15" Margin="0,10,0,0">
-                <Frame BackgroundColor="#E8E2FF" CornerRadius="12" Padding="12">
-                    <Grid ColumnDefinitions="*,Auto">
-                        <VerticalStackLayout>
-                            <Label Text="Finish UI Design for ITMDA" FontAttributes="Bold" FontSize="16" TextColor="#1E1E5A"/>
-                            <Label Text="11:00 - 13:00" FontSize="12" TextColor="#555"/>
-                        </VerticalStackLayout>
-                    </Grid>
-                </Frame>
-
-                <Frame BackgroundColor="#DCE6FF" CornerRadius="12" Padding="12">
-                    <Grid ColumnDefinitions="*,Auto">
-                        <VerticalStackLayout>
-                            <Label Text="Teams Meeting" FontAttributes="Bold" FontSize="16" TextColor="#1E1E5A"/>
-                            <Label Text="14:00 - 15:30" FontSize="12" TextColor="#555"/>
-                        </VerticalStackLayout>
-                    </Grid>
-                </Frame>
-
-                <Frame BackgroundColor="#FCEED8" CornerRadius="12" Padding="12">
-                    <Grid ColumnDefinitions="*,Auto">
-                        <VerticalStackLayout>
-                            <Label Text="Submit ITBEA Assignment" FontAttributes="Bold" FontSize="16" TextColor="#1E1E5A"/>
-                            <Label Text="17:00" FontSize="12" TextColor="#555"/>
-                        </VerticalStackLayout>
-                    </Grid>
-                </Frame>
-            </VerticalStackLayout>
-
-        </VerticalStackLayout>
+            <Button x:Name="ButtonSave"
+                    Text="Save"
+                    HeightRequest="60"
+                    Clicked="OnSaveClicked"/>
+        </StackLayout>
     </ScrollView>
 </ContentPage>
-

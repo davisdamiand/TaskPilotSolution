@@ -8,16 +8,24 @@ public partial class TodoPage : ContentPage
 {
 	private readonly HttpClient _httpClient = new();
 
+
+
     public TodoPage()
 	{
 		InitializeComponent();
 
-		_httpClient = new HttpClient
+        DatePickerDueDate.Date = DateTime.Now; // Set default date to today
+
+        _httpClient = new HttpClient
 		{
 			BaseAddress = new Uri(Config.BaseUrl)
 		};
 	}
 
+	public async void OnSaveClicked(object sender, EventArgs args)
+	{
+		// code here
+	}
 	private async Task CreateTodoAsync(TodoCreateDto todoCreateDto)
 	{
 		try
