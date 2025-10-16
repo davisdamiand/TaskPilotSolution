@@ -32,6 +32,7 @@ public partial class MainPage : ContentPage
 
         if (string.IsNullOrEmpty(storedID))
         {
+            await Task.Yield();
             await Shell.Current.GoToAsync("//LoginPage");
             return;
         }

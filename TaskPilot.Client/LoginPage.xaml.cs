@@ -2,6 +2,7 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Shared.DTOs;
 using Shared.Security;
+using Microsoft.Maui.Storage;
 
 namespace TaskPilot.Client;
 
@@ -21,9 +22,9 @@ public partial class LoginPage : ContentPage
     }
 
     //Navigate to forget password page
-    private void OnForgotPasswordClicked(object sender, EventArgs e)
+    private async void OnForgotPasswordClicked(object sender, EventArgs e)
     {
-        Shell.Current.GoToAsync("//ForgotPasswordPage");
+        await Shell.Current.GoToAsync("//ForgotPasswordPage");
     }
 
     private async void OnLoginClicked(object sender, EventArgs e)
@@ -46,9 +47,9 @@ public partial class LoginPage : ContentPage
     }
 
     // Navigation 
-    private void OnSignUpClicked(object sender, EventArgs e)
+    private async void OnSignUpClicked(object sender, EventArgs e)
     {
-        Shell.Current.GoToAsync("//RegisterPage");
+        await Shell.Current.GoToAsync("//RegisterPage");
     }
 
     private async Task ValidateStudent(StudentValidationDto studentValidationDto)
