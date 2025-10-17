@@ -8,9 +8,9 @@ namespace TaskPilot.Server.Models
         public int Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public DateOnly DueDate { get; set; }
-        public TimeOnly StartTime { get; set; }
-        public TimeOnly EndTime { get; set; }
+        public DateTime DueDateTime { get; set; }
+        public DateTime StartDateTime { get; set; }
+        public DateTime EndDateTime { get; set; }
         public int PriorityLevel { get; set; }
         public double PrioritySelection { get; set; }
         public int TimeSpentMinutes { get; set; }

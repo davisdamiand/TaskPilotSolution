@@ -29,9 +29,7 @@ namespace TaskPilot.Server.Services
                     StudentID = student.Id,
                     Title = todoCreateDto.Name,
                     Description = todoCreateDto.Description,
-                    DueDate = todoCreateDto.DueDate,
-                    StartTime = todoCreateDto.StartTime,
-                    EndTime = todoCreateDto.EndTime,
+                    DueDateTime = todoCreateDto.DueDateTime,
                     PriorityLevel = todoCreateDto.PriorityLevel,
                 };
 
@@ -58,19 +56,12 @@ namespace TaskPilot.Server.Services
             double score = todo.PriorityLevel;
 
             // Days until due
-            var dueDateTime = todo.DueDate.ToDateTime(todo.EndTime);
+            var dueDateTime = todo.DueDateTime;
             double daysUntilDue = (dueDateTime - DateTime.Now).TotalDays;
-
-            // Duration in hours
-            double durationHours = todo.EndTime.ToTimeSpan().TotalHours - todo.StartTime.ToTimeSpan().TotalHours;
-            if (durationHours < 0) durationHours += 24; // handle overnight
 
             // Adjust based on due date
             if (daysUntilDue <= 1) score -= 1.0;
             else if (daysUntilDue <= 3) score -= 0.5;
-
-            // Adjust based on task length
-            if (durationHours < 1) score -= 0.5;
 
             // Store the calculated value
             todo.PrioritySelection = score;
@@ -90,9 +81,9 @@ namespace TaskPilot.Server.Services
                 Description = t.Description,
                 PrioritySelection = t.PrioritySelection,
                 TimeSpentMinutes = t.TimeSpentMinutes,
-                DueDate = t.DueDate,
-                StartTime = t.StartTime,
-                EndTime = t.EndTime
+                DueDateTime = t.DueDateTime,
+                StartDateTime = t.StartDateTime,
+                EndDateTime = t.EndDateTime
 
             })
             .ToListAsync();

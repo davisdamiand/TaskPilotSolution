@@ -20,33 +20,32 @@ namespace Shared.DTOs
 
         public int TimeSpentMinutes { get; set; }
 
-
         [Required(ErrorMessage = "Due date is required")]
-        public DateOnly DueDate { get; set; }
-        
+        public DateTime DueDateTime { get; set; }
+
         [Required(ErrorMessage = "Start time is required")]
-        public TimeOnly StartTime { get; set; }
+        public DateTime StartDateTime { get; set; }
 
         [Required(ErrorMessage = "End time is required")]
         [CustomValidation(typeof(TodoGetDto), nameof(ValidateEndTime))]
-        public TimeOnly EndTime { get; set; }
+        public DateTime EndDateTime { get; set; }
 
-        public static ValidationResult ValidateEndTime(TimeOnly endTime, ValidationContext context)
+        public static ValidationResult ValidateEndTime(DateTime endTime, ValidationContext context)
         {
             var instance = (TodoGetDto)context.ObjectInstance;
-            if (endTime <= instance.StartTime)
+            if (endTime <= instance.StartDateTime)
             {
                 return new ValidationResult("End time must be later than start time");
             }
             return ValidationResult.Success!;
         }
-
         public double Progress
         {
             get
             {
-                var totalMinutes = EndTime.ToTimeSpan().TotalMinutes - StartTime.ToTimeSpan().TotalMinutes;
+                var totalMinutes = (EndDateTime - StartDateTime).TotalMinutes;
                 if (totalMinutes <= 0) return 0;
+
                 return Math.Clamp(TimeSpentMinutes / totalMinutes, 0, 1);
             }
         }
