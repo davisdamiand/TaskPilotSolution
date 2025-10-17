@@ -1,115 +1,268 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage 
+<ContentPage
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:vm="clr-namespace:TaskPilot.Client.ViewModels"
     x:Class="TaskPilot.Client.TodoPage"
     Shell.NavBarIsVisible="False"
-    BackgroundColor="Black">
+    BackgroundColor="#F5F5F7">
 
+    <!-- ViewModel -->
     <ContentPage.BindingContext>
         <vm:TodoViewModel />
     </ContentPage.BindingContext>
 
     <ScrollView>
-        <VerticalStackLayout Padding="25,50,25,40" Spacing="20">
-            <!-- HEADER WITH IMAGE -->
-            <Frame HasShadow="False" BackgroundColor="Transparent">
-                <Grid>
-                    <Image Source="desktop (1).avif" Aspect="AspectFill" Opacity="0.15"/>
-                    <VerticalStackLayout Padding="0,20" HorizontalOptions="Center">
-                        <Label Text="✨ Your Productivity Dashboard" FontSize="28" FontAttributes="Bold" TextColor="#1E1E5A" HorizontalOptions="Center"/>
-                        <Label x:Name="DayLabel" FontSize="15" TextColor="#444" Text="Today, Monday 13 October 2025" HorizontalOptions="Center"/>
-                    </VerticalStackLayout>
+        <VerticalStackLayout Padding="40,30" Spacing="30">
+
+            <!-- HEADER -->
+            <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,20">
+                <VerticalStackLayout Spacing="5" VerticalOptions="Center">
+                    <Label Text="What's on your plate today?" 
+                           FontSize="36" 
+                           FontAttributes="Bold" 
+                           TextColor="#1A1D3F"/>
+                    <Label x:Name="DayLabel"
+                           Text="Today, Friday 17 October 2025"
+                           FontSize="15"
+                           TextColor="#555"/>
+                </VerticalStackLayout>
+
+                <HorizontalStackLayout Grid.Column="1" Spacing="20" VerticalOptions="Center">
+                    <!-- Search Bar -->
+                    <Frame BackgroundColor="White"
+                           CornerRadius="12"
+                           BorderColor="Transparent"
+                           HasShadow="True"
+                           Padding="0"
+                           WidthRequest="350"
+                           HeightRequest="50">
+                        <Grid ColumnDefinitions="*, Auto" Padding="15,0">
+                            <Entry Placeholder="Search tasks..."
+                                   FontSize="14"
+                                   VerticalOptions="Center"
+                                   BackgroundColor="Transparent"
+                                   TextColor="#1A1D3F" />
+                            <Label Grid.Column="1" 
+                                    Text="" 
+                                    FontSize="20" 
+                                    VerticalOptions="Center"/>
+                        </Grid>
+                    </Frame>
+                </HorizontalStackLayout>
+            </Grid>
+
+            <!-- TASK LIST -->
+            <VerticalStackLayout Spacing="20">
+                <!-- Upcoming Section -->
+                <Grid ColumnDefinitions="*,Auto">
+                    <HorizontalStackLayout Spacing="12">
+                        <Label Text="Upcoming" 
+                               FontSize="20" 
+                               FontAttributes="Bold" 
+                               TextColor="#1A1D3F"
+                               VerticalOptions="Center"/>
+                        <Frame BackgroundColor="#FFE5D3" 
+                               Padding="10,4" 
+                               CornerRadius="15" 
+                               HasShadow="False">
+                            <Label Text="3" 
+                                   FontSize="13" 
+                                   TextColor="#FF6B35"
+                                   FontAttributes="Bold"/>
+                        </Frame>
+                    </HorizontalStackLayout>
                 </Grid>
-            </Frame>
-            <!-- Search Bar -->
-            <Frame BackgroundColor="#F3F3F3" CornerRadius="25" HasShadow="True" Padding="0" HeightRequest="50">
-                <Grid ColumnDefinitions="*, Auto" Padding="10">
-                    <Entry x:Name="SearchBar" Placeholder="Search tasks..." FontSize="14" BackgroundColor="Transparent" TextColor="#1E1E5A" />
-                    <Image Source="search.png" WidthRequest="22" HeightRequest="22" VerticalOptions="Center" HorizontalOptions="End" />
-                </Grid>
-            </Frame>
-            <!-- Title -->
-            <Label Text="Your Tasks for Today" FontAttributes="Bold" FontSize="20" TextColor="#1E1E5A" HorizontalOptions="Center"/>
-            <!-- Summary Cards -->
-            <HorizontalStackLayout Spacing="15" HorizontalOptions="Center">
-                <Frame BackgroundColor="#F5F6FA" CornerRadius="18" Padding="15,10" WidthRequest="110" HasShadow="True">
-                    <VerticalStackLayout Spacing="3" HorizontalOptions="Center">
-                        <Label Text="Ongoing" FontAttributes="Bold" TextColor="#1E1E5A" FontSize="13"/>
-                        <Label Text="3" FontSize="22" FontAttributes="Bold" TextColor="#1E1E5A"/>
+
+                <!-- Task Card 1 -->
+                <Frame BackgroundColor="White" 
+                       CornerRadius="16" 
+                       Padding="20" 
+                       BorderColor="Transparent"
+                       HasShadow="True">
+                    <VerticalStackLayout Spacing="15">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Frame BackgroundColor="#FFEBEE" 
+                                   Padding="10,6" 
+                                   CornerRadius="8" 
+                                   HasShadow="False"
+                                   HorizontalOptions="Start">
+                                <Label Text="High Priority - 5" 
+                                       FontSize="12" 
+                                       TextColor="#F44336"
+                                       FontAttributes="Bold"/>
+                            </Frame>
+                            <Label Text="⋮" Grid.Column="1" FontSize="20" TextColor="#999"/>
+                        </Grid>
+
+                        <Label Text="Finish the UI Design For the Settings page" 
+                               FontSize="17" 
+                               FontAttributes="Bold" 
+                               TextColor="#1A1D3F"/>
+
+                        <Grid ColumnDefinitions="*,Auto">
+                            <HorizontalStackLayout Grid.Column="1" Spacing="6" VerticalOptions="Center">
+                                <Label Text="" FontSize="16"/>
+                                <Label Text="11:00 - 13:00" FontSize="13" TextColor="#9CA3AF"/>
+                            </HorizontalStackLayout>
+                        </Grid>
                     </VerticalStackLayout>
                 </Frame>
-                <Frame BackgroundColor="#E8E9F7" CornerRadius="18" Padding="15,10" WidthRequest="110" HasShadow="True">
-                    <VerticalStackLayout Spacing="3" HorizontalOptions="Center">
-                        <Label Text="Completed" FontAttributes="Bold" TextColor="#1E1E5A" FontSize="13"/>
-                        <Label Text="5" FontSize="22" FontAttributes="Bold" TextColor="#1E1E5A"/>
+
+                <!-- Task Card 2 -->
+                <Frame BackgroundColor="White" 
+                       CornerRadius="16" 
+                       Padding="20" 
+                       BorderColor="Transparent"
+                       HasShadow="True">
+                    <VerticalStackLayout Spacing="15">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Frame BackgroundColor="#FFF4E6" 
+                                   Padding="10,6" 
+                                   CornerRadius="8" 
+                                   HasShadow="False"
+                                   HorizontalOptions="Start">
+                                <Label Text="Medium Priority - 3" 
+                                       FontSize="12" 
+                                       TextColor="#FF9800"
+                                       FontAttributes="Bold"/>
+                            </Frame>
+                            <Label Text="⋮" Grid.Column="1" FontSize="20" TextColor="#999"/>
+                        </Grid>
+
+                        <Label Text="Teams Meeting" 
+                               FontSize="17" 
+                               FontAttributes="Bold" 
+                               TextColor="#1A1D3F"/>
+
+                        <Grid ColumnDefinitions="*,Auto">
+                            <HorizontalStackLayout Grid.Column="1" Spacing="6" VerticalOptions="Center">
+                                <Label Text="" FontSize="16"/>
+                                <Label Text="14:00 - 15:30" FontSize="13" TextColor="#9CA3AF"/>
+                            </HorizontalStackLayout>
+                        </Grid>
                     </VerticalStackLayout>
                 </Frame>
-                <Frame BackgroundColor="#F3F4FF" CornerRadius="18" Padding="15,10" WidthRequest="110" HasShadow="True">
-                    <VerticalStackLayout Spacing="3" HorizontalOptions="Center">
-                        <Label Text="Upcoming" FontAttributes="Bold" TextColor="#1E1E5A" FontSize="13"/>
-                        <Label Text="2" FontSize="22" FontAttributes="Bold" TextColor="#1E1E5A"/>
+
+                <!-- Task Card 3 -->
+                <Frame BackgroundColor="White" 
+                       CornerRadius="16" 
+                       Padding="20" 
+                       BorderColor="Transparent"
+                       HasShadow="True">
+                    <VerticalStackLayout Spacing="15">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Frame BackgroundColor="#E8F5E9" 
+                                   Padding="10,6" 
+                                   CornerRadius="8" 
+                                   HasShadow="False"
+                                   HorizontalOptions="Start">
+                                <Label Text="Low Priority - 1" 
+                                       FontSize="12" 
+                                       TextColor="#4CAF50"
+                                       FontAttributes="Bold"/>
+                            </Frame>
+                            <Label Text="⋮" Grid.Column="1" FontSize="20" TextColor="#999"/>
+                        </Grid>
+
+                        <Label Text="Submit the ITBEA Assignment" 
+                               FontSize="17" 
+                               FontAttributes="Bold" 
+                               TextColor="#1A1D3F"/>
+
+                        <Grid ColumnDefinitions="*,Auto">
+                            <HorizontalStackLayout Grid.Column="1" Spacing="6" VerticalOptions="Center">
+                                <Label Text="" FontSize="16"/>
+                                <Label Text="17:00" FontSize="13" TextColor="#9CA3AF"/>
+                            </HorizontalStackLayout>
+                        </Grid>
                     </VerticalStackLayout>
-                </Frame>
-            </HorizontalStackLayout>
-            <!-- Task List -->
-            <VerticalStackLayout x:Name="TaskList" Spacing="15" Margin="0,10,0,0">
-                <Frame BackgroundColor="#F7F7FA" CornerRadius="18" Padding="15" HasShadow="True">
-                    <Grid ColumnDefinitions="*,Auto">
-                        <VerticalStackLayout>
-                            <Label Text="Finish UI Design" FontAttributes="Bold" FontSize="16" TextColor="#1E1E5A"/>
-                            <Label Text="11:00 - 13:00" FontSize="12" TextColor="#666"/>
-                            <Label Text="Priority: 5 🔥" FontSize="12" TextColor="#1E1E5A" FontAttributes="Bold"/>
-                        </VerticalStackLayout>
-                        <Image Source="high.png" WidthRequest="28" HeightRequest="28" Grid.Column="1" VerticalOptions="Center"/>
-                    </Grid>
-                </Frame>
-                <Frame BackgroundColor="#FAFAFF" CornerRadius="18" Padding="15" HasShadow="True">
-                    <Grid ColumnDefinitions="*,Auto">
-                        <VerticalStackLayout>
-                            <Label Text="Team Meeting" FontAttributes="Bold" FontSize="16" TextColor="#1E1E5A"/>
-                            <Label Text="14:00 - 15:30" FontSize="12" TextColor="#666"/>
-                            <Label Text="Priority: 3 ⭐" FontSize="12" TextColor="#1E1E5A" FontAttributes="Bold"/>
-                        </VerticalStackLayout>
-                        <Image Source="medium.png" WidthRequest="28" HeightRequest="28" Grid.Column="1" VerticalOptions="Center"/>
-                    </Grid>
-                </Frame>
-                <Frame BackgroundColor="#FFFFFF" CornerRadius="18" Padding="15" HasShadow="True">
-                    <Grid ColumnDefinitions="*,Auto">
-                        <VerticalStackLayout>
-                            <Label Text="Submit Assignment" FontAttributes="Bold" FontSize="16" TextColor="#1E1E5A"/>
-                            <Label Text="17:00" FontSize="12" TextColor="#666"/>
-                            <Label Text="Priority: 1 ⏰" FontSize="12" TextColor="#1E1E5A" FontAttributes="Bold"/>
-                        </VerticalStackLayout>
-                        <Image Source="low.png" WidthRequest="28" HeightRequest="28" Grid.Column="1" VerticalOptions="Center"/>
-                    </Grid>
                 </Frame>
             </VerticalStackLayout>
-            <!-- Add New Task Form -->
-            <Frame BackgroundColor="#F9F9FF" CornerRadius="20" Padding="20" Margin="0,25,0,0" HasShadow="True">
-                <VerticalStackLayout Spacing="10">
-                    <Label Text="Add a New Task" FontAttributes="Bold" FontSize="18" TextColor="#1E1E5A"/>
-                    <Entry Placeholder="Task Name" Text="{Binding Name}" BackgroundColor="White" TextColor="Black" CornerRadius="10" Padding="10,5"/>
-                    <Editor Placeholder="Task Description" Text="{Binding Description}" HeightRequest="100" BackgroundColor="White" TextColor="Black" CornerRadius="10" Padding="10"/>
-                    <HorizontalStackLayout Spacing="10">
-                <DatePicker Date="{Binding DueDateTime, Mode=TwoWay}" />
-                <TimePicker Time="{Binding DueDateTime, Mode=TwoWay}" />
-            </HorizontalStackLayout>
 
-            <Label Text="Priority:" TextColor="White"/>
-            <HorizontalStackLayout
-                RadioButtonGroup.SelectedValue="{Binding Priority, Mode=TwoWay}">
-                <RadioButton Content="1" Value="1" />
-                <RadioButton Content="2" Value="2" />
-                <RadioButton Content="3" Value="3" />
-                <RadioButton Content="4" Value="4" />
-                <RadioButton Content="5" Value="5" IsChecked="True" />
-            </HorizontalStackLayout>
+            <!-- ADD NEW TASK FORM -->
+            <Frame BackgroundColor="White"
+                   CornerRadius="20"
+                   Padding="25"
+                   Margin="0,20,0,0"
+                   BorderColor="Transparent"
+                   HasShadow="True">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Add a New Task"
+                           FontAttributes="Bold"
+                           FontSize="20"
+                           TextColor="#1A1D3F"/>
 
-            <Button Text="Save Todo"
-                    Command="{Binding SaveCommand}" />
+                    <Border Stroke="#F0F0F0" StrokeThickness="1" BackgroundColor="#F9FAFB" Padding="15,0" StrokeShape="RoundRectangle 8">
+                        <Entry Placeholder="Task Name"
+                               Text="{Binding Name}"
+                               VerticalOptions="Center"
+                               BackgroundColor="Transparent"
+                               TextColor="#1A1D3F"
+                               PlaceholderColor="#9CA3AF"
+                               HeightRequest="45"/>
+                    </Border>
 
-        </StackLayout>
+                    <Border Stroke="#F0F0F0" StrokeThickness="1" BackgroundColor="#F9FAFB" Padding="15" StrokeShape="RoundRectangle 8">
+                        <Editor Placeholder="Task Description"
+                               Text="{Binding Description}"
+                               HeightRequest="100"
+                               BackgroundColor="Transparent"
+                               TextColor="#1A1D3F"
+                               PlaceholderColor="#9CA3AF"/>
+                    </Border>
+
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto, Auto" ColumnSpacing="15" RowSpacing="10">
+                        <Label Text="Due Date" 
+                               Grid.Row="0" Grid.Column="0" 
+                               VerticalOptions="Center" 
+                               TextColor="#6B7280" 
+                               FontSize="14"/>
+                        <DatePicker Date="{Binding DueDate, Mode=TwoWay}"
+                                    BackgroundColor="#F9FAFB"
+                                    TextColor="#1A1D3F" 
+                                    Grid.Row="1" Grid.Column="0"/>
+
+                        <Label Text="Time Range" 
+                               Grid.Row="0" Grid.Column="1" 
+                               VerticalOptions="Center" 
+                               TextColor="#6B7280" 
+                               FontSize="14"/>
+                        <HorizontalStackLayout Grid.Row="1" Grid.Column="1" Spacing="5" VerticalOptions="Center">
+                            <TimePicker Time="{Binding FromTime, Mode=TwoWay}"
+                                        BackgroundColor="#F9FAFB"
+                                        TextColor="#1A1D3F" />
+                            <Label Text="-" VerticalOptions="Center" TextColor="#6B7280" FontSize="14" FontAttributes="Bold"/>
+                            <TimePicker Time="{Binding ToTime, Mode=TwoWay}"
+                                        BackgroundColor="#F9FAFB"
+                                        TextColor="#1A1D3F" />
+                        </HorizontalStackLayout>
+                    </Grid>
+
+                    <Label Text="Priority (1 = Low, 5 = High):"
+                           FontSize="14"
+                           TextColor="#6B7280"
+                           FontAttributes="Bold"/>
+
+                    <HorizontalStackLayout Spacing="10" RadioButtonGroup.GroupName="PriorityGroup" RadioButtonGroup.SelectedValue="{Binding Priority, Mode=TwoWay}">
+                        <RadioButton Content="1" Value="1"/>
+                        <RadioButton Content="2" Value="2"/>
+                        <RadioButton Content="3" Value="3"/>
+                        <RadioButton Content="4" Value="4"/>
+                        <RadioButton Content="5" Value="5" IsChecked="True"/>
+                    </HorizontalStackLayout>
+
+                    <Button Text="Save Task"
+                            Command="{Binding SaveCommand}"
+                            BackgroundColor="#1A1D3F"
+                            TextColor="White"
+                            CornerRadius="12"
+                            FontAttributes="Bold"
+                            HeightRequest="50"
+                            Margin="0,10,0,0"/>
+                </VerticalStackLayout>
+            </Frame>
+        </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
+
