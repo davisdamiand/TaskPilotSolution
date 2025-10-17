@@ -12,19 +12,87 @@
     </ContentPage.BindingContext>
 
     <ScrollView>
-        <StackLayout Padding="20" Spacing="15">
-
-            <Label Text="Todo Name:" TextColor="White"/>
-            <Entry Text="{Binding Name}" Placeholder="Enter task name" />
-
-            <Label Text="Todo Description:" TextColor="White"/>
-            <Editor Text="{Binding Description}" 
-                    AutoSize="TextChanges" 
-                    HeightRequest="100"
-                    Placeholder="Enter task details" />
-
-            <HorizontalStackLayout>
-                <Label Text="Due Date:" TextColor="White"/>
+        <VerticalStackLayout Padding="25,50,25,40" Spacing="20">
+            <!-- HEADER WITH IMAGE -->
+            <Frame HasShadow="False" BackgroundColor="Transparent">
+                <Grid>
+                    <Image Source="desktop (1).avif" Aspect="AspectFill" Opacity="0.15"/>
+                    <VerticalStackLayout Padding="0,20" HorizontalOptions="Center">
+                        <Label Text="✨ Your Productivity Dashboard" FontSize="28" FontAttributes="Bold" TextColor="#1E1E5A" HorizontalOptions="Center"/>
+                        <Label x:Name="DayLabel" FontSize="15" TextColor="#444" Text="Today, Monday 13 October 2025" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Grid>
+            </Frame>
+            <!-- Search Bar -->
+            <Frame BackgroundColor="#F3F3F3" CornerRadius="25" HasShadow="True" Padding="0" HeightRequest="50">
+                <Grid ColumnDefinitions="*, Auto" Padding="10">
+                    <Entry x:Name="SearchBar" Placeholder="Search tasks..." FontSize="14" BackgroundColor="Transparent" TextColor="#1E1E5A" />
+                    <Image Source="search.png" WidthRequest="22" HeightRequest="22" VerticalOptions="Center" HorizontalOptions="End" />
+                </Grid>
+            </Frame>
+            <!-- Title -->
+            <Label Text="Your Tasks for Today" FontAttributes="Bold" FontSize="20" TextColor="#1E1E5A" HorizontalOptions="Center"/>
+            <!-- Summary Cards -->
+            <HorizontalStackLayout Spacing="15" HorizontalOptions="Center">
+                <Frame BackgroundColor="#F5F6FA" CornerRadius="18" Padding="15,10" WidthRequest="110" HasShadow="True">
+                    <VerticalStackLayout Spacing="3" HorizontalOptions="Center">
+                        <Label Text="Ongoing" FontAttributes="Bold" TextColor="#1E1E5A" FontSize="13"/>
+                        <Label Text="3" FontSize="22" FontAttributes="Bold" TextColor="#1E1E5A"/>
+                    </VerticalStackLayout>
+                </Frame>
+                <Frame BackgroundColor="#E8E9F7" CornerRadius="18" Padding="15,10" WidthRequest="110" HasShadow="True">
+                    <VerticalStackLayout Spacing="3" HorizontalOptions="Center">
+                        <Label Text="Completed" FontAttributes="Bold" TextColor="#1E1E5A" FontSize="13"/>
+                        <Label Text="5" FontSize="22" FontAttributes="Bold" TextColor="#1E1E5A"/>
+                    </VerticalStackLayout>
+                </Frame>
+                <Frame BackgroundColor="#F3F4FF" CornerRadius="18" Padding="15,10" WidthRequest="110" HasShadow="True">
+                    <VerticalStackLayout Spacing="3" HorizontalOptions="Center">
+                        <Label Text="Upcoming" FontAttributes="Bold" TextColor="#1E1E5A" FontSize="13"/>
+                        <Label Text="2" FontSize="22" FontAttributes="Bold" TextColor="#1E1E5A"/>
+                    </VerticalStackLayout>
+                </Frame>
+            </HorizontalStackLayout>
+            <!-- Task List -->
+            <VerticalStackLayout x:Name="TaskList" Spacing="15" Margin="0,10,0,0">
+                <Frame BackgroundColor="#F7F7FA" CornerRadius="18" Padding="15" HasShadow="True">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <VerticalStackLayout>
+                            <Label Text="Finish UI Design" FontAttributes="Bold" FontSize="16" TextColor="#1E1E5A"/>
+                            <Label Text="11:00 - 13:00" FontSize="12" TextColor="#666"/>
+                            <Label Text="Priority: 5 🔥" FontSize="12" TextColor="#1E1E5A" FontAttributes="Bold"/>
+                        </VerticalStackLayout>
+                        <Image Source="high.png" WidthRequest="28" HeightRequest="28" Grid.Column="1" VerticalOptions="Center"/>
+                    </Grid>
+                </Frame>
+                <Frame BackgroundColor="#FAFAFF" CornerRadius="18" Padding="15" HasShadow="True">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <VerticalStackLayout>
+                            <Label Text="Team Meeting" FontAttributes="Bold" FontSize="16" TextColor="#1E1E5A"/>
+                            <Label Text="14:00 - 15:30" FontSize="12" TextColor="#666"/>
+                            <Label Text="Priority: 3 ⭐" FontSize="12" TextColor="#1E1E5A" FontAttributes="Bold"/>
+                        </VerticalStackLayout>
+                        <Image Source="medium.png" WidthRequest="28" HeightRequest="28" Grid.Column="1" VerticalOptions="Center"/>
+                    </Grid>
+                </Frame>
+                <Frame BackgroundColor="#FFFFFF" CornerRadius="18" Padding="15" HasShadow="True">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <VerticalStackLayout>
+                            <Label Text="Submit Assignment" FontAttributes="Bold" FontSize="16" TextColor="#1E1E5A"/>
+                            <Label Text="17:00" FontSize="12" TextColor="#666"/>
+                            <Label Text="Priority: 1 ⏰" FontSize="12" TextColor="#1E1E5A" FontAttributes="Bold"/>
+                        </VerticalStackLayout>
+                        <Image Source="low.png" WidthRequest="28" HeightRequest="28" Grid.Column="1" VerticalOptions="Center"/>
+                    </Grid>
+                </Frame>
+            </VerticalStackLayout>
+            <!-- Add New Task Form -->
+            <Frame BackgroundColor="#F9F9FF" CornerRadius="20" Padding="20" Margin="0,25,0,0" HasShadow="True">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Add a New Task" FontAttributes="Bold" FontSize="18" TextColor="#1E1E5A"/>
+                    <Entry Placeholder="Task Name" Text="{Binding Name}" BackgroundColor="White" TextColor="Black" CornerRadius="10" Padding="10,5"/>
+                    <Editor Placeholder="Task Description" Text="{Binding Description}" HeightRequest="100" BackgroundColor="White" TextColor="Black" CornerRadius="10" Padding="10"/>
+                    <HorizontalStackLayout Spacing="10">
                 <DatePicker Date="{Binding DueDateTime, Mode=TwoWay}" />
                 <TimePicker Time="{Binding DueDateTime, Mode=TwoWay}" />
             </HorizontalStackLayout>
