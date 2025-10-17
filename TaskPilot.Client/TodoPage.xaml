@@ -4,97 +4,40 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="TaskPilot.Client.TodoPage"
     Shell.NavBarIsVisible="False"
-    BackgroundColor="White">
-
-    <ContentPage.Resources>
-        <!-- Global Styles -->
-        <Style TargetType="Label">
-            <Setter Property="TextColor" Value="Black"/>
-            <Setter Property="FontSize" Value="16"/>
-        </Style>
-
-        <Style TargetType="Entry">
-            <Setter Property="TextColor" Value="Black"/>
-            <Setter Property="FontSize" Value="16"/>
-        </Style>
-
-        <Style TargetType="RadioButton">
-            <Setter Property="TextColor" Value="Black"/>
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="Margin" Value="0,0"/>
-        </Style>
-
-        <Style TargetType="Button">
-            <Setter Property="TextColor" Value="White"/>
-            <Setter Property="BackgroundColor" Value="#0078D7"/>
-            <Setter Property="CornerRadius" Value="8"/>
-            <Setter Property="Margin" Value="20,10"/>
-            <Setter Property="HorizontalOptions" Value="Fill"/>
-        </Style>
-    </ContentPage.Resources>
-
+    BackgroundColor="Black">
+    
     <ScrollView>
-        <StackLayout Padding="20" Spacing="12">
-
-            <Label x:Name="LableStudentName" Text="Name here"/>
-
-            <Entry x:Name="EntryTodoName"
-                   Placeholder="Enter task name"
-                   HorizontalOptions="Fill"/>
-
-            <Label Text="Time"/>
-            <Frame
-                BackgroundColor="#F2F2F7"
-                CornerRadius="10"
-                HasShadow="False"
-                Padding="10,5"
-                HorizontalOptions="Center">
-                <TimePicker x:Name="TimePickerStart"
-                        Format="HH:mm"
-                        Time="00:00:00"
-                        TextColor="Black"/>
-            </Frame>
-            <Frame
-                BackgroundColor="#F2F2F7"
-                CornerRadius="10"
-                HasShadow="False"
-                Padding="10,5"
-                HorizontalOptions="Center">
-                <TimePicker x:Name="TimePickerEnd"
-                        Format="HH:mm"
-                        Time="23:59:00"
-                        TextColor="Black"/>
-            </Frame>
-
-
-            <Label Text="Due Date"/>
-            <DatePicker x:Name="DatePickerDueDate"
-                        TextColor="Black"/>
-            <Label Text="Priority"/>
-            <FlexLayout Wrap="Wrap" JustifyContent="Start" AlignItems="Center">
-                <RadioButton Content="1" GroupName="PriorityGroup" Value="1"/>
-                <RadioButton Content="2" GroupName="PriorityGroup" Value="2"/>
-                <RadioButton Content="3" GroupName="PriorityGroup" Value="3"/>
-                <RadioButton Content="4" GroupName="PriorityGroup" Value="4"/>
-                <RadioButton Content="5" GroupName="PriorityGroup" Value="5" IsChecked="True"/>
-            </FlexLayout>
-
-
-            <Label Text="Description"/>
-            <Frame
-                BackgroundColor="#F2F2F7"
-                CornerRadius="10"
-                HasShadow="False"
-                Padding="10,5">
-                <Entry x:Name="EntryDescription"
-                       Placeholder="Enter description"
-                       TextColor="Black"/>
-            </Frame>
-
-            <Button x:Name="ButtonSave"
-                    Text="Save"
-                    HeightRequest="60"
-                    Clicked="OnSaveClicked"/>
+        <StackLayout>
+            <Label
+                x:Name="LabelStudentName"/>
+            <Label
+                Text="Todo Name:"/>
+            <Entry
+                x:Name="EntryTodoName"/>
+            <Label
+                Text="Todo Description:"/>
+            <Editor
+                x:Name="EditorTodoDescription"
+                AutoSize="TextChanges"
+                HeightRequest="100"/>
+            <HorizontalStackLayout>
+                <Label
+                    Text="Due Date:"/>
+                <DatePicker
+                    x:Name="DatePickerDueDate"/>
+                <TimePicker
+                    x:Name="TimePickerDueTime"/>
+            </HorizontalStackLayout>
+            <HorizontalStackLayout>
+                <RadioButton Content="1" GroupName="RatingGroup" Value="1" />
+                <RadioButton Content="2" GroupName="RatingGroup" Value="2" />
+                <RadioButton Content="3" GroupName="RatingGroup" Value="3" />
+                <RadioButton Content="4" GroupName="RatingGroup" Value="4" />
+                <RadioButton Content="5" GroupName="RatingGroup" Value="5" />
+            </HorizontalStackLayout>
+            <Button
+                x:Name="ButtonSaveTodo"
+                Text="Save Todo"/>
         </StackLayout>
     </ScrollView>
 </ContentPage>
