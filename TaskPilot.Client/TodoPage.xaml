@@ -2,42 +2,46 @@
 <ContentPage 
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:TaskPilot.Client.ViewModels"
     x:Class="TaskPilot.Client.TodoPage"
     Shell.NavBarIsVisible="False"
     BackgroundColor="Black">
-    
+
+    <ContentPage.BindingContext>
+        <vm:TodoViewModel />
+    </ContentPage.BindingContext>
+
     <ScrollView>
-        <StackLayout>
-            <Label
-                x:Name="LabelStudentName"/>
-            <Label
-                Text="Todo Name:"/>
-            <Entry
-                x:Name="EntryTodoName"/>
-            <Label
-                Text="Todo Description:"/>
-            <Editor
-                x:Name="EditorTodoDescription"
-                AutoSize="TextChanges"
-                HeightRequest="100"/>
+        <StackLayout Padding="20" Spacing="15">
+
+            <Label Text="Todo Name:" TextColor="White"/>
+            <Entry Text="{Binding Name}" Placeholder="Enter task name" />
+
+            <Label Text="Todo Description:" TextColor="White"/>
+            <Editor Text="{Binding Description}" 
+                    AutoSize="TextChanges" 
+                    HeightRequest="100"
+                    Placeholder="Enter task details" />
+
             <HorizontalStackLayout>
-                <Label
-                    Text="Due Date:"/>
-                <DatePicker
-                    x:Name="DatePickerDueDate"/>
-                <TimePicker
-                    x:Name="TimePickerDueTime"/>
+                <Label Text="Due Date:" TextColor="White"/>
+                <DatePicker Date="{Binding DueDateTime, Mode=TwoWay}" />
+                <TimePicker Time="{Binding DueDateTime, Mode=TwoWay}" />
             </HorizontalStackLayout>
-            <HorizontalStackLayout>
-                <RadioButton Content="1" GroupName="RatingGroup" Value="1" />
-                <RadioButton Content="2" GroupName="RatingGroup" Value="2" />
-                <RadioButton Content="3" GroupName="RatingGroup" Value="3" />
-                <RadioButton Content="4" GroupName="RatingGroup" Value="4" />
-                <RadioButton Content="5" GroupName="RatingGroup" Value="5" />
+
+            <Label Text="Priority:" TextColor="White"/>
+            <HorizontalStackLayout
+                RadioButtonGroup.SelectedValue="{Binding Priority, Mode=TwoWay}">
+                <RadioButton Content="1" Value="1" />
+                <RadioButton Content="2" Value="2" />
+                <RadioButton Content="3" Value="3" />
+                <RadioButton Content="4" Value="4" />
+                <RadioButton Content="5" Value="5" />
             </HorizontalStackLayout>
-            <Button
-                x:Name="ButtonSaveTodo"
-                Text="Save Todo"/>
+
+            <Button Text="Save Todo"
+                    Command="{Binding SaveCommand}" />
+
         </StackLayout>
     </ScrollView>
 </ContentPage>
