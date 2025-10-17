@@ -1,116 +1,231 @@
 <?xml version="1.0" encoding="utf-8" ?>
+
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+
              x:Class="TaskPilot.Client.MainPage"
+
              Shell.NavBarIsVisible="False"
+
              BackgroundColor="White">
-             
+
+
+
+
 
     <ScrollView>
+
         <VerticalStackLayout Padding="20" Spacing="25">
 
+
+
             <!-- Header -->
+
             <HorizontalStackLayout VerticalOptions="Start" Spacing="10">
+
                 <Label Text="Name"
+
                        x:Name="LabelStudentName"
+
                        FontSize="24"
+
                        FontAttributes="Bold"
+
                        TextColor="#1E1E5A"
+
                        VerticalOptions="Center" />
+
             </HorizontalStackLayout>
+
+
 
             <!-- Description -->
+
             <Frame BackgroundColor="#F9F9FB"
+
                    CornerRadius="12"
+
                    Padding="15"
+
                    HasShadow="False">
+
                 <Label Text="“Stay focused. Keep working towards your goals — one task at a time.”"
+
                        FontSize="14"
+
                        TextColor="#4A4A6A" />
+
             </Frame>
 
+
+
             <!-- Ongoing Projects Header -->
+
             <HorizontalStackLayout>
+
                 <Label Text="Ongoing Projects"
+
                        FontSize="18"
+
                        FontAttributes="Bold"
+
                        TextColor="#1E1E5A"
+
                        HorizontalOptions="StartAndExpand" />
+
                 <Label Text="View all"
+
                        FontSize="13"
+
                        TextColor="#5A5AFF"
+
                        HorizontalOptions="End" />
+
             </HorizontalStackLayout>
 
+
+
             <CollectionView x:Name="TodosCollection"
+
                 ItemsSource="{Binding listOfTodos}"
+
                 SelectionMode="None"
+
                 Margin="0,10,0,0">
 
+
+
                 <!-- Use GridItemsLayout for tile format -->
+
                 <CollectionView.ItemsLayout>
+
                     <GridItemsLayout Orientation="Vertical"
+
                          Span="2"
+
                          HorizontalItemSpacing="12"
+
                          VerticalItemSpacing="12"/>
+
                 </CollectionView.ItemsLayout>
 
+
+
                 <!-- Empty state -->
+
                 <CollectionView.EmptyView>
+
                     <VerticalStackLayout Padding="20"
+
                              HorizontalOptions="Center"
+
                              VerticalOptions="Center">
+
                         <Label Text="No tasks yet 🎉"
+
                    FontSize="18"
+
                    FontAttributes="Bold"
+
                    TextColor="#1E1E5A"
+
                    HorizontalOptions="Center"/>
+
                         <Label Text="Add your first task to get started."
+
                    FontSize="14"
+
                    TextColor="#666"
+
                    HorizontalOptions="Center"/>
+
                     </VerticalStackLayout>
+
                 </CollectionView.EmptyView>
 
+
+
                 <!-- Template for each todo -->
+
                 <CollectionView.ItemTemplate>
+
                     <DataTemplate>
+
                         <Frame BackgroundColor="#F2F2F7"
+
                    CornerRadius="10"
+
                    HasShadow="True"
+
                    Padding="12"
+
                    Margin="4">
+
                             <VerticalStackLayout Spacing="6">
 
+
+
                                 <!-- Title -->
+
                                 <Label Text="{Binding Title}"
+
                            FontSize="15"
+
                            FontAttributes="Bold"
+
                            TextColor="#1E1E5A" />
 
+
+
                                 <!-- Due Date -->
+
                                 <Label Text="{Binding DueDate, StringFormat='Due: {0:dd MMM yyyy}'}"
+
                            FontSize="13"
+
                            TextColor="#666" />
 
+
+
                                 <!-- Progress -->
+
                                 <ProgressBar Progress="{Binding Progress}"
+
                                  ProgressColor="#4CAF50"
+
                                  HeightRequest="6"
+
                                  VerticalOptions="Center"
+
                                  Margin="0,4,0,0"/>
 
+
+
                                 <!-- Time Spent -->
+
                                 <Label Text="{Binding TimeSpentMinutes, StringFormat='Time Spent: {0} min'}"
+
                            FontSize="12"
+
                            TextColor="#555"/>
+
                             </VerticalStackLayout>
+
                         </Frame>
+
                     </DataTemplate>
+
                 </CollectionView.ItemTemplate>
+
             </CollectionView>
 
+
+
         </VerticalStackLayout>
+
     </ScrollView>
+
+
 
 </ContentPage>
