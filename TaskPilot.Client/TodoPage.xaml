@@ -36,7 +36,7 @@
                 <RadioButton Content="2" Value="2" />
                 <RadioButton Content="3" Value="3" />
                 <RadioButton Content="4" Value="4" />
-                <RadioButton Content="5" Value="5" />
+                <RadioButton Content="5" Value="5" IsChecked="True" />
             </HorizontalStackLayout>
 
             <Button Text="Save Todo"

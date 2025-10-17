@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using TaskPilot.Client.Services;
+using TaskPilot.Client.ViewModels;
 
 namespace TaskPilot.Client
 {
@@ -27,6 +28,10 @@ namespace TaskPilot.Client
 
             // Register ViewModel
             builder.Services.AddTransient<TodoViewModel>();
+
+            builder.Services.AddSingleton<StudentService>();
+
+            builder.Services.AddTransient<RegisterViewModel>();
 
 #if DEBUG
             builder.Logging.AddDebug();

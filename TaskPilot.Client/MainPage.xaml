@@ -17,14 +17,6 @@
                        FontAttributes="Bold"
                        TextColor="#1E1E5A"
                        VerticalOptions="Center" />
-
-                <SearchBar Placeholder="Search"
-                           PlaceholderColor="#A0A0A0"
-                           TextColor="#1E1E5A"
-                           BackgroundColor="#F2F2F7"
-                           HorizontalOptions="FillAndExpand"
-                           Margin="10,0,0,0"
-                           HeightRequest="40" />
             </HorizontalStackLayout>
 
             <!-- Description -->

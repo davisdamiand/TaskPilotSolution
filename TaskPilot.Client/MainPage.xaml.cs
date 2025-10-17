@@ -37,7 +37,7 @@ public partial class MainPage : ContentPage
             return;
         }
 
-        LabelStudentName.Text = Preferences.Get("StudentName", "User")
+        LabelStudentName.Text = Preferences.Get("StudentName", "Name")
                               + " "
                               + Preferences.Get("StudentSurname", "Surname");
 

@@ -2,5 +2,4 @@
   <Project Path="Shared/Shared.csproj" Id="e689650e-2d84-4eba-9c2a-9dd473494322" />
   <Project Path="TaskPilot.Client/TaskPilot.Client.csproj" />
   <Project Path="TaskPilot.Server/TaskPilot.Server.csproj" />
-  <Project Path="TaskPilot.Tests/TaskPilot.Tests.csproj" Id="382b0541-ee4a-402d-bdc5-7033d0e474a9" />
 </Solution>

@@ -72,11 +72,16 @@ public class TodoViewModel : INotifyPropertyChanged
         try
         {
             var id = await _todoService.CreateTodoAsync(newTodo);
+
+            //Reset todo page
+            ResetFields();
+
+            await Shell.Current.GoToAsync("//MainPage");
         }
         catch (Exception ex)
         {
 
-            await Application.Current.MainPage.DisplayAlert("Error", ex.Message, "OK");
+            await Application.Current.MainPage.DisplayAlertAsync("Error", ex.Message, "OK");
         }
     }
 
@@ -84,4 +89,12 @@ public class TodoViewModel : INotifyPropertyChanged
     public event PropertyChangedEventHandler PropertyChanged;
     protected void OnPropertyChanged([CallerMemberName] string name = null) =>
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+
+    private void ResetFields()
+    {
+        Name = string.Empty;
+        Description = string.Empty;
+        DueDateTime = DateTime.Now.AddDays(1).Date.AddHours(17);
+        Priority = 5;
+    }
 }
