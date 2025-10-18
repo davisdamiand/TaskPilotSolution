@@ -29,7 +29,8 @@
                     </Frame>
 
                     <!-- Name -->
-                    <Label Text="Jarren Rye"
+                    <Label Text="{Binding FullName }"
+                           x:Name="LabelFullName"
                            FontSize="28"
                            FontAttributes="Bold"
                            HorizontalOptions="Center"
@@ -86,12 +87,12 @@
                                    HorizontalOptions="Center"
                                    VerticalOptions="Center"/>
                         </Frame>
-                        <Label Text="75%"
+                        <Label Text="{Binding Stats.TotalPomodoroSessions}"
                                FontSize="32"
                                FontAttributes="Bold"
                                HorizontalOptions="Center"
                                TextColor="#1F2937"/>
-                        <Label Text="Productivity"
+                        <Label Text="Total Pomodoro Sessions"
                                FontSize="14"
                                HorizontalOptions="Center"
                                TextColor="#6B7280"/>
@@ -117,17 +118,17 @@
                                     <GradientStop Color="#FB7185" Offset="1.0"/>
                                 </LinearGradientBrush>
                             </Frame.Background>
-                            <Label Text="⏸️"
+                            <Label Text="🔥"
                                    FontSize="30"
                                    HorizontalOptions="Center"
                                    VerticalOptions="Center"/>
                         </Frame>
-                        <Label Text="25%"
+                        <Label Text="{Binding Stats.Streak}"
                                FontSize="32"
                                FontAttributes="Bold"
                                HorizontalOptions="Center"
                                TextColor="#1F2937"/>
-                        <Label Text="Inactive"
+                        <Label Text="Streak"
                                FontSize="14"
                                HorizontalOptions="Center"
                                TextColor="#6B7280"/>
@@ -153,17 +154,17 @@
                                     <GradientStop Color="#FB923C" Offset="1.0"/>
                                 </LinearGradientBrush>
                             </Frame.Background>
-                            <Label Text="🌐"
+                            <Label Text="✅"
                                    FontSize="30"
                                    HorizontalOptions="Center"
                                    VerticalOptions="Center"/>
                         </Frame>
-                        <Label Text="60%"
+                        <Label Text="{Binding Stats.TotalCompletedTasks}"
                                FontSize="32"
                                FontAttributes="Bold"
                                HorizontalOptions="Center"
                                TextColor="#1F2937"/>
-                        <Label Text="Online"
+                        <Label Text="Completed Tasks"
                                FontSize="14"
                                HorizontalOptions="Center"
                                TextColor="#6B7280"/>
@@ -189,17 +190,17 @@
                                     <GradientStop Color="#A78BFA" Offset="1.0"/>
                                 </LinearGradientBrush>
                             </Frame.Background>
-                            <Label Text="📴"
+                            <Label Text="❌"
                                    FontSize="30"
                                    HorizontalOptions="Center"
                                    VerticalOptions="Center"/>
                         </Frame>
-                        <Label Text="25%"
+                        <Label Text="{Binding Stats.TotalInCompletedTasks}"
                                FontSize="32"
                                FontAttributes="Bold"
                                HorizontalOptions="Center"
                                TextColor="#1F2937"/>
-                        <Label Text="Offline"
+                        <Label Text="Not Completed Tasks"
                                FontSize="14"
                                HorizontalOptions="Center"
                                TextColor="#6B7280"/>
@@ -207,6 +208,10 @@
                 </Frame>
 
             </Grid>
+
+            <Button
+                Command="{Binding LogoutCommand}"
+                Text="Logout"/>
 
             <!-- Recent Tasks Section -->
             <Label Text="Recent Tasks"

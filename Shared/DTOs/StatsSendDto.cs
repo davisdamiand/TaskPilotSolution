@@ -9,5 +9,7 @@ namespace Shared.DTOs
         public int TotalPomodoroSessions { get; set; }
         public int Streak { get; set; }
         public int TotalCompletedTasks { get; set; }
+
+        public int TotalInCompletedTasks { get; set; }
     }
 }

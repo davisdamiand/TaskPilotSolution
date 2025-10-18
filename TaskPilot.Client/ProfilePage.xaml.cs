@@ -1,17 +1,14 @@
+using TaskPilot.Client.ViewModels;
+
 namespace TaskPilot.Client;
 
 public partial class ProfilePage : ContentPage
 {
-	public ProfilePage()
+	public ProfilePage(ProfileViewModel vm)
 	{
 		InitializeComponent();
+		BindingContext = vm;
+		
 	}
 
-	private async void OnLogoutButtonClicked(object sender, EventArgs e)
-	{
-		// Clear user session or authentication tokens here
-		Preferences.Clear();
-        // Navigate to the login page
-        await Shell.Current.GoToAsync("//LoginPage");
-    }
 }
