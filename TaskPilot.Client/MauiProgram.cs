@@ -33,9 +33,12 @@ namespace TaskPilot.Client
 
             builder.Services.AddTransient<RegisterViewModel>();
 
-            // Register Profile related services and viewmodel so Shell can resolve ProfilePage
+            // Register Profile related services and viewmodel so Shell casn resolve ProfilePage
             builder.Services.AddSingleton<ProfileService>();
             builder.Services.AddTransient<ProfileViewModel>();
+
+            builder.Services.AddSingleton<StatsService>();
+
 
 #if DEBUG
             builder.Logging.AddDebug();

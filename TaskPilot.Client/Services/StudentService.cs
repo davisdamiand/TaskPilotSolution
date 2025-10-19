@@ -1,24 +1,31 @@
 ﻿using Shared.DTOs;
 using System.Net.Http.Json;
 
-namespace TaskPilot.Client.Services;
-
-public class StudentService
+namespace TaskPilot.Client.Services
 {
-    private readonly HttpClient _httpClient;
-
-    public StudentService(HttpClient httpClient)
+    public class StudentService
     {
-        _httpClient = httpClient;
-    }
+        private readonly HttpClient _httpClient;
 
-    public async Task<int> CreateStudentAsync(StudentCreateDto dto)
-    {
-        var response = await _httpClient.PostAsJsonAsync("api/Student/CreateStudent", dto);
+        public StudentService(HttpClient httpClient)
+        {
+            _httpClient = httpClient;
+        }
 
-        if (!response.IsSuccessStatusCode)
-            throw new Exception(await response.Content.ReadAsStringAsync());
+        public async Task<int> RegisterStudentWithDefaultsAsync(StudentCreateDto dto)
+        {
+            var response = await _httpClient.PostAsJsonAsync("api/Student/Register", dto);
 
-        return await response.Content.ReadFromJsonAsync<int>();
+            if (!response.IsSuccessStatusCode)
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                throw new Exception(error);
+            }
+
+            return await response.Content.ReadFromJsonAsync<int>();
+        }
     }
 }
+
+
+

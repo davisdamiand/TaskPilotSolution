@@ -17,8 +17,23 @@ namespace TaskPilot.Client.ViewModels
 
         private string _studentName;
         private string _studentSurname;
+        private int _totalCompletedTasks;
+        private int _totalIncompletedTasks;
+        private int _totalPomodoroSessions;
+        private int _streak;
 
         public string FullName => $"{StudentName} {StudentSurname}";
+
+
+        public int Streak
+        {
+            get => _streak;
+            set
+            {
+                _streak = value;
+                OnPropertyChanged();
+            }
+        }
 
         public string StudentName
         {
@@ -26,6 +41,36 @@ namespace TaskPilot.Client.ViewModels
             set
             {
                 _studentName = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int TotalPomodoroSessions
+        {
+            get => _totalPomodoroSessions;
+            set
+            {
+                _totalPomodoroSessions = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int TotalCompletedTasks
+        {
+            get => _totalCompletedTasks;
+            set
+            {
+                _totalCompletedTasks = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int TotalInCompletedTasks
+        {
+            get => _totalIncompletedTasks;
+            set
+            {
+                _totalIncompletedTasks = value;
                 OnPropertyChanged();
             }
         }
@@ -62,6 +107,9 @@ namespace TaskPilot.Client.ViewModels
         public async Task LoadStatsAsync(StatsCalculateDto dto)
         {
             Stats = await _profileService.GetStudentStatsAsync(dto);
+            TotalCompletedTasks = Stats.TotalCompletedTasks;
+            TotalInCompletedTasks = Stats.TotalInCompletedTasks;
+            TotalPomodoroSessions = Stats.TotalPomodoroSessions;
         }
 
         private async Task LogoutAsync()
