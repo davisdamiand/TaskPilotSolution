@@ -10,6 +10,8 @@ namespace TaskPilot.Server.Models
         public int Streak { get; set; }
         public int TotalCompletedTasks { get; set; }
 
+        public int TotalInCompletedTasks { get; set; }
+
         public int StudentID { get; set; }
         public virtual Student Student { get; set; }
     }

@@ -1,56 +1,44 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Shared.DTOs;
-using TaskPilot.Server.Interfaces;
 using Shared.Security;
+using TaskPilot.Server.Interfaces;
+using TaskPilot.Server.Services;
 
 namespace TaskPilot.Server.Controllers
 {
     [ApiController]
     [Route("api/[Controller]")]
-    public class StudentController : Controller
+    public class StudentController : ControllerBase
     {
         private readonly IStudentService _studentService;
+        private readonly IRegistrationService _registrationService;
 
-        public StudentController(IStudentService studentService)
+
+        public StudentController(IStudentService studentService, IRegistrationService registrationService)
         {
             _studentService = studentService;
+            _registrationService = registrationService;
+
         }
 
-        [HttpPost]
-        [Route("CreateStudent")]
-        public async Task<IActionResult> CreateStudent([FromBody] StudentCreateDto studentCreateDto)
+        [HttpPost("Register")]
+        public async Task<IActionResult> Register([FromBody] StudentCreateDto dto)
         {
+            if (!ModelState.IsValid)
+                return BadRequest("Validation failed");
+
             try
             {
-                if (!ModelState.IsValid)
-                {
-
-                    var errors = ModelState
-                     .SelectMany(x => x.Value.Errors)
-                     .Select(x => x.ErrorMessage)
-                     .ToList();
-
-                    return BadRequest(new ErrorResponse { Message = "Validation Failed" } );
-                }
-
-                var id = await _studentService.CreateStudentAsync(studentCreateDto);
-
-                if (id <= 0)
-                {
-                    return BadRequest(new ErrorResponse
-                    {
-                        Message = "Student creation failed — ID was not generated."
-                    });
-                }
-
-                return Ok(id);
+                var studentId = await _registrationService.RegisterStudentWithDefaultsAsync(dto);
+                return Ok(studentId);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return BadRequest("Student creation failed — ID was not generated.");
+                return BadRequest("Registration failed");
             }
         }
+
 
         [HttpPost]
         [Route("ValidateStudent")]
