@@ -74,7 +74,7 @@ public partial class MainPage : ContentPage
 		catch (Exception)
 		{
 
-			throw;
+			//Do nothing
 		}
 	}
 

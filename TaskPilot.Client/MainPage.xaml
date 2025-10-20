@@ -10,10 +10,6 @@
 
              BackgroundColor="White">
 
-
-
-
-
     <ScrollView>
 
         <VerticalStackLayout Padding="20" Spacing="25">

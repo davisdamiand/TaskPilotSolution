@@ -27,5 +27,7 @@ namespace TaskPilot.Client.Services
             //3. Read the result from the response
             return await response.Content.ReadFromJsonAsync<int>();
         }
+
+
     }
 }
