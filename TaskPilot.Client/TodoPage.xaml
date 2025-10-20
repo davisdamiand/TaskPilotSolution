@@ -29,7 +29,7 @@
                 </VerticalStackLayout>
 
                 <HorizontalStackLayout Grid.Column="1" Spacing="20" VerticalOptions="Center">
-                    <!-- Search Bar -->
+                    <!-- Search -->
                     <Frame BackgroundColor="White"
                            CornerRadius="12"
                            BorderColor="Transparent"
