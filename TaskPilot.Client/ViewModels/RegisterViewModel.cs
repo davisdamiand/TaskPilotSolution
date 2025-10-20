@@ -4,8 +4,6 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using TaskPilot.Client.Services;
 
-namespace TaskPilot.Client.ViewModels;
-
 public class RegisterViewModel : INotifyPropertyChanged
 {
     private readonly StudentService _studentService;
@@ -15,69 +13,46 @@ public class RegisterViewModel : INotifyPropertyChanged
     private string _email;
     private string _password;
     private DateTime _dob = DateTime.Today;
+    private bool _isBusy;
 
-    public RegisterViewModel(StudentService studentService)
+    public RegisterViewModel(StudentService studentService, StatsService statsService)
     {
         _studentService = studentService;
-        RegisterCommand = new Command(async () => await RegisterAsync(), CanRegister);
+        RegisterCommand = new Command(async () => await RegisterAsync(), () => !IsBusy);
     }
 
-    public string Name
-    {
-        get => _name;
-        set { _name = value; OnPropertyChanged(); ((Command)RegisterCommand).ChangeCanExecute(); }
-    }
+    public string Name { get => _name; set { _name = value; OnPropertyChanged(); } }
+    public string Surname { get => _surname; set { _surname = value; OnPropertyChanged(); } }
+    public string Email { get => _email; set { _email = value; OnPropertyChanged(); } }
+    public string Password { get => _password; set { _password = value; OnPropertyChanged(); } }
+    public DateTime DOB { get => _dob; set { _dob = value; OnPropertyChanged(); } }
 
-    public string Surname
+    public bool IsBusy
     {
-        get => _surname;
-        set { _surname = value; OnPropertyChanged(); ((Command)RegisterCommand).ChangeCanExecute(); }
-    }
-
-    public string Email
-    {
-        get => _email;
-        set { _email = value; OnPropertyChanged(); ((Command)RegisterCommand).ChangeCanExecute(); }
-    }
-
-    public string Password
-    {
-        get => _password;
-        set { _password = value; OnPropertyChanged(); ((Command)RegisterCommand).ChangeCanExecute(); }
-    }
-
-    public DateTime DOB
-    {
-        get => _dob;
-        set { _dob = value; OnPropertyChanged(); }
+        get => _isBusy;
+        private set { _isBusy = value; OnPropertyChanged(); ((Command)RegisterCommand).ChangeCanExecute(); }
     }
 
     public ICommand RegisterCommand { get; }
 
-    private bool CanRegister()
-    {
-        return !string.IsNullOrWhiteSpace(Name)
-            && !string.IsNullOrWhiteSpace(Surname)
-            && !string.IsNullOrWhiteSpace(Email)
-            && !string.IsNullOrWhiteSpace(Password);
-    }
-
     private async Task RegisterAsync()
     {
-        var student = new StudentCreateDto
-        {
-            Name = Name?.Trim(),
-            Surname = Surname?.Trim(),
-            Email = Email?.Trim(),
-            Password = Password,
-            DOB = DateOnly.FromDateTime(DOB)
-        };
+        if (IsBusy) return;
+        IsBusy = true;
 
         try
         {
-            var id = await _studentService.CreateStudentAsync(student);
+            var student = new StudentCreateDto
+            {
+                Name = Name,
+                Surname = Surname,
+                Email = Email,
+                Password = Password,
+                DOB = DateOnly.FromDateTime(DOB)
+            };
 
-            // Store locally
+            var id = await _studentService.RegisterStudentWithDefaultsAsync(student);
+
             Preferences.Set("UserID", id.ToString());
             Preferences.Set("StudentName", Name);
             Preferences.Set("StudentSurname", Surname);
@@ -86,7 +61,12 @@ public class RegisterViewModel : INotifyPropertyChanged
         }
         catch (Exception ex)
         {
-            await Application.Current.MainPage.DisplayAlertAsync("Error", ex.Message, "OK");
+            await Application.Current.MainPage.DisplayAlertAsync("Error", "Registration failed. Please try again.", "OK");
+            // log ex somewhere
+        }
+        finally
+        {
+            IsBusy = false;
         }
     }
 

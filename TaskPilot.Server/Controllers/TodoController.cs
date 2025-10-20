@@ -89,5 +89,41 @@ namespace TaskPilot.Server.Controllers
                 });
             }
         }
+
+        [HttpPost]
+        [Route("UpdateTodo")]
+        public async Task<IActionResult> UpdateTodo([FromBody] TodoUpdateDto todoUpdateDto)
+        {
+            var success = await _todoService.UpdateTodoAsync(todoUpdateDto);
+            if (!success) return NotFound("Todo not found");
+            return Ok("Todo updated successfully");
+        }
+
+        [HttpPost]
+        [Route("ToggleCompletion")]
+        public async Task<IActionResult> ToggleCompletion(int id)
+        {
+            var success = await _todoService.ToggleTodoCompletionAsync(id);
+            if (!success) return NotFound("Todo not found");
+            return Ok("Todo completion status toggled");
+        }
+
+        [HttpDelete("TodoDelete")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var success = await _todoService.DeleteTodoAsync(id);
+            if (!success) return NotFound("Todo not found");
+            return Ok("Todo deleted successfully");
+        }
+
+        [HttpPatch("UpdateTime")]
+        public async Task<IActionResult> UpdateTimeSpent(int id, [FromQuery] int minutes)
+        {
+            var success = await _todoService.UpdateTimeSpentAsync(id, minutes);
+            if (!success) return NotFound("Todo not found");
+            return Ok("Time spent updated");
+        }
+
+
     }
 }

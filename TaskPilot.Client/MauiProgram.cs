@@ -23,15 +23,31 @@ namespace TaskPilot.Client
                 BaseAddress = new Uri(Config.BaseUrl)
             });
 
+
+            // Register pages
+            builder.Services.AddTransient<MainPage>();
+            builder.Services.AddTransient<TodoPage>();
+            builder.Services.AddTransient<ProfilePage>();
+            builder.Services.AddTransient<CalendarPage>();
+            builder.Services.AddTransient<LoginPage>();
+            builder.Services.AddTransient<RegisterPage>();
+            builder.Services.AddTransient<StatsPage>();
+            builder.Services.AddTransient<ForgotPasswordPage>();
+
+            builder.Services.AddTransient<TodoViewModel>();
+            builder.Services.AddTransient<ProfileViewModel>();
+            builder.Services.AddTransient<RegisterViewModel>();
+
             // Register TodoService
             builder.Services.AddSingleton<TodoService>();
-
-            // Register ViewModel
-            builder.Services.AddTransient<TodoViewModel>();
-
             builder.Services.AddSingleton<StudentService>();
+            builder.Services.AddSingleton<ProfileService>();
+            builder.Services.AddSingleton<StatsService>();
 
-            builder.Services.AddTransient<RegisterViewModel>();
+
+            // Register Profile related services and viewmodel so Shell casn resolve ProfilePage
+
+
 
 #if DEBUG
             builder.Logging.AddDebug();

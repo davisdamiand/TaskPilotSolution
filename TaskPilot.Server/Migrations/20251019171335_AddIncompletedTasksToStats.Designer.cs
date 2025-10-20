@@ -12,8 +12,8 @@ using TaskPilot.Server.Data;
 namespace TaskPilot.Server.Migrations
 {
     [DbContext(typeof(TaskPilotContext))]
-    [Migration("20251017065059_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20251019171335_AddIncompletedTasksToStats")]
+    partial class AddIncompletedTasksToStats
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,6 +40,9 @@ namespace TaskPilot.Server.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("TotalCompletedTasks")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalInCompletedTasks")
                         .HasColumnType("int");
 
                     b.Property<int>("TotalPomodoroSessions")

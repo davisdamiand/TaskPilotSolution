@@ -35,8 +35,8 @@ namespace TaskPilot.Server.Services
                 {
                     Streak = 0,
                     TotalCompletedTasks = 0,
-                    TotalPomodoroSessions = 0
-
+                    TotalPomodoroSessions = 0,
+                    StudentID = statsCreateDto.StudentID
                 };
 
                 await _context.Stats.AddAsync(newStats);
@@ -67,6 +67,7 @@ namespace TaskPilot.Server.Services
                 {
                     TotalPomodoroSessions = stats.TotalPomodoroSessions,
                     TotalCompletedTasks = stats.TotalCompletedTasks,
+                    TotalInCompletedTasks = stats.TotalInCompletedTasks,
                     Streak = stats.Streak,
                 };
 
@@ -91,8 +92,14 @@ namespace TaskPilot.Server.Services
 
 
             stats.TotalCompletedTasks = await _context.Todos
-                .Where(t => t.IsCompleted)
-                .CountAsync();
+             .Where(t => t.IsCompleted && t.StudentID == statsCalculateDto.StudentID)
+             .CountAsync();
+
+            stats.TotalInCompletedTasks = await _context.Todos
+            .Where(t => !t.IsCompleted && t.StudentID == statsCalculateDto.StudentID)
+            .CountAsync();
+
+
 
 
             if (statsCalculateDto.LastAccessedDay == DateOnly.FromDateTime(DateTime.Now))

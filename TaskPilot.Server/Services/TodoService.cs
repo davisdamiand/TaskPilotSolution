@@ -14,6 +14,68 @@ namespace TaskPilot.Server.Services
             _context = context;
         }
 
+        public async Task<bool> ToggleTodoCompletionAsync(int todoId)
+        {
+            var todo = await _context.Todos.FindAsync(todoId);
+            if (todo == null) return false;
+
+            if (todo.IsCompleted)
+            {
+                // Undo completion
+                todo.IsCompleted = false;
+            }
+            else
+            {
+                // Mark as complete
+                todo.IsCompleted = true;
+            }
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> DeleteTodoAsync(int todoId)
+        {
+            var todo = await _context.Todos.FindAsync(todoId);
+            if (todo == null) return false;
+
+            _context.Todos.Remove(todo);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> UpdateTodoAsync(TodoUpdateDto dto)
+        {
+            var todo = await _context.Todos.FindAsync(dto.Id);
+            if (todo == null) return false;
+
+            todo.Title = dto.Title;
+            todo.Description = dto.Description;
+            todo.DueDateTime = dto.DueDateTime;
+            todo.StartDateTime = dto.StartDateTime;
+            todo.EndDateTime = dto.EndDateTime;
+            todo.PriorityLevel = dto.PriorityLevel;
+            todo.PrioritySelection = CalculatePriority(todo);
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+
+        public async Task<bool> UpdateTimeSpentAsync(int todoId, int minutes)
+        {
+            var todo = await _context.Todos.FindAsync(todoId);
+            if (todo == null) return false;
+
+            todo.TimeSpentMinutes += minutes;
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
+
+        //Create todo object
         public async Task<int> CreateTodoAsync(TodoCreateDto todoCreateDto)
         {
             try
@@ -69,6 +131,7 @@ namespace TaskPilot.Server.Services
             return score;
         }
 
+        //Get all the todos beloning to a specific user
         public async Task<List<TodoGetDto>> GetTodosByStudentIdAsync(int studentID)
         {
             var listOfTodos = await _context.Todos

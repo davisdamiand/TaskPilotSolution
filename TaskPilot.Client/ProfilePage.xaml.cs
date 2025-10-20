@@ -1,17 +1,24 @@
+using Shared.DTOs;
+using TaskPilot.Client.ViewModels;
+
 namespace TaskPilot.Client;
 
 public partial class ProfilePage : ContentPage
 {
-	public ProfilePage()
+    private ProfileViewModel ViewModel => BindingContext as ProfileViewModel;
+
+    public ProfilePage(ProfileViewModel vm)
 	{
 		InitializeComponent();
+		BindingContext = vm;
+		
 	}
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
 
-	private async void OnLogoutButtonClicked(object sender, EventArgs e)
-	{
-		// Clear user session or authentication tokens here
-		Preferences.Clear();
-        // Navigate to the login page
-        await Shell.Current.GoToAsync("//LoginPage");
+        var studentId = Preferences.Get("UserID", 0);
+        await ViewModel.LoadStatsAsync(new StatsCalculateDto { StudentID = studentId });
     }
+
 }

@@ -6,28 +6,21 @@ using System.Text;
 
 namespace TaskPilot.Client.Services
 {
-    public class TodoService
+    public class StatsService
     {
         private readonly HttpClient _httpClient;
 
-        public TodoService(HttpClient httpClient)
+        public StatsService(HttpClient httpClient)
         {
             _httpClient = httpClient;
         }
 
-        public async Task<int> CreateTodoAsync(TodoCreateDto todoCreateDto)
+        public async Task<int> CreateStatsDefaultAsync(StatsCreateDto statsCreateDto)
         {
-            // 1. Get response from the API
-            var response = await _httpClient.PostAsJsonAsync("api/Todo/CreateTodo", todoCreateDto);
-
-            //2. Check if the response is successful
+            var response = await _httpClient.PostAsJsonAsync("api/Stats/CreateStats", statsCreateDto);
             if (!response.IsSuccessStatusCode)
                 throw new Exception(await response.Content.ReadAsStringAsync());
-
-            //3. Read the result from the response
             return await response.Content.ReadFromJsonAsync<int>();
         }
-
-
     }
 }
