@@ -18,6 +18,8 @@ namespace Shared.DTOs
 
         public double PrioritySelection { get; set; }
 
+        public int PriorityLevel { get; set; }
+
         public int TimeSpentMinutes { get; set; }
 
         [Required(ErrorMessage = "Due date is required")]

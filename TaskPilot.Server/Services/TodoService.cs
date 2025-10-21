@@ -53,8 +53,6 @@ namespace TaskPilot.Server.Services
             todo.Title = dto.Title;
             todo.Description = dto.Description;
             todo.DueDateTime = dto.DueDateTime;
-            todo.StartDateTime = dto.StartDateTime;
-            todo.EndDateTime = dto.EndDateTime;
             todo.PriorityLevel = dto.PriorityLevel;
             todo.PrioritySelection = CalculatePriority(todo);
 
@@ -143,6 +141,7 @@ namespace TaskPilot.Server.Services
                 Title = t.Title,
                 Description = t.Description,
                 PrioritySelection = t.PrioritySelection,
+                PriorityLevel = t.PriorityLevel,
                 TimeSpentMinutes = t.TimeSpentMinutes,
                 DueDateTime = t.DueDateTime,
                 StartDateTime = t.StartDateTime,

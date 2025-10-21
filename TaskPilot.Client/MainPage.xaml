@@ -82,11 +82,14 @@
                                            FontAttributes="Bold"
                                            TextColor="#1A1D3F"
                                            Grid.Column="0"/>
-                                    <Label Text="⋮"
-                                           Grid.Column="1"
-                                           FontSize="20"
-                                           TextColor="#999"
-                                           VerticalOptions="Center"/>
+                                    <Button Text="⋮"
+                                            Grid.Column="1"
+                                            FontSize="20"
+                                            TextColor="#999"
+                                            BackgroundColor="Transparent"
+                                            Padding="0"
+                                            VerticalOptions="Center"
+                                            Clicked="OnMenuClicked"/>
                                 </Grid>
 
                                 <!-- DUE DATE -->

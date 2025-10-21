@@ -83,5 +83,15 @@ public partial class MainPage : ContentPage
         }
     }
 
+    private async void OnMenuClicked(object sender, EventArgs e)
+    {
+        if (sender is Button btn && btn.BindingContext is TodoGetDto task)
+        {
+            await Shell.Current.GoToAsync(nameof(TodoPage), true, new Dictionary<string, object>
+        {
+            { "TaskToEdit", task }
+        });
+        }
+    }
 
 }

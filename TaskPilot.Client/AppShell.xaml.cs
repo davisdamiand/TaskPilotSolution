@@ -11,6 +11,8 @@
             Routing.RegisterRoute("RegisterPage", typeof(RegisterPage));
             Routing.RegisterRoute("StatsPage", typeof(StatsPage));
             Routing.RegisterRoute("ForgotPasswordPage", typeof(ForgotPasswordPage));
+            Routing.RegisterRoute(nameof(TodoPage), typeof(TodoPage));
+
 
         }
     }

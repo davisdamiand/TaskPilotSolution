@@ -4,28 +4,21 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using TaskPilot.Client.Services;
 
-public class TodoViewModel : INotifyPropertyChanged
+public class TodoViewModel : INotifyPropertyChanged, IQueryAttributable
 {
-
-    // 1. Fields backing your properties
-    
+    // Fields
     private readonly TodoService _todoService;
-    public TodoViewModel(TodoService todoService)
-    {
-        _todoService = todoService;
-        _dueDateTime = DateTime.Now.AddDays(1).Date.AddHours(17);
-        SaveCommand = new Command(async () => await SaveAsync());
-
-    }
-
-    
-
+    private bool _isEditMode;
+    private int? _todoId;
     private string _name;
     private string _description;
     private DateTime _dueDateTime;
-    private int _priority = 5;
+    private string _priority = "5"; // Default value
 
-    // 2. Properties bound to UI controls
+    // UI-Bound Properties
+    public string HeaderText => _isEditMode ? "Edit Task" : "Add a New Task";
+    public string SaveButtonText => _isEditMode ? "Update Todo" : "Save Todo";
+
     public string Name
     {
         get => _name;
@@ -41,7 +34,17 @@ public class TodoViewModel : INotifyPropertyChanged
     public DateTime DueDateTime
     {
         get => _dueDateTime;
-        set { _dueDateTime = value; OnPropertyChanged(); }
+        set
+        {
+            if (_dueDateTime != value)
+            {
+                _dueDateTime = value;
+                OnPropertyChanged();
+                // Also notify dependent properties
+                OnPropertyChanged(nameof(DueDate));
+                OnPropertyChanged(nameof(DueTime));
+            }
+        }
     }
 
     public TimeSpan DueTime
@@ -53,7 +56,7 @@ public class TodoViewModel : INotifyPropertyChanged
             {
                 _dueDateTime = _dueDateTime.Date + value;
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(DueDateTime)); // Notify that the full DateTime has changed
+                OnPropertyChanged(nameof(DueDateTime));
             }
         }
     }
@@ -67,64 +70,113 @@ public class TodoViewModel : INotifyPropertyChanged
             {
                 _dueDateTime = value.Date + _dueDateTime.TimeOfDay;
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(DueDateTime)); // Notify that the full DateTime has changed
+                OnPropertyChanged(nameof(DueDateTime));
             }
         }
     }
 
-    public int Priority
+    public string Priority
     {
         get => _priority;
-        set { _priority = value; OnPropertyChanged(); }
+        set
+        {
+            if (_priority != value)
+            {
+                _priority = value;
+                OnPropertyChanged();
+            }
+        }
     }
 
-    // 3. Commands bound to buttons
     public ICommand SaveCommand { get; }
 
-    // 4. Logic (calls your ASP.NET API)
+    // Constructor
+    public TodoViewModel(TodoService todoService)
+    {
+        _todoService = todoService;
+        _dueDateTime = DateTime.Now.AddDays(1).Date.AddHours(17);
+        SaveCommand = new Command(async () => await SaveAsync());
+    }
+
+    // Method to handle navigation data
+    public void ApplyQueryAttributes(IDictionary<string, object> query)
+    {
+        if (query.TryGetValue("TaskToEdit", out var task) && task is TodoGetDto todoDto)
+        {
+            LoadTaskForEdit(todoDto);
+        }
+    }
+
+    // Logic to populate fields for editing
+    private void LoadTaskForEdit(TodoGetDto task)
+    {
+        _isEditMode = true;
+        _todoId = task.Id;
+
+        // Update properties which will trigger INotifyPropertyChanged
+        Name = task.Title;
+        Description = task.Description;
+        DueDateTime = task.DueDateTime;
+        Priority = task.PriorityLevel.ToString(); 
+
+        // Explicitly notify calculated properties that their state has changed
+        OnPropertyChanged(nameof(HeaderText));
+        OnPropertyChanged(nameof(SaveButtonText));
+    }
+
     private async Task SaveAsync()
     {
         var storedID = Preferences.Get("UserID", null);
         if (!int.TryParse(storedID, out var studentID))
             throw new InvalidOperationException("Invalid UserID");
 
-        var newTodo = new TodoCreateDto
-        {
-            StudentId = studentID,
-            Name = Name?.Trim(),
-            Description = Description?.Trim(),
-            DueDateTime = DueDateTime,
-            PriorityLevel = Priority
-
-        };
-
-        // Call your API here with HttpClient
         try
         {
-            var id = await _todoService.CreateTodoAsync(newTodo);
+            if (_isEditMode && _todoId.HasValue)
+            {
+                var updateDto = new TodoUpdateDto
+                {
+                    Id = _todoId.Value,
+                    StudentId = studentID,
+                    Title = Name?.Trim(),
+                    Description = Description?.Trim(),
+                    DueDateTime = DueDateTime,
+                    PriorityLevel = int.TryParse(Priority, out var p) ? p : 5
+                };
+                await _todoService.UpdateTodo(updateDto);
+            }
+            else
+            {
+                var newTodo = new TodoCreateDto
+                {
+                    StudentId = studentID,
+                    Name = Name?.Trim(),
+                    Description = Description?.Trim(),
+                    DueDateTime = DueDateTime,
+                    PriorityLevel = int.TryParse(Priority, out var p) ? p : 5
+                };
+                await _todoService.CreateTodoAsync(newTodo);
+            }
 
-            //Reset todo page
             ResetFields();
-
             await Shell.Current.GoToAsync("//MainPage");
         }
         catch (Exception ex)
         {
-
             await Application.Current.MainPage.DisplayAlertAsync("Error", ex.Message, "OK");
         }
     }
-
-    // 5. Boilerplate for property change notifications
-    public event PropertyChangedEventHandler PropertyChanged;
-    protected void OnPropertyChanged([CallerMemberName] string name = null) =>
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 
     private void ResetFields()
     {
         Name = string.Empty;
         Description = string.Empty;
         DueDateTime = DateTime.Now.AddDays(1).Date.AddHours(17);
-        Priority = 5;
+        Priority = "5";
     }
+
+    // Boilerplate for property change notifications
+    public event PropertyChangedEventHandler PropertyChanged;
+    protected void OnPropertyChanged([CallerMemberName] string name = null) =>
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 }
