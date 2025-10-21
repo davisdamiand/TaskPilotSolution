@@ -44,6 +44,34 @@ public class TodoViewModel : INotifyPropertyChanged
         set { _dueDateTime = value; OnPropertyChanged(); }
     }
 
+    public TimeSpan DueTime
+    {
+        get => _dueDateTime.TimeOfDay;
+        set
+        {
+            if (_dueDateTime.TimeOfDay != value)
+            {
+                _dueDateTime = _dueDateTime.Date + value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(DueDateTime)); // Notify that the full DateTime has changed
+            }
+        }
+    }
+
+    public DateTime DueDate
+    {
+        get => _dueDateTime.Date;
+        set
+        {
+            if (_dueDateTime.Date != value.Date)
+            {
+                _dueDateTime = value.Date + _dueDateTime.TimeOfDay;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(DueDateTime)); // Notify that the full DateTime has changed
+            }
+        }
+    }
+
     public int Priority
     {
         get => _priority;

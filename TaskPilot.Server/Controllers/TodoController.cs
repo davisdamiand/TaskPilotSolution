@@ -95,35 +95,117 @@ namespace TaskPilot.Server.Controllers
         public async Task<IActionResult> UpdateTodo([FromBody] TodoUpdateDto todoUpdateDto)
         {
             var success = await _todoService.UpdateTodoAsync(todoUpdateDto);
-            if (!success) return NotFound("Todo not found");
-            return Ok("Todo updated successfully");
+
+            if (!success)
+            {
+                return NotFound(new ErrorResponse
+                {
+                    Message = "Todo not found",
+                    Errors = new Dictionary<string, string[]>
+            {
+                { "Id", new[] { "The specified Todo item could not be found." } }
+            }
+                });
+            }
+
+            return Ok(new { Message = "Todo updated successfully" });
         }
+
 
         [HttpPost]
         [Route("ToggleCompletion")]
         public async Task<IActionResult> ToggleCompletion(int id)
         {
             var success = await _todoService.ToggleTodoCompletionAsync(id);
-            if (!success) return NotFound("Todo not found");
-            return Ok("Todo completion status toggled");
+
+            if (!success)
+            {
+                return NotFound(new ErrorResponse
+                {
+                    Message = "Todo not found",
+                    Errors = new Dictionary<string, string[]>
+            {
+                { "Id", new[] { "The specified Todo item could not be found." } }
+            }
+                });
+            }
+
+            return Ok(new { Message = "Todo updated successfully" });
+
         }
 
+        [HttpPost]
         [HttpDelete("TodoDelete")]
         public async Task<IActionResult> Delete(int id)
         {
-            var success = await _todoService.DeleteTodoAsync(id);
-            if (!success) return NotFound("Todo not found");
-            return Ok("Todo deleted successfully");
+            try
+            {
+                var success = await _todoService.DeleteTodoAsync(id);
+
+                if (!success)
+                {
+                    return NotFound(new ErrorResponse
+                    {
+                        Message = "Todo not found",
+                        Errors = new Dictionary<string, string[]>
+                {
+                    { "Id", new[] { $"No Todo item with id {id} exists." } }
+                }
+                    });
+                }
+
+                return Ok(new { Message = "Todo deleted successfully" });
+            }
+            catch (Exception ex)
+            {
+                // Log the exception internally (ILogger, Application Insights, etc.)
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse
+                {
+                    Message = "An unexpected error occurred while deleting the Todo.",
+                    Errors = new Dictionary<string, string[]>
+            {
+                { "Server", new[] { "Please try again later or contact support if the issue persists." } }
+            }
+                });
+            }
         }
 
+
+        [HttpPost]
         [HttpPatch("UpdateTime")]
         public async Task<IActionResult> UpdateTimeSpent(int id, [FromQuery] int minutes)
         {
-            var success = await _todoService.UpdateTimeSpentAsync(id, minutes);
-            if (!success) return NotFound("Todo not found");
-            return Ok("Time spent updated");
-        }
+            try
+            {
+                var success = await _todoService.UpdateTimeSpentAsync(id, minutes);
 
+                if (!success)
+                {
+                    return NotFound(new ErrorResponse
+                    {
+                        Message = "Todo not found",
+                        Errors = new Dictionary<string, string[]>
+                {
+                    { "Id", new[] { $"No Todo item with id {id} exists." } }
+                }
+                    });
+                }
+
+                return Ok(new { Message = "Time spent updated successfully" });
+            }
+            catch (Exception ex)
+            {
+                // Log the exception internally (ILogger, Application Insights, etc.)
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse
+                {
+                    Message = "An unexpected error occurred while updating time spent.",
+                    Errors = new Dictionary<string, string[]>
+            {
+                { "Server", new[] { "Please try again later or contact support if the issue persists." } }
+            }
+                });
+            }
+        }
 
     }
 }
