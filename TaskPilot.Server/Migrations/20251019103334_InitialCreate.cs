@@ -34,7 +34,7 @@ namespace TaskPilot.Server.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TotalPomoTotalPomodoroSessions = table.Column<TimeOnly>(type: "time", nullable: false),
+                    TotalPomodoroSessions = table.Column<int>(type: "int", nullable: false),
                     Streak = table.Column<int>(type: "int", nullable: false),
                     TotalCompletedTasks = table.Column<int>(type: "int", nullable: false),
                     StudentID = table.Column<int>(type: "int", nullable: false)
@@ -58,11 +58,12 @@ namespace TaskPilot.Server.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DueDate = table.Column<DateOnly>(type: "date", nullable: false),
-                    StartTime = table.Column<TimeOnly>(type: "time", nullable: false),
-                    EndTime = table.Column<TimeOnly>(type: "time", nullable: false),
+                    DueDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    StartDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     PriorityLevel = table.Column<int>(type: "int", nullable: false),
-                    TimeSpent = table.Column<TimeOnly>(type: "time", nullable: false),
+                    PrioritySelection = table.Column<double>(type: "float", nullable: false),
+                    TimeSpentMinutes = table.Column<int>(type: "int", nullable: false),
                     IsCompleted = table.Column<bool>(type: "bit", nullable: false),
                     StudentID = table.Column<int>(type: "int", nullable: false)
                 },

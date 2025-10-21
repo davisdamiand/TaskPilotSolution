@@ -18,17 +18,11 @@ namespace Shared.DTOs
         public string Name { get; set; }
 
         [StringLength(50, ErrorMessage = "Description cannot exceed 50 characters")]
-        public string Description { get; set; }
+        public string Description { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Due date is required")]
         [DataType(DataType.Date)]
-        public DateOnly DueDate { get; set; }
-
-        [Required(ErrorMessage = "Start time is required")]
-        public TimeOnly StartTime { get; set; }
-
-        [Required(ErrorMessage = "End time is required")]
-        public TimeOnly EndTime { get; set; }
+        public DateTime DueDateTime { get; set; }
 
         [Range(0, 5, ErrorMessage = "Priority level must be between 0 (lowest) and 5 (highest)")]
         public int PriorityLevel { get; set; } = 0;
@@ -36,19 +30,13 @@ namespace Shared.DTOs
         // Custom validation logic
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (EndTime <= StartTime)
-            {
-                yield return new ValidationResult(
-                    "End time must be later than start time",
-                    new[] { nameof(EndTime), nameof(StartTime) });
-            }
-
-            if (DueDate < DateOnly.FromDateTime(DateTime.Today))
+            if (DueDateTime < DateTime.Now.Date)
             {
                 yield return new ValidationResult(
                     "Due date cannot be in the past",
-                    new[] { nameof(DueDate) });
+                    new[] { nameof(DueDateTime) });
             }
+
         }
     }
 }

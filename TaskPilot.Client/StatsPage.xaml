@@ -1,12 +1,198 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="TaskPilot.Client.StatsPage"
-             Title="StatsPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="TaskPilot.Client.StatsPage"
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="White">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="25,50,25,40" Spacing="20">
+
+            <!-- HEADER -->
+            <Frame HasShadow="False" BackgroundColor="Transparent">
+                <VerticalStackLayout Padding="0,10" HorizontalOptions="Center">
+                    <Label Text="Do you have time on your hands?" 
+                           FontSize="28" 
+                           FontAttributes="Bold" 
+                           TextColor="#1E1E5A" 
+                           HorizontalOptions="Center"/>
+                    <Label Text="Take a moment to explore new skills and grow your potential." 
+                           FontSize="15" 
+                           TextColor="#444" 
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- SEARCH BAR -->
+            <Frame BackgroundColor="#F3F3F3" CornerRadius="25" HasShadow="True" Padding="0" HeightRequest="50">
+                <Grid ColumnDefinitions="*, Auto" Padding="10">
+                    <Entry x:Name="SearchBar" Placeholder="Search learning resources..." FontSize="14" BackgroundColor="Transparent" TextColor="#1E1E5A" />
+                    <Image Source="search.png" WidthRequest="22" HeightRequest="22" VerticalOptions="Center" HorizontalOptions="End" />
+                </Grid>
+            </Frame>
+
+            <!-- SECTION TITLE -->
+            <Label Text="Learn a New Skill" 
+                   FontAttributes="Bold" 
+                   FontSize="20" 
+                   TextColor="#1E1E5A"
+                   HorizontalOptions="Center"/>
+
+            <!-- LEARNING RESOURCE CARDS -->
+            <VerticalStackLayout Spacing="15">
+
+                <!-- Coursera -->
+                <Frame BackgroundColor="#F8F8FF" CornerRadius="18" Padding="15" HasShadow="True">
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Coursera" FontAttributes="Bold" FontSize="18" TextColor="#1E1E5A"/>
+                        <Label Text="University-level courses from top institutions." FontSize="13" TextColor="#555"/>
+                        <Button Text="Visit Coursera" 
+                                BackgroundColor="#1E1E5A" 
+                                TextColor="White" 
+                                CornerRadius="15" 
+                                FontAttributes="Bold"
+                                CommandParameter="https://www.coursera.org"
+                                Clicked="OnOpenLinkClicked"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Khan Academy -->
+                <Frame BackgroundColor="#F3F4FF" CornerRadius="18" Padding="15" HasShadow="True">
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Khan Academy" FontAttributes="Bold" FontSize="18" TextColor="#1E1E5A"/>
+                        <Label Text="Master math, science, and coding for free." FontSize="13" TextColor="#555"/>
+                        <Button Text="Visit Khan Academy" 
+                                BackgroundColor="#1E1E5A" 
+                                TextColor="White" 
+                                CornerRadius="15" 
+                                FontAttributes="Bold"
+                                CommandParameter="https://www.khanacademy.org"
+                                Clicked="OnOpenLinkClicked"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- freeCodeCamp -->
+                <Frame BackgroundColor="#E8E9F7" CornerRadius="18" Padding="15" HasShadow="True">
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="freeCodeCamp" FontAttributes="Bold" FontSize="18" TextColor="#1E1E5A"/>
+                        <Label Text="Learn web development and earn free certificates." FontSize="13" TextColor="#555"/>
+                        <Button Text="Visit freeCodeCamp" 
+                                BackgroundColor="#1E1E5A" 
+                                TextColor="White" 
+                                CornerRadius="15" 
+                                FontAttributes="Bold"
+                                CommandParameter="https://www.freecodecamp.org"
+                                Clicked="OnOpenLinkClicked"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- YouTube Learning -->
+                <Frame BackgroundColor="#F9F9FF" CornerRadius="18" Padding="15" HasShadow="True">
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="YouTube Learning" FontAttributes="Bold" FontSize="18" TextColor="#1E1E5A"/>
+                        <Label Text="Watch tutorials and master skills with video lessons." FontSize="13" TextColor="#555"/>
+                        <Button Text="Visit YouTube Learning" 
+                                BackgroundColor="#1E1E5A" 
+                                TextColor="White" 
+                                CornerRadius="15" 
+                                FontAttributes="Bold"
+                                CommandParameter="https://www.youtube.com/learning"
+                                Clicked="OnOpenLinkClicked"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Udemy -->
+                <Frame BackgroundColor="#F8F8FF" CornerRadius="18" Padding="15" HasShadow="True">
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Udemy" FontAttributes="Bold" FontSize="18" TextColor="#1E1E5A"/>
+                        <Label Text="Thousands of affordable courses in tech, business, and more." FontSize="13" TextColor="#555"/>
+                        <Button Text="Visit Udemy" 
+                                BackgroundColor="#1E1E5A" 
+                                TextColor="White" 
+                                CornerRadius="15" 
+                                FontAttributes="Bold"
+                                CommandParameter="https://www.udemy.com"
+                                Clicked="OnOpenLinkClicked"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- LinkedIn Learning -->
+                <Frame BackgroundColor="#E8E9F7" CornerRadius="18" Padding="15" HasShadow="True">
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="LinkedIn Learning" FontAttributes="Bold" FontSize="18" TextColor="#1E1E5A"/>
+                        <Label Text="Learn professional and creative skills from industry experts." FontSize="13" TextColor="#555"/>
+                        <Button Text="Visit LinkedIn Learning" 
+                                BackgroundColor="#1E1E5A" 
+                                TextColor="White" 
+                                CornerRadius="15" 
+                                FontAttributes="Bold"
+                                CommandParameter="https://www.linkedin.com/learning"
+                                Clicked="OnOpenLinkClicked"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Skillshare -->
+                <Frame BackgroundColor="#F3F4FF" CornerRadius="18" Padding="15" HasShadow="True">
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Skillshare" FontAttributes="Bold" FontSize="18" TextColor="#1E1E5A"/>
+                        <Label Text="Creative classes on design, productivity, and entrepreneurship." FontSize="13" TextColor="#555"/>
+                        <Button Text="Visit Skillshare" 
+                                BackgroundColor="#1E1E5A" 
+                                TextColor="White" 
+                                CornerRadius="15" 
+                                FontAttributes="Bold"
+                                CommandParameter="https://www.skillshare.com"
+                                Clicked="OnOpenLinkClicked"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- edX -->
+                <Frame BackgroundColor="#F8F8FF" CornerRadius="18" Padding="15" HasShadow="True">
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="edX" FontAttributes="Bold" FontSize="18" TextColor="#1E1E5A"/>
+                        <Label Text="Access free online courses from MIT, Harvard, and more." FontSize="13" TextColor="#555"/>
+                        <Button Text="Visit edX" 
+                                BackgroundColor="#1E1E5A" 
+                                TextColor="White" 
+                                CornerRadius="15" 
+                                FontAttributes="Bold"
+                                CommandParameter="https://www.edx.org"
+                                Clicked="OnOpenLinkClicked"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Codecademy -->
+                <Frame BackgroundColor="#E8E9F7" CornerRadius="18" Padding="15" HasShadow="True">
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Codecademy" FontAttributes="Bold" FontSize="18" TextColor="#1E1E5A"/>
+                        <Label Text="Interactive coding lessons for beginners to pros." FontSize="13" TextColor="#555"/>
+                        <Button Text="Visit Codecademy" 
+                                BackgroundColor="#1E1E5A" 
+                                TextColor="White" 
+                                CornerRadius="15" 
+                                FontAttributes="Bold"
+                                CommandParameter="https://www.codecademy.com"
+                                Clicked="OnOpenLinkClicked"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Google Digital Garage -->
+                <Frame BackgroundColor="#F3F4FF" CornerRadius="18" Padding="15" HasShadow="True">
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Google Digital Garage" FontAttributes="Bold" FontSize="18" TextColor="#1E1E5A"/>
+                        <Label Text="Free courses on digital marketing, career development, and tech." FontSize="13" TextColor="#555"/>
+                        <Button Text="Visit Google Digital Garage" 
+                                BackgroundColor="#1E1E5A" 
+                                TextColor="White" 
+                                CornerRadius="15" 
+                                FontAttributes="Bold"
+                                CommandParameter="https://learndigital.withgoogle.com/digitalgarage"
+                                Clicked="OnOpenLinkClicked"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

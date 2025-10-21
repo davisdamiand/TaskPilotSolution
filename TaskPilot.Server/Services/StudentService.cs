@@ -70,5 +70,19 @@ namespace TaskPilot.Server.Services
 
         private static string FormatEmail(string email) => email.Trim().ToLowerInvariant();
 
+        public async Task<StudentGetDto> GetStudentByIdAsync(int id)
+        {
+            var student = await _context.Students.FindAsync(id);
+            if (student == null)
+            {
+                return null; // Or throw an exception if preferred
+            }
+            return new StudentGetDto
+            {
+                Name = student.Name,
+                Surname = student.Surname
+            };
+        }
+
     }
 }

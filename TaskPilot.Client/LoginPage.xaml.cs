@@ -1,47 +1,139 @@
 using System.Net.Http.Json;
+using System.Threading.Tasks;
 using Shared.DTOs;
+using Shared.Security;
+using Microsoft.Maui.Storage;
 
 namespace TaskPilot.Client;
 
 public partial class LoginPage : ContentPage
 {
     private readonly HttpClient _httpClient;
+    private readonly IServiceProvider _serviceProvider;
 
-    // Add a reference to the NameLabel control
-    private Label NameLabel;
+    public LoginPage(IServiceProvider serviceProvider, HttpClient httpClient)
+    {
+        InitializeComponent();
 
-    public LoginPage()
-	{
-        // Ensure the correct namespace is used for InitializeComponent
-        // If this is a .NET MAUI or Xamarin.Forms project, this method is auto-generated
-        // and should be available in the partial class.
-        this.InitializeComponent(); // Add 'this.' to call the method from the partial class
-
-        _httpClient = new HttpClient
-        {
-            BaseAddress = new Uri(Config.BaseUrl)
-        };
-
-        // Find the NameLabel control from the XAML by its name
-        NameLabel = this.FindByName<Label>("NameLabel");
+        _serviceProvider = serviceProvider;
+        _httpClient = httpClient;
     }
 
-    private async void RunOnClick(object sender, EventArgs e)
-	{
+    //Navigate to forget password page
+    private async void OnForgotPasswordClicked(object sender, EventArgs e)
+    {
+        Application.Current.MainPage = new ForgotPasswordPage();
+    }
+
+    private async void OnLoginClicked(object sender, EventArgs e)
+    {
+        //Set the values
+        string email = EntryEmail.Text?.Trim();
+        string password = EntryPassword.Text?.Trim();
+
+        var loginStudent = new StudentValidationDto
+        {
+            Email = email,
+            Password = password
+        };
+
+        ButtonSignUp.IsEnabled = false;
+
+        await ValidateStudent(loginStudent);
+
+        ButtonSignUp.IsEnabled = true;
+    }
+
+    // Navigation 
+    private async void OnSignUpClicked(object sender, EventArgs e)
+    {
+        var registerPage = _serviceProvider.GetService<RegisterPage>();
+        Application.Current.MainPage = registerPage;
+    }
+
+    private async Task ValidateStudent(StudentValidationDto studentValidationDto)
+    {
         try
         {
-            var student = new StudentValidationDto
-            {
-                Email = "steve@gmail.com",
-                Password = "122445456456546",
-            };
-            var response = await _httpClient.PostAsJsonAsync("api/Student/ValidateStudent", student);
+            var response = await _httpClient.PostAsJsonAsync("api/Student/ValidateStudent", studentValidationDto);
 
-            NameLabel.Text = response.StatusCode.ToString();
+            if (response.IsSuccessStatusCode)
+            {
+                var id = await response.Content.ReadFromJsonAsync<int>();
+
+                if (id < 0)
+                {
+                    ShowError("Invalid email or password");
+                    return;
+                }
+                await GetStudentInformation(id);
+                Preferences.Set("UserID", id.ToString());
+                Application.Current.MainPage = new AppShell();
+            }
+            else
+            {
+                var errorResponse = await response.Content.ReadFromJsonAsync<ErrorResponse>();
+                if (errorResponse?.Errors != null && errorResponse.Errors.Any())
+                {
+                    // Show field-specific errors
+                    if (errorResponse.Errors.ContainsKey("Email"))
+                        EmailErrorLabel.Text = string.Join("\n", errorResponse.Errors["Email"]);
+
+                    if (errorResponse.Errors.ContainsKey("Password"))
+                        PasswordErrorLabel.Text = string.Join("\n", errorResponse.Errors["Password"]);
+
+                    EmailErrorLabel.IsVisible = errorResponse.Errors.ContainsKey("Email");
+                    PasswordErrorLabel.IsVisible = errorResponse.Errors.ContainsKey("Password");
+                }
+                else
+                {
+                    // Fallback to general message
+                    ShowError(errorResponse?.Message ?? "An unknown error occurred");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            ShowError(ex.Message);
+        }
+    }
+
+    private void ShowError(string message)
+    {
+        GeneralErrorLabel.Text = message;
+        GeneralErrorLabel.IsVisible = true;
+    }
+
+    private async Task GetStudentInformation(int id)
+    {
+        try
+        {
+            var response = await _httpClient.PostAsJsonAsync("api/Student/GetStudentById", id);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var student = await response.Content.ReadFromJsonAsync<StudentGetDto>();
+                if (student != null)
+                {
+                    Preferences.Set("StudentName", student.Name);
+                    Preferences.Set("StudentSurname", student.Surname);
+                }
+                else
+                {
+                    ShowError("Failed to retrieve student information.");
+                }
+            }
+            else
+            {
+                ShowError("Failed to retrieve student information.");
+            }
         }
         catch (Exception)
         {
-            NameLabel.Text = "Server offline";
-        }  
+
+            ButtonLogin.BackgroundColor = Colors.Red;
+        }
     }
+
+
 }

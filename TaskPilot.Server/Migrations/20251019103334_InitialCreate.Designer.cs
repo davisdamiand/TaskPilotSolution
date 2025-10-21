@@ -12,8 +12,8 @@ using TaskPilot.Server.Data;
 namespace TaskPilot.Server.Migrations
 {
     [DbContext(typeof(TaskPilotContext))]
-    [Migration("20251013195155_UpdateTodoModel")]
-    partial class UpdateTodoModel
+    [Migration("20251019103334_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -97,11 +97,11 @@ namespace TaskPilot.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateOnly>("DueDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("DueDateTime")
+                        .HasColumnType("datetime2");
 
-                    b.Property<TimeOnly>("EndTime")
-                        .HasColumnType("time");
+                    b.Property<DateTime>("EndDateTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("IsCompleted")
                         .HasColumnType("bit");
@@ -112,14 +112,14 @@ namespace TaskPilot.Server.Migrations
                     b.Property<double>("PrioritySelection")
                         .HasColumnType("float");
 
-                    b.Property<TimeOnly>("StartTime")
-                        .HasColumnType("time");
+                    b.Property<DateTime>("StartDateTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("StudentID")
                         .HasColumnType("int");
 
-                    b.Property<TimeOnly>("TimeSpent")
-                        .HasColumnType("time");
+                    b.Property<int>("TimeSpentMinutes")
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()

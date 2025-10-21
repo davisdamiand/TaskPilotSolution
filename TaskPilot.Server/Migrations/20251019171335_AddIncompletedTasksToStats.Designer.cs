@@ -12,8 +12,8 @@ using TaskPilot.Server.Data;
 namespace TaskPilot.Server.Migrations
 {
     [DbContext(typeof(TaskPilotContext))]
-    [Migration("20251003135709_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20251019171335_AddIncompletedTasksToStats")]
+    partial class AddIncompletedTasksToStats
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,8 +42,11 @@ namespace TaskPilot.Server.Migrations
                     b.Property<int>("TotalCompletedTasks")
                         .HasColumnType("int");
 
-                    b.Property<TimeOnly>("TotalPomoTotalPomodoroSessions")
-                        .HasColumnType("time");
+                    b.Property<int>("TotalInCompletedTasks")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalPomodoroSessions")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -97,11 +100,11 @@ namespace TaskPilot.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateOnly>("DueDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("DueDateTime")
+                        .HasColumnType("datetime2");
 
-                    b.Property<TimeOnly>("EndTime")
-                        .HasColumnType("time");
+                    b.Property<DateTime>("EndDateTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("IsCompleted")
                         .HasColumnType("bit");
@@ -109,14 +112,17 @@ namespace TaskPilot.Server.Migrations
                     b.Property<int>("PriorityLevel")
                         .HasColumnType("int");
 
-                    b.Property<TimeOnly>("StartTime")
-                        .HasColumnType("time");
+                    b.Property<double>("PrioritySelection")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("StartDateTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("StudentID")
                         .HasColumnType("int");
 
-                    b.Property<TimeOnly>("TimeSpent")
-                        .HasColumnType("time");
+                    b.Property<int>("TimeSpentMinutes")
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()

@@ -12,6 +12,8 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectio
 
 builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<ITodoService, TodoService>();
+builder.Services.AddScoped<IStatsService, StatsServices>();
+builder.Services.AddScoped<IRegistrationService, RegistrationService>();
 
 
 builder.Services.AddControllers();

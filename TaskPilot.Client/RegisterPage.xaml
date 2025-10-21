@@ -1,125 +1,59 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:TaskPilot.Client.ViewModels"
              x:Class="TaskPilot.Client.RegisterPage"
-             Loaded="OnPageLoad"
              Shell.NavBarIsVisible="False"
              BackgroundColor="White">
 
     <ScrollView>
-        <VerticalStackLayout
-            Padding="30,60,30,60"
-            Spacing="20"
-            VerticalOptions="Center"
-            HorizontalOptions="Center">
+        <VerticalStackLayout Padding="30,60,30,60" Spacing="20" VerticalOptions="Center" HorizontalOptions="Center">
 
-            <!-- Title -->
-            <Label
-                Text="Take control of your studying"
-                FontSize="22"
-                FontAttributes="Bold"
-                TextColor="#1E1E5A"
-                HorizontalOptions="Center"
-                HorizontalTextAlignment="Center"/>
+            <Label Text="Take control of your studying"
+                   FontSize="22"
+                   FontAttributes="Bold"
+                   TextColor="#1E1E5A"
+                   HorizontalOptions="Center"
+                   HorizontalTextAlignment="Center"/>
 
-            <!-- Logo -->
-            <Image
-                Source="task_pilot_icon.jpg"
-                HeightRequest="140"
-                Aspect="AspectFit"
-                Margin="0,10,0,20"/>
+            <Image Source="task_pilot_icon.jpg"
+                   HeightRequest="140"
+                   Aspect="AspectFit"
+                   Margin="0,10,0,20"/>
 
-            <!-- Already Registered -->
-            <Label
-                Text="Already Registered? Log in here."
-                FontSize="13"
-                TextColor="#555"
-                HorizontalOptions="Center"
-                Margin="0,0,0,10"/>
+            <Label Text="Already Registered? Log in here."
+                   FontSize="13"
+                   TextColor="#555"
+                   HorizontalOptions="Center"
+                   Margin="0,0,0,10"/>
 
-            <!-- Name -->
-            <Frame
-                BackgroundColor="#F2F2F7"
-                CornerRadius="10"
-                HasShadow="False"
-                Padding="10,5">
-                <Entry
-                    x:Name="EntryName"
-                    Placeholder="Name"
-                    TextColor="#1E1E5A"
-                    PlaceholderColor="#9FA4B2"
-                    BackgroundColor="Transparent"/>
+            <Frame BackgroundColor="#F2F2F7" CornerRadius="10" HasShadow="False" Padding="10,5">
+                <Entry Placeholder="Name" Text="{Binding Name}" TextColor="#1E1E5A" PlaceholderColor="#9FA4B2" BackgroundColor="Transparent"/>
             </Frame>
 
-            <!-- Surname -->
-            <Frame
-                BackgroundColor="#F2F2F7"
-                CornerRadius="10"
-                HasShadow="False"
-                Padding="10,5">
-                <Entry
-                    x:Name="EntrySurname"
-                    Placeholder="Surname"
-                    TextColor="#1E1E5A"
-                    PlaceholderColor="#9FA4B2"
-                    BackgroundColor="Transparent"/>
+            <Frame BackgroundColor="#F2F2F7" CornerRadius="10" HasShadow="False" Padding="10,5">
+                <Entry Placeholder="Surname" Text="{Binding Surname}" TextColor="#1E1E5A" PlaceholderColor="#9FA4B2" BackgroundColor="Transparent"/>
             </Frame>
 
-
-            <!-- Email -->
-            <Frame
-                BackgroundColor="#F2F2F7"
-                CornerRadius="10"
-                HasShadow="False"
-                Padding="10,5">
-                <Entry
-                    x:Name="EntryEmail"
-                    Placeholder="Email"
-                    TextColor="#1E1E5A"
-                    PlaceholderColor="#9FA4B2"
-                    BackgroundColor="Transparent"/>
+            <Frame BackgroundColor="#F2F2F7" CornerRadius="10" HasShadow="False" Padding="10,5">
+                <Entry Placeholder="Email" Text="{Binding Email}" Keyboard="Email" TextColor="#1E1E5A" PlaceholderColor="#9FA4B2" BackgroundColor="Transparent"/>
             </Frame>
 
-            <!-- Password -->
-            <Frame
-                BackgroundColor="#F2F2F7"
-                CornerRadius="10"
-                HasShadow="False"
-                Padding="10,5">
-                <Entry
-                    x:Name="EntryPassword"
-                    Placeholder="Password"
-                    IsPassword="True"
-                    TextColor="#1E1E5A"
-                    PlaceholderColor="#9FA4B2"
-                    BackgroundColor="Transparent"/>
+            <Frame BackgroundColor="#F2F2F7" CornerRadius="10" HasShadow="False" Padding="10,5">
+                <Entry Placeholder="Password" Text="{Binding Password}" IsPassword="True" TextColor="#1E1E5A" PlaceholderColor="#9FA4B2" BackgroundColor="Transparent"/>
             </Frame>
 
-            <!-- Date of Birth -->
-            <Frame
-                BackgroundColor="#F2F2F7"
-                CornerRadius="10"
-                HasShadow="False"
-                Padding="10,5">
-                <DatePicker
-                    x:Name="DatePickerDOB"
-                    TextColor="#1E1E5A"
-                    BackgroundColor="Transparent"/>
+            <Frame BackgroundColor="#F2F2F7" CornerRadius="10" HasShadow="False" Padding="10,5">
+                <DatePicker Date="{Binding DOB}" TextColor="#1E1E5A" BackgroundColor="Transparent"/>
             </Frame>
 
-            <!-- Sign Up Button -->
-            <Button
-                x:Name="ButtonRegister"
-                Text="Sign Up"
-                FontAttributes="Bold"
-                FontSize="16"
-                TextColor="White"
-                BackgroundColor="#1E1E5A"
-                CornerRadius="10"
-                Padding="0,14"
-                Clicked="OnRegisterClicked"/>
-
+            <Button Text="Sign Up"
+                    FontAttributes="Bold"
+                    FontSize="16"
+                    TextColor="White"
+                    BackgroundColor="#1E1E5A"
+                    CornerRadius="10"
+                    Padding="0,14"
+                    Command="{Binding RegisterCommand}"/>
         </VerticalStackLayout>
     </ScrollView>
-
 </ContentPage>

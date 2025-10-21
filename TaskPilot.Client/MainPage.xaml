@@ -3,101 +3,107 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TaskPilot.Client.MainPage"
              Shell.NavBarIsVisible="False"
-             BackgroundColor="White">
+             BackgroundColor="#F5F5F7">
 
     <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="25">
+        <VerticalStackLayout Padding="30,40" Spacing="25">
 
-            <!-- Header -->
-            <HorizontalStackLayout VerticalOptions="Start" Spacing="10">
-                <Label Text="Hi, Jarren"
-                       FontSize="24"
-                       FontAttributes="Bold"
-                       TextColor="#1E1E5A"
-                       VerticalOptions="Center" />
+            <!-- HEADER -->
+            <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,20">
+                <VerticalStackLayout Spacing="5" VerticalOptions="Center">
+                    <Label x:Name="LabelStudentName"
+                           Text="Name"
+                           FontSize="30"
+                           FontAttributes="Bold"
+                           TextColor="#1A1D3F" />
+                    <Label Text="“Stay focused. Keep working towards your goals — one task at a time.”"
+                           FontSize="14"
+                           TextColor="#555" />
+                </VerticalStackLayout>
+            </Grid>
 
-                <SearchBar Placeholder="Search"
-                           PlaceholderColor="#A0A0A0"
-                           TextColor="#1E1E5A"
-                           BackgroundColor="#F2F2F7"
-                           HorizontalOptions="FillAndExpand"
-                           Margin="10,0,0,0"
-                           HeightRequest="40" />
-            </HorizontalStackLayout>
+            <!-- ONGOING PROJECTS HEADER -->
+            <Grid ColumnDefinitions="*,Auto">
+                <HorizontalStackLayout Spacing="12" VerticalOptions="Center">
+                    <Label Text="Ongoing Projects"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           TextColor="#1A1D3F"/>
+                </HorizontalStackLayout>
 
-            <!-- Description -->
-            <Frame BackgroundColor="#F9F9FB"
-                   CornerRadius="12"
-                   Padding="15"
-                   HasShadow="False">
-                <Label Text="“Stay focused. Keep working towards your goals — one task at a time.”"
-                       FontSize="14"
-                       TextColor="#4A4A6A" />
-            </Frame>
+            </Grid>
 
-            <!-- Ongoing Projects Header -->
-            <HorizontalStackLayout>
-                <Label Text="Ongoing Projects"
-                       FontSize="18"
-                       FontAttributes="Bold"
-                       TextColor="#1E1E5A"
-                       HorizontalOptions="StartAndExpand" />
-                <Label Text="View all"
-                       FontSize="13"
-                       TextColor="#5A5AFF"
-                       HorizontalOptions="End" />
-            </HorizontalStackLayout>
+            <!-- TASKS COLLECTION -->
+            <CollectionView x:Name="TodosCollection"
+                            ItemsSource="{Binding listOfTodos}"
+                            SelectionMode="None"
+                            Margin="0,15,0,0">
 
-            <!-- Ongoing Projects List -->
-            <VerticalStackLayout Spacing="12">
-                <!-- Project 1 -->
-                <Frame BackgroundColor="#F2F2F7"
-                       CornerRadius="10"
-                       HasShadow="False"
-                       Padding="12">
-                    <VerticalStackLayout>
-                        <Label Text="ITEPA-34 Assignment"
-                               FontSize="15"
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical"
+                                     Span="1"
+                                     VerticalItemSpacing="15"
+                                     HorizontalItemSpacing="0" />
+                </CollectionView.ItemsLayout>
+
+                <!-- EMPTY STATE -->
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout Padding="20"
+                                         HorizontalOptions="Center"
+                                         VerticalOptions="Center">
+                        <Label Text="No tasks yet 🎉"
+                               FontSize="18"
                                FontAttributes="Bold"
-                               TextColor="#1E1E5A" />
-                        <Label Text="Due: 15 June 2025"
-                               FontSize="13"
-                               TextColor="#666" />
+                               TextColor="#1A1D3F"
+                               HorizontalOptions="Center"/>
+                        <Label Text="Add your first task to get started."
+                               FontSize="14"
+                               TextColor="#666"
+                               HorizontalOptions="Center"/>
                     </VerticalStackLayout>
-                </Frame>
+                </CollectionView.EmptyView>
 
-                <!-- Project 2 -->
-                <Frame BackgroundColor="#F2F2F7"
-                       CornerRadius="10"
-                       HasShadow="False"
-                       Padding="12">
-                    <VerticalStackLayout>
-                        <Label Text="ITPMA-33 Research"
-                               FontSize="15"
-                               FontAttributes="Bold"
-                               TextColor="#1E1E5A" />
-                        <Label Text="Due: 18 June 2025"
-                               FontSize="13"
-                               TextColor="#666" />
-                    </VerticalStackLayout>
-                </Frame>
+                <!-- TEMPLATE -->
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame BackgroundColor="White"
+                               CornerRadius="16"
+                               Padding="20"
+                               BorderColor="Transparent"
+                               HasShadow="True"
+                               Margin="0,5">
 
-                <!-- Project 3 -->
-                <Frame BackgroundColor="#F2F2F7"
-                       CornerRadius="10"
-                       HasShadow="False"
-                       Padding="12">
-                    <VerticalStackLayout>
-                        <Label Text="Study: Project management Chapter 13"
-                               FontSize="15"
-                               FontAttributes="Bold"
-                               TextColor="#1E1E5A" />
-                        <Label Text="Due: 20 June 2025"
-                               FontSize="13"
-                               TextColor="#666" />
-                    </VerticalStackLayout>
-                </Frame>
-            </VerticalStackLayout>
+                            <VerticalStackLayout Spacing="10">
+
+                                <!-- TITLE AND MENU -->
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <Label Text="{Binding Title}"
+                                           FontSize="17"
+                                           FontAttributes="Bold"
+                                           TextColor="#1A1D3F"
+                                           Grid.Column="0"/>
+                                    <Label Text="⋮"
+                                           Grid.Column="1"
+                                           FontSize="20"
+                                           TextColor="#999"
+                                           VerticalOptions="Center"/>
+                                </Grid>
+
+                                <!-- DUE DATE -->
+                                <Label Text="{Binding DueDateTime, StringFormat='Due: {0:dd MMM yyyy}'}"
+                                            FontSize="13"
+                                            TextColor="#666" />
+
+                                <!-- TIME SPENT -->
+                                <Label Text="{Binding TimeSpentMinutes, StringFormat='Time Spent: {0} min'}"
+                                       FontSize="12"
+                                       TextColor="#555"/>
+
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
 
         </VerticalStackLayout>
     </ScrollView>

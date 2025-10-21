@@ -5,25 +5,25 @@
 namespace TaskPilot.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateTodoTable : Migration
+    public partial class AddIncompletedTasksToStats : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<double>(
-                name: "PrioritySelection",
-                table: "Todos",
-                type: "float",
+            migrationBuilder.AddColumn<int>(
+                name: "TotalInCompletedTasks",
+                table: "Stats",
+                type: "int",
                 nullable: false,
-                defaultValue: 0.0);
+                defaultValue: 0);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "PrioritySelection",
-                table: "Todos");
+                name: "TotalInCompletedTasks",
+                table: "Stats");
         }
     }
 }

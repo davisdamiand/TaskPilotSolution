@@ -2,11 +2,91 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TaskPilot.Client.CalendarPage"
-             Title="CalendarPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="White">
+
+    <!-- The page is now a Grid to allow a non-scrolling header and a scrolling content area -->
+    <Grid RowDefinitions="Auto, Auto, Auto, *">
+
+        <!-- Header -->
+        <Label Grid.Row="0"
+               Text="Weekly Calendar"
+               FontSize="28"
+               FontAttributes="Bold"
+               TextColor="#1E1E5A"
+               HorizontalOptions="Start" 
+               Padding="20,40,20,0"/>
+
+        <!-- Week Navigation -->
+        <HorizontalStackLayout Grid.Row="1"
+                               HorizontalOptions="Center" 
+                               Spacing="15" 
+                               Margin="0,20,0,10">
+            <Button x:Name="PreviousWeekButton"
+                    Text="‹" 
+                    BackgroundColor="Transparent" 
+                    TextColor="#1E1E5A" 
+                    FontSize="22"
+                    Clicked="PreviousWeek_Clicked"/>
+
+            <Label x:Name="WeekLabel"
+                   Text="This Week" 
+                   FontAttributes="Bold" 
+                   FontSize="16" 
+                   TextColor="#1E1E5A" 
+                   VerticalOptions="Center">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="GoToCurrentWeek_Tapped" />
+                </Label.GestureRecognizers>
+            </Label>
+
+            <Button x:Name="NextWeekButton"
+                    Text="›" 
+                    BackgroundColor="Transparent" 
+                    TextColor="#1E1E5A" 
+                    FontSize="22"
+                    Clicked="NextWeek_Clicked"/>
+        </HorizontalStackLayout>
+
+        <!-- Days of the Week Header -->
+        <Grid x:Name="DayHeaderGrid" Grid.Row="2"
+              ColumnSpacing="1" 
+              HeightRequest="45"
+              Padding="20,0,20,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="150" />
+                <ColumnDefinition Width="150" />
+                <ColumnDefinition Width="150" />
+                <ColumnDefinition Width="150" />
+                <ColumnDefinition Width="150" />
+                <ColumnDefinition Width="150" />
+                <ColumnDefinition Width="150" />
+            </Grid.ColumnDefinitions>
+        </Grid>
+
+        <!-- Scrollable Calendar Area -->
+        <ScrollView x:Name="CalendarScrollView" Grid.Row="3" Orientation="Vertical">
+            <ScrollView Orientation="Horizontal">
+                <Grid x:Name="CalendarGrid" 
+                      ColumnSpacing="1" 
+                      RowSpacing="1" 
+                      Padding="20,0,20,30">
+                    <!-- Columns are now set in the parent Grid to align headers -->
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="150" />
+                        <ColumnDefinition Width="150" />
+                        <ColumnDefinition Width="150" />
+                        <ColumnDefinition Width="150" />
+                        <ColumnDefinition Width="150" />
+                        <ColumnDefinition Width="150" />
+                        <ColumnDefinition Width="150" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- RowDefinitions and Time Labels are now generated dynamically in C# -->
+                </Grid>
+            </ScrollView>
+        </ScrollView>
+    </Grid>
 </ContentPage>

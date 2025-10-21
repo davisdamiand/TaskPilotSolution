@@ -7,5 +7,7 @@ namespace TaskPilot.Server.Interfaces
         Task<int> CreateStudentAsync(StudentCreateDto studentCreateDto);
 
         Task<int> ValidateStudentAsync(StudentValidationDto studentValidationDto);
+
+        Task<StudentGetDto> GetStudentByIdAsync(int id); 
     }
 }
