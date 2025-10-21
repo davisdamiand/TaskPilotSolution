@@ -30,13 +30,6 @@ public partial class MainPage : ContentPage
 
         storedID = Preferences.Get("UserID", null);
 
-        if (string.IsNullOrEmpty(storedID))
-        {
-            await Task.Yield();
-            await Shell.Current.GoToAsync("//LoginPage");
-            return;
-        }
-
         LabelStudentName.Text = Preferences.Get("StudentName", "Name")
                               + " "
                               + Preferences.Get("StudentSurname", "Surname");

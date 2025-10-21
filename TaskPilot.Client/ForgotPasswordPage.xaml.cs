@@ -42,7 +42,7 @@ namespace TaskPilot.Client
 
         private async void OnBackToLoginClicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new LoginPage());
+            Application.Current.MainPage = MauiProgram.Services.GetService<LoginPage>();
         }
     }
 }

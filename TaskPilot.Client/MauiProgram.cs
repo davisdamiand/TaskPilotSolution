@@ -6,6 +6,7 @@ namespace TaskPilot.Client
 {
     public static class MauiProgram
     {
+        public static IServiceProvider Services { get; private set; }
         public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();
@@ -38,7 +39,7 @@ namespace TaskPilot.Client
             builder.Services.AddTransient<ProfileViewModel>();
             builder.Services.AddTransient<RegisterViewModel>();
 
-            // Register TodoService
+            // Register Services
             builder.Services.AddSingleton<TodoService>();
             builder.Services.AddSingleton<StudentService>();
             builder.Services.AddSingleton<ProfileService>();
@@ -47,13 +48,18 @@ namespace TaskPilot.Client
 
             // Register Profile related services and viewmodel so Shell casn resolve ProfilePage
 
-
+           
 
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
 
-            return builder.Build();
+            var app = builder.Build();
+
+            // Capture the service provider so we can use it anywhere
+            Services = app.Services;
+
+            return app;
         }
     }
 }

@@ -31,12 +31,6 @@
                            TextColor="#1A1D3F"/>
                 </HorizontalStackLayout>
 
-                <Label Grid.Column="1"
-                       Text="View all"
-                       FontSize="14"
-                       TextColor="#5A5AFF"
-                       VerticalOptions="Center"
-                       HorizontalOptions="End"/>
             </Grid>
 
             <!-- TASKS COLLECTION -->
