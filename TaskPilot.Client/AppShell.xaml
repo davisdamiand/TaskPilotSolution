@@ -24,4 +24,9 @@
         <ShellContent ContentTemplate="{DataTemplate local:CalendarPage}" Route="CalendarPage" />
     </FlyoutItem>
 
+    <FlyoutItem Title="Settings">
+        <ShellContent ContentTemplate="{DataTemplate local:SettingsPage}" Route="SettingsPage" />
+    </FlyoutItem>
+
 </Shell>
+
