@@ -5,7 +5,7 @@
              Shell.NavBarIsVisible="False"
              BackgroundColor="White">
 
-    <!-- The page is now a Grid to allow a non-scrolling header and a scrolling content area -->
+   
     <Grid RowDefinitions="Auto, Auto, Auto, *">
 
         <!-- Header -->
@@ -65,14 +65,14 @@
             </Grid.ColumnDefinitions>
         </Grid>
 
-        <!-- Scrollable Calendar Area -->
+        <!-- Calendar Area -->
         <ScrollView x:Name="CalendarScrollView" Grid.Row="3" Orientation="Vertical">
             <ScrollView Orientation="Horizontal">
                 <Grid x:Name="CalendarGrid" 
                       ColumnSpacing="1" 
                       RowSpacing="1" 
                       Padding="20,0,20,30">
-                    <!-- Columns are now set in the parent Grid to align headers -->
+                  
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="50"/>
                         <ColumnDefinition Width="150" />
