@@ -19,6 +19,20 @@ public class TodoViewModel : INotifyPropertyChanged, IQueryAttributable
     public string HeaderText => _isEditMode ? "Edit Task" : "Add a New Task";
     public string SaveButtonText => _isEditMode ? "Update Todo" : "Save Todo";
 
+    public bool IsEditMode
+    {
+        get => _isEditMode;
+        set
+        {
+            if (_isEditMode != value)
+            {
+                _isEditMode = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(HeaderText));
+                OnPropertyChanged(nameof(SaveButtonText));
+            }
+        }
+    }
     public string Name
     {
         get => _name;
@@ -89,6 +103,7 @@ public class TodoViewModel : INotifyPropertyChanged, IQueryAttributable
     }
 
     public ICommand SaveCommand { get; }
+    public ICommand DeleteCommand { get; }
 
     // Constructor
     public TodoViewModel(TodoService todoService)
@@ -96,6 +111,10 @@ public class TodoViewModel : INotifyPropertyChanged, IQueryAttributable
         _todoService = todoService;
         _dueDateTime = DateTime.Now.AddDays(1).Date.AddHours(17);
         SaveCommand = new Command(async () => await SaveAsync());
+        DeleteCommand = new Command(async () => await DeleteAsync());
+
+        // Set default state
+        ResetFields();
     }
 
     // Method to handle navigation data
@@ -105,12 +124,16 @@ public class TodoViewModel : INotifyPropertyChanged, IQueryAttributable
         {
             LoadTaskForEdit(todoDto);
         }
+        else
+        {
+            ResetFields();
+        }
     }
 
     // Logic to populate fields for editing
     private void LoadTaskForEdit(TodoGetDto task)
     {
-        _isEditMode = true;
+        IsEditMode = true;
         _todoId = task.Id;
 
         // Update properties which will trigger INotifyPropertyChanged
@@ -119,9 +142,25 @@ public class TodoViewModel : INotifyPropertyChanged, IQueryAttributable
         DueDateTime = task.DueDateTime;
         Priority = task.PriorityLevel.ToString(); 
 
-        // Explicitly notify calculated properties that their state has changed
-        OnPropertyChanged(nameof(HeaderText));
-        OnPropertyChanged(nameof(SaveButtonText));
+    }
+
+    private async Task DeleteAsync()
+    {
+        if (!_isEditMode || !_todoId.HasValue)
+            return;
+        var confirm = await Application.Current.MainPage.DisplayAlertAsync("Confirm Delete", "Are you sure you want to delete this todo?", "Yes", "No");
+        if (!confirm)
+            return;
+        try
+        {
+            await _todoService.DeleteTodoAsync(_todoId.Value);
+            ResetFields();
+            await Shell.Current.GoToAsync("//MainPage");
+        }
+        catch (Exception ex)
+        {
+            await Application.Current.MainPage.DisplayAlertAsync("Error", ex.Message, "OK");
+        }
     }
 
     private async Task SaveAsync()
@@ -173,6 +212,7 @@ public class TodoViewModel : INotifyPropertyChanged, IQueryAttributable
         Description = string.Empty;
         DueDateTime = DateTime.Now.AddDays(1).Date.AddHours(17);
         Priority = "5";
+        IsEditMode = false;
     }
 
     // Boilerplate for property change notifications
