@@ -58,7 +58,7 @@ public class RegisterViewModel : INotifyPropertyChanged
             Preferences.Set("StudentName", Name);
             Preferences.Set("StudentSurname", Surname);
 
-            Application.Current.MainPage = new AppShell();
+            Application.Current.MainPage = MauiProgram.Services.GetService<AppShell>();
         }
         catch (Exception ex)
         {

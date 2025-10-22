@@ -24,9 +24,10 @@ namespace TaskPilot.Client
                 BaseAddress = new Uri(Config.BaseUrl)
             });
 
+            builder.Services.AddSingleton<AppShell>();
 
             // Register pages
-            builder.Services.AddTransient<MainPage>();
+            builder.Services.AddSingleton<MainPage>();
             builder.Services.AddTransient<TodoPage>();
             builder.Services.AddTransient<ProfilePage>();
             builder.Services.AddTransient<CalendarPage>();
@@ -34,6 +35,7 @@ namespace TaskPilot.Client
             builder.Services.AddTransient<RegisterPage>();
             builder.Services.AddTransient<StatsPage>();
             builder.Services.AddTransient<ForgotPasswordPage>();
+            builder.Services.AddTransient<SettingsPage>();
 
             builder.Services.AddTransient<TodoViewModel>();
             builder.Services.AddTransient<ProfileViewModel>();

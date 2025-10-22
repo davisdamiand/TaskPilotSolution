@@ -70,44 +70,59 @@
                 <!-- TEMPLATE -->
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Frame BackgroundColor="White"
-                               CornerRadius="16"
-                               Padding="20"
-                               BorderColor="Transparent"
-                               HasShadow="True"
-                               Margin="0,5">
+                        <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="12" Padding="15,10">
 
-                            <VerticalStackLayout Spacing="10">
+                            <!-- Column 0: The CheckBox -->
+                            <CheckBox Grid.Column="0"
+                                      IsChecked="{Binding IsCompleted}"
+                                      Command="{Binding ToggleCompleteCommand}"
+                                      Color="#5A67D8"
+                                      VerticalOptions="Center" />
 
-                                <!-- TITLE AND MENU -->
-                                <Grid ColumnDefinitions="*,Auto">
-                                    <Label Text="{Binding Title}"
-                                           FontSize="17"
-                                           FontAttributes="Bold"
-                                           TextColor="#1A1D3F"
-                                           Grid.Column="0"/>
-                                    <Button Text="⋮"
-                                            Grid.Column="1"
-                                            FontSize="20"
-                                            TextColor="#999"
-                                            BackgroundColor="Transparent"
-                                            Padding="0"
-                                            VerticalOptions="Center"
-                                            Clicked="OnMenuClicked"/>
-                                </Grid>
+                                <!-- Column 1: Title and Due Date -->
+                                <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
 
-                                <!-- DUE DATE -->
-                                <Label Text="{Binding DueDateTime, StringFormat='Due: {0:dd MMM yyyy}'}"
-                                            FontSize="13"
-                                            TextColor="#666" />
+                                    <!-- The Task Title Label with dynamic styling -->
+                                    <Label Text="{Binding Title}" FontSize="16">
+                                        <Label.Style>
+                                            <Style TargetType="Label">
+                                                <Setter Property="TextColor" Value="#1A1D3F" />
+                                                <Setter Property="TextDecorations" Value="None" />
+                                                <Style.Triggers>
+                                                    <DataTrigger TargetType="Label" Binding="{Binding IsCompleted}" Value="True">
+                                                        <Setter Property="TextColor" Value="Gray" />
+                                                        <Setter Property="TextDecorations" Value="Strikethrough" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Label.Style>
+                                    </Label>
 
-                                <!-- TIME SPENT -->
-                                <Label Text="{Binding TimeSpentMinutes, StringFormat='Time Spent: {0} min'}"
-                                       FontSize="12"
-                                       TextColor="#555"/>
+                                    <!-- The Due Date Label with dynamic styling -->
+                                    <Label Text="{Binding DueDateTime, StringFormat='Due: {0:ddd, MMM d}'}" FontSize="13">
+                                        <Label.Style>
+                                            <Style TargetType="Label">
+                                                <Setter Property="TextColor" Value="#666" />
+                                                <Style.Triggers>
+                                                    <DataTrigger TargetType="Label" Binding="{Binding IsCompleted}" Value="True">
+                                                        <Setter Property="TextColor" Value="LightGray" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Label.Style>
+                                    </Label>
+                                </VerticalStackLayout>
 
-                            </VerticalStackLayout>
-                        </Frame>
+                                <!-- Column 2: The existing "More Options" Button -->
+                                <Button Grid.Column="2"
+                                        Text="⋮"
+                                        Clicked="OnMenuClicked"
+                                        VerticalOptions="Center"
+                                        BackgroundColor="Transparent"
+                                        TextColor="#999"
+                                        FontSize="20"
+                                        Padding="0"/>
+                        </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>

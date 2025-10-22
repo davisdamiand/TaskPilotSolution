@@ -3,6 +3,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Net.Http.Json;
 using System.Windows.Input;
+using TaskPilot.Client.Services;
+using System.Linq;
 
 namespace TaskPilot.Client;
 
@@ -10,14 +12,18 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
 {
     public List<TodoGetDto> allTodos { get; set; } = new();
     public ObservableCollection<TodoGetDto> listOfTodos { get; set; } = new();
-
     private bool _isShowingAll = false;
     public string ViewAllButtonText => _isShowingAll ? "Show less" : "View all";
-
     private readonly HttpClient _httpClient = new HttpClient();
-
 	public string storedID = "";
+
+    private readonly TodoService _todoService;
+
     public ICommand ViewAllProjectsCommand { get; }
+
+    // Guard to prevent concurrent toggle requests
+    private bool _isToggleInProgress;
+
     public MainPage()
 	{
 		InitializeComponent();
@@ -26,6 +32,9 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
 		{
 			BaseAddress = new Uri(Config.BaseUrl)
 		};
+
+        // Initialize the TodoService with the same HttpClient so client
+        _todoService = new TodoService(_httpClient);
 
         ViewAllProjectsCommand = new Command(ToggleViewAllProjects);
 
@@ -46,7 +55,10 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
 
         allTodos.Clear();
 
-        await GetTodos(int.Parse(storedID));
+        if (int.TryParse(storedID, out var id))
+        {
+            await GetTodos(id);
+        }
     }
 
     public void TodoRedirect()
@@ -73,6 +85,11 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
                 // Keep the full list if you need it elsewhere
                 allTodos = todos ?? new List<TodoGetDto>();
 
+                foreach (var todo in allTodos)
+                {
+                    todo.ToggleCompleteCommand = new Command(async () => await ToggleTodoCompletion(todo));
+                }
+
                 // Now update the UI Based on the flag state (view all) or (view top 4)
                 UpdateDisplayedTodos();
 
@@ -85,6 +102,45 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
 			//Do nothing
 		}
 	}
+
+    private async Task ToggleTodoCompletion(TodoGetDto todo)
+    {
+        if (todo == null) return;
+
+        // prevent double taps/race conditions
+        if (_isToggleInProgress) return;
+        _isToggleInProgress = true;
+
+        try
+        {
+            // 1. Call your service to update the database
+            bool success = await _todoService.ToggleCompletion(todo.Id);
+
+            // 2. If the server confirms, re-sync from server to ensure UI reflects server state
+            if (success)
+            {
+                if (int.TryParse(storedID, out var id))
+                {
+                    await GetTodos(id); // server approach: reload the todo list
+                }
+                else
+                {
+                    // fallback: update local state if storedID is missing
+                    todo.IsCompleted = true;
+                    allTodos.RemoveAll(t => t.Id == todo.Id);
+                    UpdateDisplayedTodos();
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", $"Failed to update task status: {ex.Message}", "OK");
+        }
+        finally
+        {
+            _isToggleInProgress = false;
+        }
+    }
 
     private void UpdateDisplayedTodos()
     {

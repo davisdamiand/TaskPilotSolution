@@ -8,6 +8,9 @@ namespace TaskPilot.Server.Services
     public class TodoService : ITodoService
     {
         private readonly TaskPilotContext _context;
+
+        // value used to push completed tasks to the end of ordered lists
+        private const double CompletedPriorityValue = 10;
         
         public TodoService (TaskPilotContext context)
         {
@@ -19,15 +22,18 @@ namespace TaskPilot.Server.Services
             var todo = await _context.Todos.FindAsync(todoId);
             if (todo == null) return false;
 
+            // Toggle completion state
+            todo.IsCompleted = !todo.IsCompleted;
+
+            // If completed, push to the end by assigning a very large priority selection.
+            // If un-completed, recalc priority based on existing rules.
             if (todo.IsCompleted)
             {
-                // Undo completion
-                todo.IsCompleted = false;
+                todo.PrioritySelection = CompletedPriorityValue;
             }
             else
             {
-                // Mark as complete
-                todo.IsCompleted = true;
+                todo.PrioritySelection = CalculatePriority(todo);
             }
 
             await _context.SaveChangesAsync();
@@ -54,7 +60,11 @@ namespace TaskPilot.Server.Services
             todo.Description = dto.Description;
             todo.DueDateTime = dto.DueDateTime;
             todo.PriorityLevel = dto.PriorityLevel;
-            todo.PrioritySelection = CalculatePriority(todo);
+            // Recompute priority selection when the todo is edited — don't override completed tasks
+            if (!todo.IsCompleted)
+            {
+                todo.PrioritySelection = CalculatePriority(todo);
+            }
 
             await _context.SaveChangesAsync();
             return true;
@@ -129,7 +139,8 @@ namespace TaskPilot.Server.Services
             return score;
         }
 
-        //Get all the todos beloning to a specific user
+        //Get all the todos belonging to a specific user (completed tasks are returned too,
+        //but completed tasks will have a large PrioritySelection so they appear last)
         public async Task<List<TodoGetDto>> GetTodosByStudentIdAsync(int studentID)
         {
             var listOfTodos = await _context.Todos
@@ -145,8 +156,8 @@ namespace TaskPilot.Server.Services
                 TimeSpentMinutes = t.TimeSpentMinutes,
                 DueDateTime = t.DueDateTime,
                 StartDateTime = t.StartDateTime,
-                EndDateTime = t.EndDateTime
-
+                EndDateTime = t.EndDateTime,
+                IsCompleted = t.IsCompleted
             })
             .ToListAsync();
 

@@ -68,7 +68,7 @@ public partial class LoginPage : ContentPage
                 }
                 await GetStudentInformation(id);
                 Preferences.Set("UserID", id.ToString());
-                Application.Current.MainPage = new AppShell();
+                Application.Current.MainPage = MauiProgram.Services.GetService<AppShell>();
             }
             else
             {
