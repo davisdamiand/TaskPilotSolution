@@ -29,6 +29,10 @@
                            FontSize="20"
                            FontAttributes="Bold"
                            TextColor="#1A1D3F"/>
+                    <Button Text="{Binding ViewAllButtonText}"
+                            Command="{Binding ViewAllProjectsCommand}"
+                            BackgroundColor="Transparent"
+                            TextColor="#1A1D3F"/>
                 </HorizontalStackLayout>
 
             </Grid>
