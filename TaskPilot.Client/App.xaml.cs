@@ -5,11 +5,9 @@
         public App()
         {
             InitializeComponent();
+
+            MainPage = AuthService.GetInitialPage();
         }
 
-        protected override Window CreateWindow(IActivationState? activationState)
-        {
-            return new Window(new AppShell());
-        }
     }
 }

@@ -18,7 +18,7 @@ namespace Shared.DTOs
         public string Name { get; set; }
 
         [StringLength(50, ErrorMessage = "Description cannot exceed 50 characters")]
-        public string Description { get; set; }
+        public string Description { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Due date is required")]
         [DataType(DataType.Date)]

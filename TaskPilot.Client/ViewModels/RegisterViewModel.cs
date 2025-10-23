@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using TaskPilot.Client;
 using TaskPilot.Client.Services;
 
 public class RegisterViewModel : INotifyPropertyChanged
@@ -57,7 +58,7 @@ public class RegisterViewModel : INotifyPropertyChanged
             Preferences.Set("StudentName", Name);
             Preferences.Set("StudentSurname", Surname);
 
-            await Shell.Current.GoToAsync("//MainPage");
+            Application.Current.MainPage = MauiProgram.Services.GetService<AppShell>();
         }
         catch (Exception ex)
         {

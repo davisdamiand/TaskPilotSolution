@@ -1,48 +1,84 @@
 using Microsoft.Maui.Controls;
 using System;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace TaskPilot.Client
 {
     public partial class ForgotPasswordPage : ContentPage
     {
+        // Stores verified user details temporarily
+        private string verifiedEmail;
+        private string verifiedDOB;
+
         public ForgotPasswordPage()
         {
             InitializeComponent();
         }
 
-        private async void OnResetClicked(object sender, EventArgs e)
+        // Verify email and DOB
+        private void OnVerifyClicked(object sender, EventArgs e)
         {
-            string email = EntryResetEmail.Text?.Trim();
+            ErrorLabel.IsVisible = false;
+            MessageLabel.IsVisible = false;
 
-            // Validate email
-            if (string.IsNullOrEmpty(email))
+            string email = EntryEmail.Text?.Trim();
+            string dob = EntryDOB.Text?.Trim();
+
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(dob))
             {
-                EmailErrorLabel.Text = "Please enter your email address.";
-                EmailErrorLabel.IsVisible = true;
+                ErrorLabel.Text = "Please enter both email and date of birth.";
+                ErrorLabel.IsVisible = true;
                 return;
             }
 
-            if (!Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
-            {
-                EmailErrorLabel.Text = "Please enter a valid email address.";
-                EmailErrorLabel.IsVisible = true;
-                return;
-            }
+            // Store values; replace with actual database/API check later
+            verifiedEmail = email;
+            verifiedDOB = dob;
 
-            EmailErrorLabel.IsVisible = false;
-
-            // Simulate sending email
-            await Task.Delay(1500);
-
-            MessageLabel.Text = "A password reset link has been sent to your email.";
-            MessageLabel.IsVisible = true;
+            // Show new password fields
+            NewPasswordSection.IsVisible = true;
         }
 
+        // Reset password
+        private void OnResetPasswordClicked(object sender, EventArgs e)
+        {
+            ErrorLabel.IsVisible = false;
+            MessageLabel.IsVisible = false;
+
+            string newPass = EntryNewPassword.Text;
+            string confirmPass = EntryConfirmPassword.Text;
+
+            if (string.IsNullOrEmpty(newPass) || string.IsNullOrEmpty(confirmPass))
+            {
+                ErrorLabel.Text = "Please enter and confirm your new password.";
+                ErrorLabel.IsVisible = true;
+                return;
+            }
+
+            if (newPass != confirmPass)
+            {
+                ErrorLabel.Text = "Passwords do not match.";
+                ErrorLabel.IsVisible = true;
+                return;
+            }
+
+            // TODO: Update your database/API here
+            // Example: UpdateUserPassword(verifiedEmail, verifiedDOB, newPass);
+
+            MessageLabel.Text = "Password reset successfully!";
+            MessageLabel.IsVisible = true;
+
+            // Hide password section and clear fields
+            NewPasswordSection.IsVisible = false;
+            EntryEmail.Text = "";
+            EntryDOB.Text = "";
+            EntryNewPassword.Text = "";
+            EntryConfirmPassword.Text = "";
+        }
+
+        // Back to login
         private async void OnBackToLoginClicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new LoginPage());
+            await Shell.Current.GoToAsync("..");
         }
     }
 }

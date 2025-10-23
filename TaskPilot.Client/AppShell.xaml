@@ -6,22 +6,5 @@
     xmlns:local="clr-namespace:TaskPilot.Client"
     Title="TaskPilot.Client"
     FlyoutBehavior="Flyout">
-
-    <!-- Visible in the flyout -->
-    <FlyoutItem Title="Main">
-        <ShellContent ContentTemplate="{DataTemplate local:MainPage}" Route="MainPage" />
-    </FlyoutItem>
-
-    <FlyoutItem Title="Todo">
-        <ShellContent ContentTemplate="{DataTemplate local:TodoPage}" Route="TodoPage" />
-    </FlyoutItem>
-
-    <FlyoutItem Title="Profile">
-        <ShellContent ContentTemplate="{DataTemplate local:ProfilePage}" Route="ProfilePage" />
-    </FlyoutItem>
-
-    <FlyoutItem Title="Calendar">
-        <ShellContent ContentTemplate="{DataTemplate local:CalendarPage}" Route="CalendarPage" />
-    </FlyoutItem>
-
 </Shell>
+

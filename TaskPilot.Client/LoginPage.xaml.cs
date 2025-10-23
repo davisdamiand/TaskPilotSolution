@@ -9,22 +9,20 @@ namespace TaskPilot.Client;
 public partial class LoginPage : ContentPage
 {
     private readonly HttpClient _httpClient;
+    private readonly IServiceProvider _serviceProvider;
 
-    public LoginPage()
-	{
-        InitializeComponent(); 
+    public LoginPage(IServiceProvider serviceProvider, HttpClient httpClient)
+    {
+        InitializeComponent();
 
-        _httpClient = new HttpClient
-        {
-            BaseAddress = new Uri(Config.BaseUrl)
-        };
-
+        _serviceProvider = serviceProvider;
+        _httpClient = httpClient;
     }
 
     //Navigate to forget password page
     private async void OnForgotPasswordClicked(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("//ForgotPasswordPage");
+        Application.Current.MainPage = new ForgotPasswordPage();
     }
 
     private async void OnLoginClicked(object sender, EventArgs e)
@@ -49,7 +47,8 @@ public partial class LoginPage : ContentPage
     // Navigation 
     private async void OnSignUpClicked(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("//RegisterPage");
+        var registerPage = _serviceProvider.GetService<RegisterPage>();
+        Application.Current.MainPage = registerPage;
     }
 
     private async Task ValidateStudent(StudentValidationDto studentValidationDto)
@@ -69,7 +68,7 @@ public partial class LoginPage : ContentPage
                 }
                 await GetStudentInformation(id);
                 Preferences.Set("UserID", id.ToString());
-                await Shell.Current.GoToAsync("//MainPage");
+                Application.Current.MainPage = MauiProgram.Services.GetService<AppShell>();
             }
             else
             {
