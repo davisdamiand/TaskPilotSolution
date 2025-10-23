@@ -22,7 +22,7 @@
                 </VerticalStackLayout>
             </Grid>
 
-            <!-- ONGOING PROJECTS HEADER -->
+            <!-- ONGOING HEADER -->
             <Grid ColumnDefinitions="*,Auto">
                 <HorizontalStackLayout Spacing="12" VerticalOptions="Center">
                     <Label Text="Ongoing Projects"
