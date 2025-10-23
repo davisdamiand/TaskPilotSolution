@@ -31,6 +31,14 @@
                            FontSize="14"
                            TextColor="#555" />
                 </VerticalStackLayout>
+
+                <!-- Bell icon -->
+                <Image Grid.Column="2"
+                       Source="bell_icon.jpg"
+                       WidthRequest="45"
+                       HeightRequest="45"
+                       HorizontalOptions="End"
+                       VerticalOptions="Center"/>
             </Grid>
 
             <!-- Pomodoro Timer Section -->
