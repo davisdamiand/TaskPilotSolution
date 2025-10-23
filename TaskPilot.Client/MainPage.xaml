@@ -24,7 +24,7 @@
                 <VerticalStackLayout Grid.Column="1" Spacing="5" VerticalOptions="Center">
                     <Label x:Name="LabelStudentName"
                            Text="Name"
-                           FontSize="30"
+                           FontSize="25"
                            FontAttributes="Bold"
                            TextColor="#1A1D3F" />
                     <Label Text="“Stay focused. Keep working towards your goals ,one task at a time.”"

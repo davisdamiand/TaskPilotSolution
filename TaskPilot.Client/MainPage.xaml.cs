@@ -17,6 +17,8 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
     private bool _isTimerRunning;
     // -----------------------------
 
+    private const double CompletedPriorityValue = 10.0;
+
     public List<TodoGetDto> allTodos { get; set; } = new();
     public ObservableCollection<TodoGetDto> listOfTodos { get; set; } = new();
     private bool _isShowingAll = false;
@@ -84,7 +86,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
         _timer.Tick += OnTimerTick;
     }
 
-    private void OnTimerTick(object sender, EventArgs e)
+    private async void OnTimerTick(object sender, EventArgs e)
     {
         _remainingSeconds--;
 
@@ -99,7 +101,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
             StartStopButton.Text = "Start New Pomodoro";
 
             // Display an alert for the break
-            DisplayAlert("Pomodoro Finished!", "Time for a short break!", "OK");
+            await DisplayAlertAsync("Pomodoro Finished!", "Time for a short break!", "OK");
         }
 
         UpdateTimerDisplay();
@@ -191,8 +193,15 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
         if (_isToggleInProgress) return;
         _isToggleInProgress = true;
 
+        var previousIsCompleted = todo.IsCompleted;
+        var previousPrioritySelection = todo.PrioritySelection;
+
         try
         {
+            // local update so UI + ViewAll state are immediately consistent
+            todo.IsCompleted = true;
+            todo.PrioritySelection = CompletedPriorityValue;
+
             // 1. Call your service to update the database
             bool success = await _todoService.ToggleCompletion(todo.Id);
 
@@ -206,15 +215,13 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
                 else
                 {
                     // fallback: update local state if storedID is missing
-                    todo.IsCompleted = true;
-                    allTodos.RemoveAll(t => t.Id == todo.Id);
-                    UpdateDisplayedTodos();
+                    await DisplayAlertAsync("Error", "Failed to mark task as completed.", "OK");
                 }
             }
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Error", $"Failed to update task status: {ex.Message}", "OK");
+            await DisplayAlertAsync("Error", $"Failed to update task status: {ex.Message}", "OK");
         }
         finally
         {
