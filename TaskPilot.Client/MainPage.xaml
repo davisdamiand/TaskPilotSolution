@@ -8,23 +8,42 @@
     <ScrollView>
         <VerticalStackLayout Padding="30,40" Spacing="25">
 
-            <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,20">
+            <!-- HEADER -->
+            <Grid ColumnDefinitions="Auto,*,Auto" Margin="0,0,0,20" VerticalOptions="Center">
 
-                <VerticalStackLayout Spacing="5" VerticalOptions="Center">
+                <!-- Task icon -->
+                <Image Grid.Column="0"
+                       Source="task_pilot_icon.jpg"
+                       WidthRequest="60"
+                       HeightRequest="60"
+                       HorizontalOptions="Start"
+                       VerticalOptions="Center"
+                       Margin="0,0,15,0"/>
+
+                <!-- Center: Title and quote -->
+                <VerticalStackLayout Grid.Column="1" Spacing="5" VerticalOptions="Center">
                     <Label x:Name="LabelStudentName"
                            Text="Name"
                            FontSize="30"
                            FontAttributes="Bold"
                            TextColor="#1A1D3F" />
-                    <Label Text="“Stay focused.
-                         Keep working towards your goals — one task at a time.”"
+                    <Label Text="“Stay focused. Keep working towards your goals ,one task at a time.”"
                            FontSize="14"
                            TextColor="#555" />
                 </VerticalStackLayout>
+
+                <!-- Bell icon -->
+                <Image Grid.Column="2"
+                       Source="bell_icon.jpg"
+                       WidthRequest="45"
+                       HeightRequest="45"
+                       HorizontalOptions="End"
+                       VerticalOptions="Center"/>
             </Grid>
 
-            <Frame BackgroundColor="White" 
-                   CornerRadius="10" 
+            <!-- Pomodoro Timer Section -->
+            <Frame BackgroundColor="White"
+                   CornerRadius="10"
                    Padding="20"
                    HasShadow="True">
                 <VerticalStackLayout Spacing="15">
@@ -38,34 +57,38 @@
                            Text="25:00"
                            FontSize="72"
                            FontAttributes="Bold"
-                           TextColor="#5A67D8"
+                           TextColor="#1A1D3F"
                            HorizontalOptions="Center" />
 
                     <Button x:Name="StartStopButton"
-        Text="Start Pomodoro"
-        Clicked="OnStartStopButtonClicked"
-        CornerRadius="8"
-        HorizontalOptions="Center"
-        BackgroundColor="#5A67D8"
-        TextColor="White"
-        FontSize="Medium"
-        FontAttributes="Bold" />
+                            Text="Start Pomodoro"
+                            Clicked="OnStartStopButtonClicked"
+                            CornerRadius="8"
+                            HorizontalOptions="Center"
+                            BackgroundColor="#1A1D3F"
+                            TextColor="White"
+                            FontSize="Medium"
+                            FontAttributes="Bold" />
                 </VerticalStackLayout>
             </Frame>
-            <Grid ColumnDefinitions="*,Auto">
-                <HorizontalStackLayout Spacing="12" VerticalOptions="Center">
+
+            <!-- Ongoing Projects Section -->
+            <Grid ColumnDefinitions="*,Auto" Margin="0,15,0,0">
+                <HorizontalStackLayout Spacing="12" VerticalOptions="Center" Grid.Column="0">
                     <Label Text="Ongoing Projects"
                            FontSize="20"
                            FontAttributes="Bold"
                            TextColor="#1A1D3F"/>
-                    <Button Text="{Binding ViewAllButtonText}"
-                            Command="{Binding ViewAllProjectsCommand}"
-                            BackgroundColor="Transparent"
-                            TextColor="#1A1D3F"/>
                 </HorizontalStackLayout>
 
+                <Button Text="{Binding ViewAllButtonText}"
+                        Command="{Binding ViewAllProjectsCommand}"
+                        BackgroundColor="Transparent"
+                        TextColor="#1A1D3F"
+                        Grid.Column="1"/>
             </Grid>
 
+            <!-- Tasks Collection -->
             <CollectionView x:Name="TodosCollection"
                             ItemsSource="{Binding listOfTodos}"
                             SelectionMode="None"
@@ -78,6 +101,7 @@
                                      HorizontalItemSpacing="0" />
                 </CollectionView.ItemsLayout>
 
+                <!-- Empty State -->
                 <CollectionView.EmptyView>
                     <VerticalStackLayout Padding="20"
                                          HorizontalOptions="Center"
@@ -94,9 +118,10 @@
                     </VerticalStackLayout>
                 </CollectionView.EmptyView>
 
+                <!-- Task Template -->
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="12" Padding="15,10">
+                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12" Padding="15,10">
 
                             <CheckBox Grid.Column="0"
                                       IsChecked="{Binding IsCompleted}"
@@ -105,7 +130,6 @@
                                       VerticalOptions="Center" />
 
                             <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
-
                                 <Label Text="{Binding Title}" FontSize="16">
                                     <Label.Style>
                                         <Style TargetType="Label">
@@ -147,6 +171,7 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+
         </VerticalStackLayout>
     </ScrollView>
 
