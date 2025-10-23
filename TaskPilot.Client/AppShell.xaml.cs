@@ -3,7 +3,7 @@ namespace TaskPilot.Client
 {
     public partial class AppShell : Shell
     {
-        public AppShell(MainPage mainPage, TodoPage todoPage, ProfilePage profilePage, CalendarPage calendarPage, SettingsPage settingsPage)
+        public AppShell(MainPage mainPage, TodoPage todoPage, ProfilePage profilePage, CalendarPage calendarPage)
         {
             InitializeComponent();
 
@@ -51,24 +51,12 @@ namespace TaskPilot.Client
             });
             this.Items.Add(calendarFlyout);
 
-
-           // 5.Create the "Settings" Flyout Item
-             var settingsFlyout = new FlyoutItem { Title = "Settings" };
-            settingsFlyout.Items.Add(new ShellContent
-            {
-                Title = "Settings",
-                Content = settingsPage,
-                Route = "SettingsPage"
-            });
-            this.Items.Add(settingsFlyout);
-
             // Register routes for pages that should not appear in the flyout
             Routing.RegisterRoute("LoginPage", typeof(LoginPage));
             Routing.RegisterRoute("RegisterPage", typeof(RegisterPage));
             Routing.RegisterRoute("StatsPage", typeof(StatsPage));
             Routing.RegisterRoute("ForgotPasswordPage", typeof(ForgotPasswordPage));
             Routing.RegisterRoute(nameof(TodoPage), typeof(TodoPage));
-
 
         }
     }
