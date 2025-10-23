@@ -36,7 +36,8 @@ namespace TaskPilot.Server.Services
                     Streak = 0,
                     TotalCompletedTasks = 0,
                     TotalPomodoroSessions = 0,
-                    StudentID = statsCreateDto.StudentID
+                    StudentID = statsCreateDto.StudentID,
+                    LastAccessedDay = null
                 };
 
                 await _context.Stats.AddAsync(newStats);
@@ -99,13 +100,41 @@ namespace TaskPilot.Server.Services
             .Where(t => !t.IsCompleted && t.StudentID == statsCalculateDto.StudentID)
             .CountAsync();
 
+            // Persisted streak logic using server-stored LastAccessedDay.
+            // If server-stored value not present, fall back to client's dto value.
+            var today = DateOnly.FromDateTime(DateTime.Now);
 
+            DateOnly? prior = stats.LastAccessedDay;
+            if (!prior.HasValue && statsCalculateDto.LastAccessedDay != default)
+            {
+                prior = statsCalculateDto.LastAccessedDay;
+            }
 
-
-            if (statsCalculateDto.LastAccessedDay == DateOnly.FromDateTime(DateTime.Now))
-                stats.Streak += 1;
+            if (prior.HasValue)
+            {
+                if (prior.Value == today)
+                {
+                    // already visited today — keep streak unchanged
+                }
+                else if (prior.Value == today.AddDays(-1))
+                {
+                    // consecutive day -> increment
+                    stats.Streak += 1;
+                }
+                else
+                {
+                    // gap >= 2 days -> reset
+                    stats.Streak = 0;
+                }
+            }
             else
-                stats.Streak = 0;
+            {
+                // no prior info -> if stats.Streak already > 0 keep it
+                stats.Streak = stats.Streak;
+            }
+
+            // Update stored last accessed day to today
+            stats.LastAccessedDay = today;
 
             return stats;
 

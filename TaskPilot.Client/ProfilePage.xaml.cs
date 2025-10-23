@@ -16,9 +16,17 @@ public partial class ProfilePage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
+        var storedId = Preferences.Get("UserID", 0);
 
-        var studentId = Preferences.Get("UserID", 0);
-        await ViewModel.LoadStatsAsync(new StatsCalculateDto { StudentID = studentId });
+
+        //Send today's date to calculate streaks
+        var dto = new StatsCalculateDto
+        {
+            StudentID = storedId,
+            LastAccessedDay = DateOnly.FromDateTime(DateTime.Now)
+        };
+
+        await ViewModel.LoadStatsAsync(dto);
     }
 
 }

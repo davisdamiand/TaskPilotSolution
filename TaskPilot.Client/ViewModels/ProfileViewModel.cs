@@ -110,6 +110,7 @@ namespace TaskPilot.Client.ViewModels
             TotalCompletedTasks = Stats.TotalCompletedTasks;
             TotalInCompletedTasks = Stats.TotalInCompletedTasks;
             TotalPomodoroSessions = Stats.TotalPomodoroSessions;
+            Streak = Stats.Streak;
         }
 
         private async Task LogoutAsync()
