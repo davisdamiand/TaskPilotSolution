@@ -9,35 +9,86 @@
         <VerticalStackLayout Padding="30,40" Spacing="25">
 
             <!-- HEADER -->
-            <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,20">
-                <VerticalStackLayout Spacing="5" VerticalOptions="Center">
+            <Grid ColumnDefinitions="Auto,*,Auto" Margin="0,0,0,20" VerticalOptions="Center">
+
+                <!-- Task icon -->
+                <Image Grid.Column="0"
+                       Source="task_pilot_icon.jpg"
+                       WidthRequest="60"
+                       HeightRequest="60"
+                       HorizontalOptions="Start"
+                       VerticalOptions="Center"
+                       Margin="0,0,15,0"/>
+
+                <!-- Center: Title and quote -->
+                <VerticalStackLayout Grid.Column="1" Spacing="5" VerticalOptions="Center">
                     <Label x:Name="LabelStudentName"
                            Text="Name"
                            FontSize="30"
                            FontAttributes="Bold"
                            TextColor="#1A1D3F" />
-                    <Label Text="“Stay focused. Keep working towards your goals — one task at a time.”"
+                    <Label Text="“Stay focused. Keep working towards your goals ,one task at a time.”"
                            FontSize="14"
                            TextColor="#555" />
                 </VerticalStackLayout>
+
+                <!-- Bell icon -->
+                <Image Grid.Column="2"
+                       Source="bell_icon.jpg"
+                       WidthRequest="45"
+                       HeightRequest="45"
+                       HorizontalOptions="End"
+                       VerticalOptions="Center"/>
             </Grid>
 
-            <!-- ONGOING HEADER -->
-            <Grid ColumnDefinitions="*,Auto">
-                <HorizontalStackLayout Spacing="12" VerticalOptions="Center">
+            <!-- Pomodoro Timer Section -->
+            <Frame BackgroundColor="White"
+                   CornerRadius="10"
+                   Padding="20"
+                   HasShadow="True">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Pomodoro Timer"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="#1A1D3F"
+                           HorizontalOptions="Center" />
+
+                    <Label x:Name="TimerDisplayLabel"
+                           Text="25:00"
+                           FontSize="72"
+                           FontAttributes="Bold"
+                           TextColor="#1A1D3F"
+                           HorizontalOptions="Center" />
+
+                    <Button x:Name="StartStopButton"
+                            Text="Start Pomodoro"
+                            Clicked="OnStartStopButtonClicked"
+                            CornerRadius="8"
+                            HorizontalOptions="Center"
+                            BackgroundColor="#1A1D3F"
+                            TextColor="White"
+                            FontSize="Medium"
+                            FontAttributes="Bold" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Ongoing Projects Section -->
+            <Grid ColumnDefinitions="*,Auto" Margin="0,15,0,0">
+                <HorizontalStackLayout Spacing="12" VerticalOptions="Center" Grid.Column="0">
                     <Label Text="Ongoing Projects"
                            FontSize="20"
                            FontAttributes="Bold"
                            TextColor="#1A1D3F"/>
-                    <Button Text="{Binding ViewAllButtonText}"
-                            Command="{Binding ViewAllProjectsCommand}"
-                            BackgroundColor="Transparent"
-                            TextColor="#1A1D3F"/>
                 </HorizontalStackLayout>
 
+                <Button Text="{Binding ViewAllButtonText}"
+                        Command="{Binding ViewAllProjectsCommand}"
+                        BackgroundColor="Transparent"
+                        TextColor="#1A1D3F"
+                        Grid.Column="1"/>
             </Grid>
 
-            <!-- TASKS COLLECTION -->
+            <!-- Tasks Collection -->
             <CollectionView x:Name="TodosCollection"
                             ItemsSource="{Binding listOfTodos}"
                             SelectionMode="None"
@@ -50,7 +101,7 @@
                                      HorizontalItemSpacing="0" />
                 </CollectionView.ItemsLayout>
 
-                <!-- EMPTY STATE -->
+                <!-- Empty State -->
                 <CollectionView.EmptyView>
                     <VerticalStackLayout Padding="20"
                                          HorizontalOptions="Center"
@@ -67,22 +118,18 @@
                     </VerticalStackLayout>
                 </CollectionView.EmptyView>
 
-                <!-- TEMPLATE -->
+                <!-- Task Template -->
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="12" Padding="15,10">
+                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12" Padding="15,10">
 
-                            <!--  The CheckBox -->
                             <CheckBox Grid.Column="0"
                                       IsChecked="{Binding IsCompleted}"
                                       Command="{Binding ToggleCompleteCommand}"
                                       Color="#5A67D8"
                                       VerticalOptions="Center" />
 
-                            <!-- Column 1: Title and Due Date -->
                             <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
-
-                                <!-- The Task Title Label with dynamic styling -->
                                 <Label Text="{Binding Title}" FontSize="16">
                                     <Label.Style>
                                         <Style TargetType="Label">
@@ -98,7 +145,6 @@
                                     </Label.Style>
                                 </Label>
 
-                                <!-- The Due Date Label with dynamic styling -->
                                 <Label Text="{Binding DueDateTime, StringFormat='Due: {0:ddd, MMM d}'}" FontSize="13">
                                     <Label.Style>
                                         <Style TargetType="Label">
@@ -113,59 +159,19 @@
                                 </Label>
                             </VerticalStackLayout>
 
-                            <!-- Column 2: The existing "More Options" Button -->
                             <Button Grid.Column="2"
-                                        Text="⋮"
-                                        Clicked="OnMenuClicked"
-                                        VerticalOptions="Center"
-                                        BackgroundColor="Transparent"
-                                        TextColor="#999"
-                                        FontSize="20"
-                                        Padding="0"/>
+                                    Text="⋮"
+                                    Clicked="OnMenuClicked"
+                                    VerticalOptions="Center"
+                                    BackgroundColor="Transparent"
+                                    TextColor="#999"
+                                    FontSize="20"
+                                    Padding="0"/>
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
-            <!--<Grid Grid.Row="2" Padding="10,5" BackgroundColor="White" HeightRequest="65">
-
-                --><!-- Home --><!--
-                <VerticalStackLayout Grid.Column="0" HorizontalOptions="Center" VerticalOptions="Center">
-                    <Button 
-                        Text="Home"
-                        FontSize="12"
-                        TextColor="#666666"
-                        BackgroundColor="Transparent"/>
-                        --><!--Clicked="OnHomeClicked"--><!-- 
-                </VerticalStackLayout>
-                --><!-- Tasks --><!--
-                <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center" VerticalOptions="Center">
-                    <Button 
-                        Text="Tasks"
-                        FontSize="12"
-                        TextColor="#666666"
-                        BackgroundColor="Transparent"/>
-                    --><!--Clicked="OnTasksClicked" />--><!--
-                </VerticalStackLayout>
-                --><!-- Settings (Active) --><!--
-                <VerticalStackLayout Grid.Column="2" HorizontalOptions="Center" VerticalOptions="Center">
-                    <Button 
-                        Text="Settings"
-                        FontSize="12"
-                        TextColor="#666666"
-                        BackgroundColor="Transparent"
-                        IsEnabled="False" />
-                </VerticalStackLayout>
-                --><!-- Profile --><!--
-                <VerticalStackLayout Grid.Column="3" HorizontalOptions="Center" VerticalOptions="Center">
-                    <Button 
-                        Text="Profile"
-                        FontSize="12"
-                        TextColor="#666666"
-                        BackgroundColor="Transparent"/>
-                        --><!--Clicked="OnProfileClicked"--><!-- 
-                </VerticalStackLayout>
-            </Grid>-->
         </VerticalStackLayout>
     </ScrollView>
 

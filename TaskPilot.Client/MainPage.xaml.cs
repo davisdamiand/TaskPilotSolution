@@ -10,12 +10,19 @@ namespace TaskPilot.Client;
 
 public partial class MainPage : ContentPage, INotifyPropertyChanged
 {
+    // --- Pomodoro Timer Fields ---
+    private const int PomodoroDurationSeconds = 25 * 60; // 25 minutes
+    private int _remainingSeconds;
+    private IDispatcherTimer _timer;
+    private bool _isTimerRunning;
+    // -----------------------------
+
     public List<TodoGetDto> allTodos { get; set; } = new();
     public ObservableCollection<TodoGetDto> listOfTodos { get; set; } = new();
     private bool _isShowingAll = false;
     public string ViewAllButtonText => _isShowingAll ? "Show less" : "View all";
     private readonly HttpClient _httpClient = new HttpClient();
-	public string storedID = "";
+    public string storedID = "";
 
     private readonly TodoService _todoService;
 
@@ -25,18 +32,23 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
     private bool _isToggleInProgress;
 
     public MainPage()
-	{
-		InitializeComponent();
+    {
+        InitializeComponent();
 
-		_httpClient = new HttpClient
-		{
-			BaseAddress = new Uri(Config.BaseUrl)
-		};
+        _httpClient = new HttpClient
+        {
+            BaseAddress = new Uri(Config.BaseUrl)
+        };
 
         // Initialize the TodoService with the same HttpClient so client
         _todoService = new TodoService(_httpClient);
 
         ViewAllProjectsCommand = new Command(ToggleViewAllProjects);
+
+        // --- Initialize Pomodoro Timer ---
+        InitializePomodoroTimer();
+        UpdateTimerDisplay();
+        // ---------------------------------
 
         BindingContext = this;
     }
@@ -61,10 +73,78 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
         }
     }
 
+    // --- Pomodoro Timer Methods ---
+    private void InitializePomodoroTimer()
+    {
+        _remainingSeconds = PomodoroDurationSeconds;
+        _isTimerRunning = false;
+
+        _timer = Dispatcher.CreateTimer();
+        _timer.Interval = TimeSpan.FromSeconds(1);
+        _timer.Tick += OnTimerTick;
+    }
+
+    private void OnTimerTick(object sender, EventArgs e)
+    {
+        _remainingSeconds--;
+
+        if (_remainingSeconds <= 0)
+        {
+            // Timer finished
+            _timer.Stop();
+            _isTimerRunning = false;
+            _remainingSeconds = 0;
+
+            // Update button text to reflect a new session is ready
+            StartStopButton.Text = "Start New Pomodoro";
+
+            // Display an alert for the break
+            DisplayAlert("Pomodoro Finished!", "Time for a short break!", "OK");
+        }
+
+        UpdateTimerDisplay();
+    }
+
+    // Connects to the button in MainPage.xaml
+    private void OnStartStopButtonClicked(object sender, EventArgs e)
+    {
+        if (_isTimerRunning)
+        {
+            // Stop/Pause the timer
+            _timer.Stop();
+            _isTimerRunning = false;
+            StartStopButton.Text = "Resume Pomodoro";
+        }
+        else
+        {
+            // Start or resume the timer
+            if (_remainingSeconds <= 0)
+            {
+                // Reset to 25:00 if it had finished
+                _remainingSeconds = PomodoroDurationSeconds;
+            }
+
+            _timer.Start();
+            _isTimerRunning = true;
+            StartStopButton.Text = "Pause Pomodoro";
+        }
+    }
+
+    private void UpdateTimerDisplay()
+    {
+        // Convert seconds to MM:SS format
+        int minutes = _remainingSeconds / 60;
+        int seconds = _remainingSeconds % 60;
+
+        // Use :D2 format specifier to ensure leading zeros (e.g., 05:03)
+        TimerDisplayLabel.Text = $"{minutes:D2}:{seconds:D2}";
+    }
+    // ------------------------------
+
     public void TodoRedirect()
-	{
-		Shell.Current.GoToAsync("//TodoPage");
-	}
+    {
+        Shell.Current.GoToAsync("//TodoPage");
+    }
 
     private void ToggleViewAllProjects()
     {
@@ -73,13 +153,13 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
         OnPropertyChanged(nameof(ViewAllButtonText)); // Notify the UI that the button text has changed
     }
     public async Task GetTodos(int id)
-	{
-		try
-		{
-			var response = await _httpClient.PostAsJsonAsync("api/Todo/GetTodos", id);
+    {
+        try
+        {
+            var response = await _httpClient.PostAsJsonAsync("api/Todo/GetTodos", id);
 
-			if (response.IsSuccessStatusCode)
-			{
+            if (response.IsSuccessStatusCode)
+            {
                 var todos = await response.Content.ReadFromJsonAsync<List<TodoGetDto>>();
 
                 // Keep the full list if you need it elsewhere
@@ -96,12 +176,12 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
             }
 
         }
-		catch (Exception)
-		{
+        catch (Exception)
+        {
 
-			//Do nothing
-		}
-	}
+            //Do nothing
+        }
+    }
 
     private async Task ToggleTodoCompletion(TodoGetDto todo)
     {
