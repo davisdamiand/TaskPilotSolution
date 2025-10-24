@@ -4,8 +4,9 @@
              x:Class="TaskPilot.Client.CalendarPage"
              Shell.NavBarIsVisible="False"
              BackgroundColor="White">
-    <Grid RowDefinitions="*, Auto" BackgroundColor="#F5F5F7">
-        <Grid RowDefinitions="Auto, Auto, *">
+
+   
+    <Grid RowDefinitions="Auto, Auto, Auto, *">
 
         <!-- Header -->
         <Label Grid.Row="0"
@@ -45,18 +46,45 @@
                     Clicked="NextDay_Clicked"/>
         </HorizontalStackLayout>
 
-        <!-- Scrollable Calendar Area (vertical only) -->
-        <ScrollView x:Name="CalendarScrollView" Grid.Row="2" Orientation="Vertical">
-            <Grid x:Name="CalendarGrid"
-                  ColumnSpacing="1"
-                  RowSpacing="1"
-                  Padding="20,0,20,30">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="50"/>   <!-- Time ruler -->
-                    <ColumnDefinition Width="*" />   <!-- Day column -->
-                </Grid.ColumnDefinitions>
-                <!-- Rows (hours) are generated dynamically in code-behind -->
-            </Grid>
+        <!-- Days of the Week Header -->
+        <Grid x:Name="DayHeaderGrid" Grid.Row="2"
+              ColumnSpacing="1" 
+              HeightRequest="45"
+              Padding="20,0,20,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="150" />
+                <ColumnDefinition Width="150" />
+                <ColumnDefinition Width="150" />
+                <ColumnDefinition Width="150" />
+                <ColumnDefinition Width="150" />
+                <ColumnDefinition Width="150" />
+                <ColumnDefinition Width="150" />
+            </Grid.ColumnDefinitions>
+        </Grid>
+
+        <!-- Calendar Area -->
+        <ScrollView x:Name="CalendarScrollView" Grid.Row="3" Orientation="Vertical">
+            <ScrollView Orientation="Horizontal">
+                <Grid x:Name="CalendarGrid" 
+                      ColumnSpacing="1" 
+                      RowSpacing="1" 
+                      Padding="20,0,20,30">
+                  
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="150" />
+                        <ColumnDefinition Width="150" />
+                        <ColumnDefinition Width="150" />
+                        <ColumnDefinition Width="150" />
+                        <ColumnDefinition Width="150" />
+                        <ColumnDefinition Width="150" />
+                        <ColumnDefinition Width="150" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- RowDefinitions and Time Labels are now generated dynamically in C# -->
+                </Grid>
+            </ScrollView>
         </ScrollView>
     </Grid>
         <ContentPresenter Grid.Row="0" />
