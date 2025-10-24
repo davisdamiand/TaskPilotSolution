@@ -22,7 +22,9 @@ public partial class LoginPage : ContentPage
     //Navigate to forget password page
     private async void OnForgotPasswordClicked(object sender, EventArgs e)
     {
-        Application.Current.MainPage = new ForgotPasswordPage();
+        var serviceProvider = this.Handler.MauiContext.Services;
+        var forgotPasswordPage = serviceProvider.GetService<ForgotPasswordPage>();
+        Application.Current.MainPage = forgotPasswordPage;
     }
 
     private async void OnLoginClicked(object sender, EventArgs e)
@@ -68,7 +70,7 @@ public partial class LoginPage : ContentPage
                 }
                 await GetStudentInformation(id);
                 Preferences.Set("UserID", id.ToString());
-                Application.Current.MainPage = new AppShell();
+                Application.Current.MainPage = MauiProgram.Services.GetService<AppShell>();
             }
             else
             {

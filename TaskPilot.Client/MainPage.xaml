@@ -4,108 +4,246 @@
              x:Class="TaskPilot.Client.MainPage"
              Shell.NavBarIsVisible="False"
              BackgroundColor="#F5F5F7">
+    <Grid RowDefinitions="*, Auto" BackgroundColor="#F5F5F7">
+        <ScrollView Padding="30,0,30,0">
+            <Grid>
+                <VerticalStackLayout Padding="0,40,0,40" Spacing="25">
 
-    <ScrollView>
-        <VerticalStackLayout Padding="30,40" Spacing="25">
+                    <!-- HEADER -->
+                    <Grid ColumnDefinitions="Auto,*,Auto" Margin="0,0,0,20" VerticalOptions="Center">
 
-            <!-- HEADER -->
-            <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,20">
-                <VerticalStackLayout Spacing="5" VerticalOptions="Center">
-                    <Label x:Name="LabelStudentName"
+                        <!-- Task icon -->
+                        <Image Grid.Column="0"
+                       Source="task_pilot_icon.jpg"
+                       WidthRequest="60"
+                       HeightRequest="60"
+                       HorizontalOptions="Start"
+                       VerticalOptions="Center"
+                       Margin="0,0,15,0"/>
+
+                        <!-- Center: Title and quote -->
+                        <VerticalStackLayout Grid.Column="1" Spacing="5" VerticalOptions="Center">
+                            <Label x:Name="LabelStudentName"
                            Text="Name"
-                           FontSize="30"
+                           FontSize="25"
                            FontAttributes="Bold"
                            TextColor="#1A1D3F" />
-                    <Label Text="“Stay focused. Keep working towards your goals — one task at a time.”"
+                            <Label Text="“Stay focused. Keep working towards your goals ,one task at a time.”"
                            FontSize="14"
                            TextColor="#555" />
-                </VerticalStackLayout>
-            </Grid>
+                        </VerticalStackLayout>
 
-            <!-- ONGOING PROJECTS HEADER -->
-            <Grid ColumnDefinitions="*,Auto">
-                <HorizontalStackLayout Spacing="12" VerticalOptions="Center">
-                    <Label Text="Ongoing Projects"
+                    </Grid>
+
+                    <!-- Pomodoro Timer Section -->
+                    <Frame BackgroundColor="White"
+                   CornerRadius="10"
+                   Padding="20"
+                   HasShadow="True">
+                        <VerticalStackLayout Spacing="15">
+                            <Label Text="Pomodoro Timer"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="#1A1D3F"
+                           HorizontalOptions="Center" />
+
+                            <Label x:Name="TimerDisplayLabel"
+                           Text="25:00"
+                           FontSize="72"
+                           FontAttributes="Bold"
+                           TextColor="#1A1D3F"
+                           HorizontalOptions="Center" />
+
+                            <Button x:Name="StartStopButton"
+                            Text="Start Pomodoro"
+                            Clicked="OnStartStopButtonClicked"
+                            IsEnabled="{Binding EnableTimer}"
+                            CornerRadius="8"
+                            HorizontalOptions="Center"
+                            BackgroundColor="{Binding TimerButtonColor}"
+                            TextColor="White"
+                            FontSize="Medium"
+                            FontAttributes="Bold" />
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- Ongoing Projects Section -->
+                    <Grid ColumnDefinitions="*,Auto" Margin="0,15,0,0">
+                        <HorizontalStackLayout Spacing="12" VerticalOptions="Center" Grid.Column="0">
+                            <Label Text="Ongoing Projects"
                            FontSize="20"
                            FontAttributes="Bold"
                            TextColor="#1A1D3F"/>
-                </HorizontalStackLayout>
+                        </HorizontalStackLayout>
 
-            </Grid>
+                        <Button Text="{Binding ViewAllButtonText}"
+                        Command="{Binding ViewAllProjectsCommand}"
+                        BackgroundColor="Transparent"
+                        TextColor="#1A1D3F"
+                        Grid.Column="1"/>
+                    </Grid>
 
-            <!-- TASKS COLLECTION -->
-            <CollectionView x:Name="TodosCollection"
+                    <!-- Tasks Collection -->
+                    <CollectionView x:Name="TodosCollection"
                             ItemsSource="{Binding listOfTodos}"
                             SelectionMode="None"
                             Margin="0,15,0,0">
 
-                <CollectionView.ItemsLayout>
-                    <GridItemsLayout Orientation="Vertical"
+                        <CollectionView.ItemsLayout>
+                            <GridItemsLayout Orientation="Vertical"
                                      Span="1"
                                      VerticalItemSpacing="15"
                                      HorizontalItemSpacing="0" />
-                </CollectionView.ItemsLayout>
+                        </CollectionView.ItemsLayout>
 
-                <!-- EMPTY STATE -->
-                <CollectionView.EmptyView>
-                    <VerticalStackLayout Padding="20"
+                        <!-- Empty State -->
+                        <CollectionView.EmptyView>
+                            <VerticalStackLayout Padding="20"
                                          HorizontalOptions="Center"
                                          VerticalOptions="Center">
-                        <Label Text="No tasks yet 🎉"
+                                <Label Text="No tasks yet 🎉"
                                FontSize="18"
                                FontAttributes="Bold"
                                TextColor="#1A1D3F"
                                HorizontalOptions="Center"/>
-                        <Label Text="Add your first task to get started."
+                                <Label Text="Add your first task to get started."
                                FontSize="14"
                                TextColor="#666"
                                HorizontalOptions="Center"/>
-                    </VerticalStackLayout>
-                </CollectionView.EmptyView>
-
-                <!-- TEMPLATE -->
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Frame BackgroundColor="White"
-                               CornerRadius="16"
-                               Padding="20"
-                               BorderColor="Transparent"
-                               HasShadow="True"
-                               Margin="0,5">
-
-                            <VerticalStackLayout Spacing="10">
-
-                                <!-- TITLE AND MENU -->
-                                <Grid ColumnDefinitions="*,Auto">
-                                    <Label Text="{Binding Title}"
-                                           FontSize="17"
-                                           FontAttributes="Bold"
-                                           TextColor="#1A1D3F"
-                                           Grid.Column="0"/>
-                                    <Label Text="⋮"
-                                           Grid.Column="1"
-                                           FontSize="20"
-                                           TextColor="#999"
-                                           VerticalOptions="Center"/>
-                                </Grid>
-
-                                <!-- DUE DATE -->
-                                <Label Text="{Binding DueDateTime, StringFormat='Due: {0:dd MMM yyyy}'}"
-                                            FontSize="13"
-                                            TextColor="#666" />
-
-                                <!-- TIME SPENT -->
-                                <Label Text="{Binding TimeSpentMinutes, StringFormat='Time Spent: {0} min'}"
-                                       FontSize="12"
-                                       TextColor="#555"/>
-
                             </VerticalStackLayout>
-                        </Frame>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+                        </CollectionView.EmptyView>
 
-        </VerticalStackLayout>
-    </ScrollView>
+                        <!-- Task Template -->
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border Padding="0"
+                                    StrokeThickness="2">
 
+                                    <!--Add rounded corners to border-->
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="12" />
+                                    </Border.StrokeShape>
+
+                                    <!--To trigger the change in border when todo is selected-->
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Stroke" Value="Transparent" />
+                                            <Style.Triggers>
+                                                <DataTrigger TargetType="Border"
+                                                             Binding="{Binding IsSelected}"
+                                                             Value="True">
+                                                    <Setter Property="Stroke" Value="Blue" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="OnItemTapped" />
+                                    </Border.GestureRecognizers>
+
+                                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12" Padding="15,10">
+
+                                        <CheckBox Grid.Column="0"
+                                              IsChecked="{Binding IsCompleted}"
+                                              Command="{Binding ToggleCompleteCommand}"
+                                              Color="#5A67D8"
+                                              VerticalOptions="Center" />
+
+                                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                            <Label Text="{Binding Title}" FontSize="16">
+                                                <Label.Style>
+                                                    <Style TargetType="Label">
+                                                        <Setter Property="TextColor" Value="#1A1D3F" />
+                                                        <Setter Property="TextDecorations" Value="None" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger TargetType="Label" Binding="{Binding IsCompleted}" Value="True">
+                                                                <Setter Property="TextColor" Value="Gray" />
+                                                                <Setter Property="TextDecorations" Value="Strikethrough" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Label.Style>
+                                            </Label>
+
+                                            <Label Text="{Binding DueDateTime, StringFormat='Due: {0:ddd, MMM d}'}" FontSize="13">
+                                                <Label.Style>
+                                                    <Style TargetType="Label">
+                                                        <Setter Property="TextColor" Value="#666" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger TargetType="Label" Binding="{Binding IsCompleted}" Value="True">
+                                                                <Setter Property="TextColor" Value="LightGray" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Label.Style>
+                                            </Label>
+                                            <Label Text="{Binding TimeSpentMinutes, StringFormat='Time Spent: {0} min'}" FontSize="13">
+                                                <Label.Style>
+                                                    <Style TargetType="Label">
+                                                        <Setter Property="TextColor" Value="#666" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger TargetType="Label" Binding="{Binding IsCompleted}" Value="True">
+                                                                <Setter Property="TextColor" Value="LightGray" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Label.Style>
+                                            </Label>
+                                        </VerticalStackLayout>
+
+                                        <Button Grid.Column="2"
+                                        Text="⋮"
+                                        Clicked="OnMenuClicked"
+                                        VerticalOptions="Center"
+                                        BackgroundColor="Transparent"
+                                        TextColor="#999"
+                                        FontSize="20"
+                                        Padding="0"/>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                </VerticalStackLayout>
+            </Grid>
+        </ScrollView>
+        <ContentPresenter Grid.Row="0" />
+        <Grid Grid.Row="1" 
+                  ColumnDefinitions="*,*,*" 
+                  BackgroundColor="Transparent"
+                  HeightRequest="60"
+                  Padding="10,0,0,0">
+
+
+            <Button Grid.Column="0"
+                    WidthRequest="60" 
+                    Margin="0,0,0,15" CornerRadius="10"  
+                    HeightRequest="60"
+                    ImageSource="todo.jpg"
+                    BackgroundColor="White" 
+                    Clicked="OnTodoPageClicked"
+                    TextColor="White"/>
+            <Button Grid.Column="1" 
+                    WidthRequest="60" 
+                    Margin="0,0,0,15" 
+                    CornerRadius="10"  
+                    HeightRequest="60" 
+                    Clicked="OnCalendarPageClicked"
+                    BackgroundColor="White"
+                    ImageSource="calendar.jpg"
+                    TextColor="White"/>
+            <Button Grid.Column="2" 
+                    WidthRequest="60" 
+                    Margin="0,0,0,15" 
+                    CornerRadius="10"  
+                    HeightRequest="60" 
+                    ImageSource="profile.jpg"
+                    FontSize="26" 
+                    BackgroundColor="White"
+                    Clicked="OnProfilePageClicked"
+                    TextColor="White"/>
+        </Grid>
+    </Grid>
 </ContentPage>

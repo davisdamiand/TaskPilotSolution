@@ -39,6 +39,27 @@ namespace TaskPilot.Server.Controllers
             }
         }
 
+        [HttpPost("ResetPassword")]
+        public async Task<IActionResult> ResetPassword([FromBody] ForgotPasswordDto forgotPasswordDto)
+        {
+            try
+            {
+                var success = await _studentService.ResetPasswordAsync(forgotPasswordDto);
+
+                if (success)
+                {
+                    return Ok(new { Message = "Password has been reset successfully." });
+                }
+
+                return BadRequest(new { Message = "Invalid email or date of birth provided." });
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An internal server error occurred.");
+            }
+        }
 
         [HttpPost]
         [Route("ValidateStudent")]

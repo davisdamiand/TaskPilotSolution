@@ -24,9 +24,10 @@ namespace TaskPilot.Client
                 BaseAddress = new Uri(Config.BaseUrl)
             });
 
+            builder.Services.AddSingleton<AppShell>();
 
             // Register pages
-            builder.Services.AddTransient<MainPage>();
+            builder.Services.AddSingleton<MainPage>();
             builder.Services.AddTransient<TodoPage>();
             builder.Services.AddTransient<ProfilePage>();
             builder.Services.AddTransient<CalendarPage>();

@@ -6,7 +6,7 @@ public static class AuthService
     {
         if (!string.IsNullOrEmpty(Preferences.Get("UserID", null)))
         {
-            return new AppShell();
+            return MauiProgram.Services.GetService<AppShell>();
         }
         else
         {

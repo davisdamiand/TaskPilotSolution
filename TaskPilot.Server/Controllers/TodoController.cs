@@ -8,12 +8,11 @@ namespace TaskPilot.Server.Controllers
 {
     [ApiController]
     [Route("api/[Controller]")]
-
     public class TodoController : Controller
     {
         private readonly ITodoService _todoService;
 
-        public TodoController(ITodoService todoService)
+        public TodoController(ITodoService todoService)T
         {
             _todoService = todoService;
         }
@@ -114,7 +113,7 @@ namespace TaskPilot.Server.Controllers
 
         [HttpPost]
         [Route("ToggleCompletion")]
-        public async Task<IActionResult> ToggleCompletion(int id)
+        public async Task<IActionResult> ToggleCompletion([FromBody] int id)
         {
             var success = await _todoService.ToggleTodoCompletionAsync(id);
 
@@ -124,14 +123,13 @@ namespace TaskPilot.Server.Controllers
                 {
                     Message = "Todo not found",
                     Errors = new Dictionary<string, string[]>
-            {
-                { "Id", new[] { "The specified Todo item could not be found." } }
-            }
+                    {
+                        { "Id", new[] { "The specified Todo item could not be found." } }
+                    }
                 });
             }
 
             return Ok(new { Message = "Todo updated successfully" });
-
         }
 
         [HttpPost]

@@ -1,48 +1,92 @@
 using Microsoft.Maui.Controls;
+using Shared.DTOs;
 using System;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using TaskPilot.Client.Services;
 
 namespace TaskPilot.Client
 {
     public partial class ForgotPasswordPage : ContentPage
     {
-        public ForgotPasswordPage()
+        
+        private readonly StudentService _studentService;
+        private string verifiedEmail;
+
+        public ForgotPasswordPage(StudentService studentService)
         {
             InitializeComponent();
+            _studentService = studentService;
         }
 
-        private async void OnResetClicked(object sender, EventArgs e)
+
+        private async void OnResetPasswordClicked(object sender, EventArgs e)
         {
-            string email = EntryResetEmail.Text?.Trim();
+            ErrorLabel.IsVisible = false;
 
-            // Validate email
-            if (string.IsNullOrEmpty(email))
+            string email = EntryEmail.Text?.Trim();
+            string newPass = EntryNewPassword.Text;
+            string confirmPass = EntryConfirmPassword.Text;
+            DateTime selectedDate = (DateTime)DatePickerDOB.Date;
+            DateOnly dob = DateOnly.FromDateTime(selectedDate);
+
+            // --- Input Validation ---
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(newPass))
             {
-                EmailErrorLabel.Text = "Please enter your email address.";
-                EmailErrorLabel.IsVisible = true;
+                ErrorLabel.Text = "Please fill in all fields.";
+                ErrorLabel.IsVisible = true;
                 return;
             }
 
-            if (!Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+            if (newPass != confirmPass)
             {
-                EmailErrorLabel.Text = "Please enter a valid email address.";
-                EmailErrorLabel.IsVisible = true;
+                ErrorLabel.Text = "Passwords do not match.";
+                ErrorLabel.IsVisible = true;
                 return;
             }
 
-            EmailErrorLabel.IsVisible = false;
 
-            // Simulate sending email
-            await Task.Delay(1500);
+            // --- API Call ---
+            try
+            {
+                var dto = new ForgotPasswordDto
+                {
+                    Email = email,
+                    DOB = dob,
+                    NewPassword = newPass
+                };
 
-            MessageLabel.Text = "A password reset link has been sent to your email.";
-            MessageLabel.IsVisible = true;
+                bool success = await _studentService.ResetPasswordAsync(dto);
+
+                if (success)
+                {
+                    await DisplayAlertAsync("Success", "Your password has been reset successfully.", "OK");
+                    // Navigate on success
+                    await LoginPage();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Display the error from the server
+                ErrorLabel.Text = ex.Message;
+                ErrorLabel.IsVisible = true;
+            }
         }
 
+
+
+        // Back to login
         private async void OnBackToLoginClicked(object sender, EventArgs e)
         {
-            Application.Current.MainPage = MauiProgram.Services.GetService<LoginPage>();
+           await LoginPage();
+        }
+
+
+        private async Task LoginPage()
+        {
+            var serviceProvider = this.Handler.MauiContext.Services;
+            var loginPage = serviceProvider.GetService<LoginPage>();
+            // clear any stored preferences if needed
+            Preferences.Clear();
+            App.Current.MainPage = new NavigationPage(loginPage);
         }
     }
 }

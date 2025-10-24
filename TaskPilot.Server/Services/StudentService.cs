@@ -38,7 +38,10 @@ namespace TaskPilot.Server.Services
                     DOB = studentCreateDto.DOB
                 };
 
+                // Add student to the database
                 await _context.Students.AddAsync(student);
+
+                // Save changes
                 await _context.SaveChangesAsync();
                 return student.Id;
             }
@@ -66,6 +69,29 @@ namespace TaskPilot.Server.Services
 
             return -1;
             
+        }
+
+        public async Task<bool> ResetPasswordAsync(ForgotPasswordDto forgotPasswordDto)
+        {
+            var formattedEmail = FormatEmail(forgotPasswordDto.Email);
+
+            // Find the student matching BOTH email and DOB for security
+            var student = await _context.Students.FirstOrDefaultAsync(s =>
+                s.Email == formattedEmail &&
+                s.DOB == forgotPasswordDto.DOB);
+
+            // If no student is found, the details were incorrect
+            if (student == null)
+            {
+                return false;
+            }
+
+            // If found, update the password with the new hashed password
+            student.Password = PasswordHelper.HashPassword(forgotPasswordDto.NewPassword);
+
+            await _context.SaveChangesAsync();
+
+            return true;
         }
 
         private static string FormatEmail(string email) => email.Trim().ToLowerInvariant();

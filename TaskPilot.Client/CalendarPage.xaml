@@ -4,89 +4,96 @@
              x:Class="TaskPilot.Client.CalendarPage"
              Shell.NavBarIsVisible="False"
              BackgroundColor="White">
+    <Grid RowDefinitions="*, Auto" BackgroundColor="#F5F5F7">
+        <Grid RowDefinitions="Auto, Auto, *">
 
-   
-    <Grid RowDefinitions="Auto, Auto, Auto, *">
-
-        <!-- Header -->
-        <Label Grid.Row="0"
-               Text="Weekly Calendar"
+            <!-- Header -->
+            <Label Grid.Row="0"
+               Text="Daily Calendar"
                FontSize="28"
                FontAttributes="Bold"
                TextColor="#1E1E5A"
-               HorizontalOptions="Start" 
+               HorizontalOptions="Start"
                Padding="20,40,20,0"/>
 
-        <!-- Week Navigation -->
-        <HorizontalStackLayout Grid.Row="1"
-                               HorizontalOptions="Center" 
-                               Spacing="15" 
+            <!-- Day Navigation: previous / day label / next -->
+            <HorizontalStackLayout Grid.Row="1"
+                               HorizontalOptions="Center"
+                               Spacing="15"
                                Margin="0,20,0,10">
-            <Button x:Name="PreviousWeekButton"
-                    Text="‹" 
-                    BackgroundColor="Transparent" 
-                    TextColor="#1E1E5A" 
+                <Button x:Name="PreviousDayButton"
+                    Text="‹"
+                    BackgroundColor="Transparent"
+                    TextColor="#1E1E5A"
                     FontSize="22"
-                    Clicked="PreviousWeek_Clicked"/>
-
-            <Label x:Name="WeekLabel"
-                   Text="This Week" 
-                   FontAttributes="Bold" 
-                   FontSize="16" 
-                   TextColor="#1E1E5A" 
+                    Clicked="PreviousDay_Clicked"/>
+                <Label x:Name="DayLabel"
+                   Text="Today"
+                   FontAttributes="Bold"
+                   FontSize="16"
+                   TextColor="#1E1E5A"
                    VerticalOptions="Center">
-                <Label.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="GoToCurrentWeek_Tapped" />
-                </Label.GestureRecognizers>
-            </Label>
-
-            <Button x:Name="NextWeekButton"
-                    Text="›" 
-                    BackgroundColor="Transparent" 
-                    TextColor="#1E1E5A" 
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="GoToToday_Tapped" />
+                    </Label.GestureRecognizers>
+                </Label>
+                <Button x:Name="NextDayButton"
+                    Text="›"
+                    BackgroundColor="Transparent"
+                    TextColor="#1E1E5A"
                     FontSize="22"
-                    Clicked="NextWeek_Clicked"/>
-        </HorizontalStackLayout>
+                    Clicked="NextDay_Clicked"/>
+            </HorizontalStackLayout>
 
-        <!-- Days of the Week Header -->
-        <Grid x:Name="DayHeaderGrid" Grid.Row="2"
-              ColumnSpacing="1" 
-              HeightRequest="45"
-              Padding="20,0,20,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="50"/>
-                <ColumnDefinition Width="150" />
-                <ColumnDefinition Width="150" />
-                <ColumnDefinition Width="150" />
-                <ColumnDefinition Width="150" />
-                <ColumnDefinition Width="150" />
-                <ColumnDefinition Width="150" />
-                <ColumnDefinition Width="150" />
-            </Grid.ColumnDefinitions>
-        </Grid>
-
-        <!-- Calendar Area -->
-        <ScrollView x:Name="CalendarScrollView" Grid.Row="3" Orientation="Vertical">
-            <ScrollView Orientation="Horizontal">
-                <Grid x:Name="CalendarGrid" 
-                      ColumnSpacing="1" 
-                      RowSpacing="1" 
-                      Padding="20,0,20,30">
-                  
+            <!-- Scrollable Calendar Area (vertical only) -->
+            <ScrollView x:Name="CalendarScrollView" Grid.Row="2" Orientation="Vertical">
+                <Grid x:Name="CalendarGrid"
+                  ColumnSpacing="1"
+                  RowSpacing="1"
+                  Padding="20,0,20,30">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="50"/>
-                        <ColumnDefinition Width="150" />
-                        <ColumnDefinition Width="150" />
-                        <ColumnDefinition Width="150" />
-                        <ColumnDefinition Width="150" />
-                        <ColumnDefinition Width="150" />
-                        <ColumnDefinition Width="150" />
-                        <ColumnDefinition Width="150" />
+                        <!-- Time ruler -->
+                        <ColumnDefinition Width="*" />
+                        <!-- Day column -->
                     </Grid.ColumnDefinitions>
-
-                    <!-- RowDefinitions and Time Labels are now generated dynamically in C# -->
+                    <!-- Rows (hours) are generated dynamically in code-behind -->
                 </Grid>
             </ScrollView>
-        </ScrollView>
+        </Grid>
+        <ContentPresenter Grid.Row="0" />
+        <Grid Grid.Row="1" 
+          ColumnDefinitions="*,*,*" 
+          BackgroundColor="Transparent"
+          HeightRequest="60"
+          Padding="10,0,0,0">
+            <Button Grid.Column="0"
+                WidthRequest="60" 
+                Margin="0,0,0,15" CornerRadius="10"  
+                HeightRequest="60"
+                ImageSource="todo.jpg"
+                BackgroundColor="White" 
+                Clicked="OnTodoPageClicked"
+                TextColor="White"/>
+            <Button Grid.Column="1" 
+                WidthRequest="60" 
+                Margin="0,0,0,15" 
+                CornerRadius="10"  
+                HeightRequest="60" 
+                Clicked="OnHomePageClicked"
+                BackgroundColor="White"
+                ImageSource="home.jpg"
+                TextColor="White"/>
+            <Button Grid.Column="2" 
+                WidthRequest="60" 
+                Margin="0,0,0,15" 
+                CornerRadius="10"  
+                HeightRequest="60" 
+                ImageSource="profile.jpg"
+                FontSize="26" 
+                BackgroundColor="White"
+                Clicked="OnProfilePageClicked"
+                TextColor="White"/>
+        </Grid>
     </Grid>
 </ContentPage>

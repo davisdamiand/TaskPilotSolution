@@ -20,6 +20,7 @@ public class RegisterViewModel : INotifyPropertyChanged
     {
         _studentService = studentService;
         RegisterCommand = new Command(async () => await RegisterAsync(), () => !IsBusy);
+        BackToLoginCommand = new Command(async () => await ReturnToLogin());
     }
 
     public string Name { get => _name; set { _name = value; OnPropertyChanged(); } }
@@ -35,6 +36,21 @@ public class RegisterViewModel : INotifyPropertyChanged
     }
 
     public ICommand RegisterCommand { get; }
+    public ICommand BackToLoginCommand { get; }
+
+    private Task ReturnToLogin()
+    {
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            var loginPage = MauiProgram.Services.GetService<LoginPage>();
+            if (loginPage != null)
+            {
+                App.Current.MainPage = new NavigationPage(loginPage);
+            }
+        });
+
+        return Task.CompletedTask;
+    }
 
     private async Task RegisterAsync()
     {
@@ -58,7 +74,7 @@ public class RegisterViewModel : INotifyPropertyChanged
             Preferences.Set("StudentName", Name);
             Preferences.Set("StudentSurname", Surname);
 
-            Application.Current.MainPage = new AppShell();
+            Application.Current.MainPage = MauiProgram.Services.GetService<AppShell>();
         }
         catch (Exception ex)
         {

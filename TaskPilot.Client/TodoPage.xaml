@@ -6,9 +6,9 @@
     x:Class="TaskPilot.Client.TodoPage"
     Shell.NavBarIsVisible="False"
     BackgroundColor="#E5E7EB">
-    <!-- UPDATED COLOR HERE -->
-
-    <ScrollView>
+ 
+    <Grid RowDefinitions="*, Auto" BackgroundColor="#F5F5F7">
+        <ScrollView>
         <VerticalStackLayout Padding="40,30" Spacing="30">
 
             <!-- HEADER -->
@@ -40,10 +40,11 @@
                    BorderColor="Transparent"
                    HasShadow="True">
                 <VerticalStackLayout Spacing="15">
-                    <Label Text="Add a New Task"
+                    <Label Text="{Binding HeaderText}"
                            FontAttributes="Bold"
                            FontSize="20"
-                           TextColor="#1A1D3F"/>
+                           TextColor="#1A1D3F"/>    
+
 
                     <Border Stroke="#F0F0F0" StrokeThickness="1" BackgroundColor="#F9FAFB" Padding="15,0" StrokeShape="RoundRectangle 8">
                         <Entry Placeholder="Task Name"
@@ -97,11 +98,20 @@
                         <RadioButton Content="2" Value="2" TextColor="#6B7280"/>
                         <RadioButton Content="3" Value="3" TextColor="#6B7280"/>
                         <RadioButton Content="4" Value="4" TextColor="#6B7280"/>
-                        <RadioButton Content="5" Value="5" IsChecked="True" TextColor="#6B7280"/>
+                        <RadioButton Content="5" Value="5" TextColor="#6B7280"/>
                     </HorizontalStackLayout>
 
-                    <Button Text="Save Task"
+                    <Button Text="{Binding SaveButtonText}"
                             Command="{Binding SaveCommand}"
+                            BackgroundColor="#1A1D3F"
+                            TextColor="White"
+                            CornerRadius="12"
+                            FontAttributes="Bold"
+                            HeightRequest="50"
+                            Margin="0,10,0,0"/>
+                    <Button Text="Remove Todo"
+                            Command="{Binding DeleteCommand}"
+                            IsVisible="{Binding IsEditMode}" 
                             BackgroundColor="#1A1D3F"
                             TextColor="White"
                             CornerRadius="12"
@@ -112,4 +122,36 @@
             </Frame>
         </VerticalStackLayout>
     </ScrollView>
+        <ContentPresenter Grid.Row="0" />
+        <Grid Grid.Row="1" 
+          ColumnDefinitions="*,*,*" 
+          BackgroundColor="Transparent"
+          HeightRequest="60"
+          Padding="10,0,0,0">
+            <Button Grid.Column="0"
+                    WidthRequest="60" 
+                    Margin="0,0,0,15" CornerRadius="10"  
+                    HeightRequest="60"
+                    ImageSource="calendar.jpg"
+                    BackgroundColor="White" 
+                     Command="{Binding ReturnCalendarCommand}"
+                    TextColor="White"/>
+            <Button Grid.Column="1"
+                    WidthRequest="60" 
+                    Margin="0,0,0,15" CornerRadius="10"  
+                    HeightRequest="60"
+                    ImageSource="home.jpg"
+                    BackgroundColor="White" 
+                     Command="{Binding ReturnHomeCommand}"
+                    TextColor="White"/>
+            <Button Grid.Column="2"
+                    WidthRequest="60" 
+                    Margin="0,0,0,15" CornerRadius="10"  
+                    HeightRequest="60"
+                    ImageSource="profile.jpg"
+                    BackgroundColor="White" 
+                     Command="{Binding ReturnProfileCommand}"
+                    TextColor="White"/>
+        </Grid>
+    </Grid>
 </ContentPage>

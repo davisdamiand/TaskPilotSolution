@@ -5,8 +5,8 @@
              Shell.NavBarIsVisible="False"
              BackgroundColor="#F8F9FA">
 
-
-    <ScrollView>
+    <Grid RowDefinitions="*, Auto" BackgroundColor="#F5F5F7">
+        <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="20">
 
             <!-- Profile Header -->
@@ -211,5 +211,40 @@
 
         </VerticalStackLayout>
     </ScrollView>
+        <ContentPresenter Grid.Row="0" />
+        <Grid Grid.Row="1" 
+              ColumnDefinitions="*,*,*" 
+              BackgroundColor="Transparent"
+              HeightRequest="60"
+              Padding="10,0,0,0">
+            <Button Grid.Column="0"
+                    WidthRequest="60" 
+                    Margin="0,0,0,15" CornerRadius="10"  
+                    HeightRequest="60"
+                    ImageSource="todo.jpg"
+                    BackgroundColor="White" 
+                    Command="{Binding ReturnTodoPageCommand}"
+                    TextColor="White"/>
+            <Button Grid.Column="1" 
+                    WidthRequest="60" 
+                    Margin="0,0,0,15" 
+                    CornerRadius="10"  
+                    HeightRequest="60" 
+                    Command="{Binding ReturnHomePageCommand}"
+                    BackgroundColor="White"
+                    ImageSource="home.jpg"
+                    TextColor="White"/>
+            <Button Grid.Column="2" 
+                    WidthRequest="60" 
+                    Margin="0,0,0,15" 
+                    CornerRadius="10"  
+                    HeightRequest="60" 
+                    ImageSource="calendar.jpg"
+                    FontSize="26" 
+                    BackgroundColor="White"
+                    Command="{Binding ReturnCalendarPageCommand}"
+                    TextColor="White"/>
+        </Grid>
+    </Grid>
 
 </ContentPage>
