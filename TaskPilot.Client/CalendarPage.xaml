@@ -4,8 +4,8 @@
              x:Class="TaskPilot.Client.CalendarPage"
              Shell.NavBarIsVisible="False"
              BackgroundColor="White">
-
-    <Grid RowDefinitions="Auto, Auto, *">
+    <Grid RowDefinitions="*, Auto" BackgroundColor="#F5F5F7">
+        <Grid RowDefinitions="Auto, Auto, *">
 
         <!-- Header -->
         <Label Grid.Row="0"
@@ -58,5 +58,40 @@
                 <!-- Rows (hours) are generated dynamically in code-behind -->
             </Grid>
         </ScrollView>
+    </Grid>
+        <ContentPresenter Grid.Row="0" />
+        <Grid Grid.Row="1" 
+          ColumnDefinitions="*,*,*" 
+          BackgroundColor="Transparent"
+          HeightRequest="60"
+          Padding="10,0,0,0">
+            <Button Grid.Column="0"
+                WidthRequest="60" 
+                Margin="0,0,0,15" CornerRadius="10"  
+                HeightRequest="60"
+                ImageSource="todo.jpg"
+                BackgroundColor="White" 
+                Clicked="OnTodoPageClicked"
+                TextColor="White"/>
+            <Button Grid.Column="1" 
+                WidthRequest="60" 
+                Margin="0,0,0,15" 
+                CornerRadius="10"  
+                HeightRequest="60" 
+                Clicked="OnHomePageClicked"
+                BackgroundColor="White"
+                ImageSource="home.jpg"
+                TextColor="White"/>
+            <Button Grid.Column="2" 
+                WidthRequest="60" 
+                Margin="0,0,0,15" 
+                CornerRadius="10"  
+                HeightRequest="60" 
+                ImageSource="profile.jpg"
+                FontSize="26" 
+                BackgroundColor="White"
+                Clicked="OnProfilePageClicked"
+                TextColor="White"/>
+        </Grid>
     </Grid>
 </ContentPage>

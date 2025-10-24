@@ -69,6 +69,24 @@ namespace TaskPilot.Client
             }
         }
 
+        // Navigate to the Todo Page Page
+        public async void OnTodoPageClicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("//TodoPage");
+        }
+
+        //Navigate to the Profile Page
+        public async void OnProfilePageClicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("//ProfilePage");
+        }
+
+        //Navigate to the Main Page
+        public async void OnHomePageClicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("//MainPage");
+        }
+
         private async Task LoadTasksAndDisplay()
         {
             try
@@ -181,7 +199,7 @@ namespace TaskPilot.Client
 
         // small wrapper to avoid using obsolete Sync APIs
         private Task DisplayAlertAsync(string title, string message, string cancel) =>
-            this.DisplayAlert(title, message, cancel);
+            this.DisplayAlertAsync(title, message, cancel);
 
     }
 }

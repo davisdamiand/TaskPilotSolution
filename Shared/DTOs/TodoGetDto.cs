@@ -10,6 +10,9 @@ namespace Shared.DTOs
 {
     public class TodoGetDto: INotifyPropertyChanged
     {
+        //Use to determine what task will be effected by the pomodoro timer
+        private bool _isSelected;
+        private int _timeSpentMinutes;
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Title is required")]
@@ -25,7 +28,18 @@ namespace Shared.DTOs
 
         public int PriorityLevel { get; set; }
 
-        public int TimeSpentMinutes { get; set; }
+        public int TimeSpentMinutes
+        {
+            get => _timeSpentMinutes;
+            set
+            {
+                if (_timeSpentMinutes != value)
+                {
+                    _timeSpentMinutes = value;
+                    OnPropertyChanged(); // This notifies the UI
+                }
+            }
+        }
 
         [Required(ErrorMessage = "Due date is required")]
         public DateTime DueDateTime { get; set; }
@@ -63,18 +77,6 @@ namespace Shared.DTOs
             return ValidationResult.Success!;
         }
 
-        public double Progress
-        {
-            get
-            {
-                var totalMinutes = (EndDateTime - StartDateTime).TotalMinutes;
-                if (totalMinutes <= 0) return 0;
-
-                // ensure double division and double arguments for Math.Clamp
-                return Math.Clamp((double)TimeSpentMinutes / totalMinutes, 0.0, 1.0);
-            }
-        }
-
         private bool _isCompleted;
         public bool IsCompleted
         {
@@ -92,6 +94,19 @@ namespace Shared.DTOs
 
                 _isCompleted = value;
                 OnPropertyChanged(); // This tells the UI to refresh!
+            }
+        }
+
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set
+            {
+                if (_isSelected != value)
+                {
+                    _isSelected = value;
+                    OnPropertyChanged(); 
+                }
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿using Shared.DTOs;
+using Shared.Security;
 using System.Net.Http.Json;
 
 namespace TaskPilot.Client.Services
@@ -23,6 +24,20 @@ namespace TaskPilot.Client.Services
             }
 
             return await response.Content.ReadFromJsonAsync<int>();
+        }
+
+        public async Task<bool> ResetPasswordAsync(ForgotPasswordDto forgotPasswordDto)
+        {
+            var response = await _httpClient.PostAsJsonAsync("api/Student/ResetPassword", forgotPasswordDto);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+
+            // If the server returns an error, throw it so the UI can display it.
+            var errorContent = await response.Content.ReadFromJsonAsync<ErrorResponse>();
+            throw new Exception(errorContent?.Message ?? "An unknown error occurred.");
         }
     }
 }

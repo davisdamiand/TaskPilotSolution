@@ -105,6 +105,10 @@ public class TodoViewModel : INotifyPropertyChanged, IQueryAttributable
     public ICommand SaveCommand { get; }
     public ICommand DeleteCommand { get; }
 
+    public ICommand ReturnHomeCommand { get; }
+    public ICommand ReturnProfileCommand { get; }
+    public ICommand ReturnCalendarCommand { get; }
+
     // Constructor
     public TodoViewModel(TodoService todoService)
     {
@@ -112,7 +116,9 @@ public class TodoViewModel : INotifyPropertyChanged, IQueryAttributable
         _dueDateTime = DateTime.Now.AddDays(1).Date.AddHours(17);
         SaveCommand = new Command(async () => await SaveAsync());
         DeleteCommand = new Command(async () => await DeleteAsync());
-
+        ReturnHomeCommand = new Command(async () => await ReturnHomeAsync());
+        ReturnCalendarCommand = new Command(async () => await ReturnCalendarAsync());
+        ReturnProfileCommand = new Command(async () => await ReturnProfileAsync());
         // Set default state
         ResetFields();
     }
@@ -142,6 +148,27 @@ public class TodoViewModel : INotifyPropertyChanged, IQueryAttributable
         DueDateTime = task.DueDateTime;
         Priority = task.PriorityLevel.ToString(); 
 
+    }
+
+    //Retun back to main page
+    private async Task ReturnHomeAsync()
+    {
+        ResetFields();
+        await Shell.Current.GoToAsync("//MainPage");
+    }
+
+    // Navigate to the Calendar Page
+    private async Task ReturnCalendarAsync()
+    {
+        ResetFields();
+        await Shell.Current.GoToAsync("//CalendarPage");
+    }
+
+    // Navigate to the Profile  Page
+    private async Task ReturnProfileAsync()
+    {
+        ResetFields();
+        await Shell.Current.GoToAsync("//ProfilePage");
     }
 
     private async Task DeleteAsync()

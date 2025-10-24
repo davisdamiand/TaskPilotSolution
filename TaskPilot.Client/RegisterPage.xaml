@@ -20,11 +20,13 @@
                    Aspect="AspectFit"
                    Margin="0,10,0,20"/>
 
-            <Label Text="Already Registered? Log in here."
+            <Label Text="Already Registered?"
                    FontSize="13"
                    TextColor="#555"
                    HorizontalOptions="Center"
                    Margin="0,0,0,10"/>
+            <Button Text="Log in here" FontSize="13" FontAttributes="Bold" TextColor="#1E1E5A"
+                BackgroundColor="Transparent" BorderWidth="0" Padding="0" Command="{Binding BackToLoginCommand}"/>
 
             <Frame BackgroundColor="#F2F2F7" CornerRadius="10" HasShadow="False" Padding="10,5">
                 <Entry Placeholder="Name" Text="{Binding Name}" TextColor="#1E1E5A" PlaceholderColor="#9FA4B2" BackgroundColor="Transparent"/>

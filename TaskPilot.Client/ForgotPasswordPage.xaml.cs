@@ -1,55 +1,37 @@
 using Microsoft.Maui.Controls;
+using Shared.DTOs;
 using System;
+using TaskPilot.Client.Services;
 
 namespace TaskPilot.Client
 {
     public partial class ForgotPasswordPage : ContentPage
     {
-        // Stores verified user details temporarily
+        
+        private readonly StudentService _studentService;
         private string verifiedEmail;
-        private string verifiedDOB;
 
-        public ForgotPasswordPage()
+        public ForgotPasswordPage(StudentService studentService)
         {
             InitializeComponent();
+            _studentService = studentService;
         }
 
-        // Verify email and DOB
-        private void OnVerifyClicked(object sender, EventArgs e)
+
+        private async void OnResetPasswordClicked(object sender, EventArgs e)
         {
             ErrorLabel.IsVisible = false;
-            MessageLabel.IsVisible = false;
 
             string email = EntryEmail.Text?.Trim();
-            string dob = EntryDOB.Text?.Trim();
-
-            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(dob))
-            {
-                ErrorLabel.Text = "Please enter both email and date of birth.";
-                ErrorLabel.IsVisible = true;
-                return;
-            }
-
-            // Store values; replace with actual database/API check later
-            verifiedEmail = email;
-            verifiedDOB = dob;
-
-            // Show new password fields
-            NewPasswordSection.IsVisible = true;
-        }
-
-        // Reset password
-        private void OnResetPasswordClicked(object sender, EventArgs e)
-        {
-            ErrorLabel.IsVisible = false;
-            MessageLabel.IsVisible = false;
-
             string newPass = EntryNewPassword.Text;
             string confirmPass = EntryConfirmPassword.Text;
+            DateTime selectedDate = (DateTime)DatePickerDOB.Date;
+            DateOnly dob = DateOnly.FromDateTime(selectedDate);
 
-            if (string.IsNullOrEmpty(newPass) || string.IsNullOrEmpty(confirmPass))
+            // --- Input Validation ---
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(newPass))
             {
-                ErrorLabel.Text = "Please enter and confirm your new password.";
+                ErrorLabel.Text = "Please fill in all fields.";
                 ErrorLabel.IsVisible = true;
                 return;
             }
@@ -61,24 +43,50 @@ namespace TaskPilot.Client
                 return;
             }
 
-            // TODO: Update your database/API here
-            // Example: UpdateUserPassword(verifiedEmail, verifiedDOB, newPass);
 
-            MessageLabel.Text = "Password reset successfully!";
-            MessageLabel.IsVisible = true;
+            // --- API Call ---
+            try
+            {
+                var dto = new ForgotPasswordDto
+                {
+                    Email = email,
+                    DOB = dob,
+                    NewPassword = newPass
+                };
 
-            // Hide password section and clear fields
-            NewPasswordSection.IsVisible = false;
-            EntryEmail.Text = "";
-            EntryDOB.Text = "";
-            EntryNewPassword.Text = "";
-            EntryConfirmPassword.Text = "";
+                bool success = await _studentService.ResetPasswordAsync(dto);
+
+                if (success)
+                {
+                    await DisplayAlertAsync("Success", "Your password has been reset successfully.", "OK");
+                    // Navigate on success
+                    await LoginPage();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Display the error from the server
+                ErrorLabel.Text = ex.Message;
+                ErrorLabel.IsVisible = true;
+            }
         }
+
+
 
         // Back to login
         private async void OnBackToLoginClicked(object sender, EventArgs e)
         {
-            await Shell.Current.GoToAsync("..");
+           await LoginPage();
+        }
+
+
+        private async Task LoginPage()
+        {
+            var serviceProvider = this.Handler.MauiContext.Services;
+            var loginPage = serviceProvider.GetService<LoginPage>();
+            // clear any stored preferences if needed
+            Preferences.Clear();
+            App.Current.MainPage = new NavigationPage(loginPage);
         }
     }
 }

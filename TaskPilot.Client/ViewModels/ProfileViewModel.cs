@@ -14,6 +14,10 @@ namespace TaskPilot.Client.ViewModels
         private StatsSendDto _stats;
 
         public ICommand LogoutCommand { get; }
+        public ICommand ReturnHomePageCommand { get; }
+        public ICommand ReturnTodoPageCommand { get; }
+        public ICommand ReturnCalendarPageCommand { get; }
+
 
         private string _studentName;
         private string _studentSurname;
@@ -100,7 +104,11 @@ namespace TaskPilot.Client.ViewModels
             _profileService = profileService;
             StudentName = Preferences.Get("StudentName", string.Empty);
             StudentSurname = Preferences.Get("StudentSurname", string.Empty);
+
             LogoutCommand = new Command(async () => await LogoutAsync());
+            ReturnHomePageCommand = new Command(async () => await ReturnHomePageAsync());
+            ReturnTodoPageCommand = new Command(async () => await ReturnTodoPageAsync());
+            ReturnCalendarPageCommand = new Command(async () => await ReturnCalendarPageAsync());
 
         }
 
@@ -119,6 +127,21 @@ namespace TaskPilot.Client.ViewModels
             Preferences.Clear();
             var loginPage = MauiProgram.Services.GetService<LoginPage>();
             Application.Current.MainPage = loginPage;
+        }
+
+        private async Task ReturnHomePageAsync()
+        {
+            await Shell.Current.GoToAsync("//MainPage");
+        }
+
+        private async Task ReturnTodoPageAsync()
+        {
+            await Shell.Current.GoToAsync("//TodoPage");
+        }
+
+        private async Task ReturnCalendarPageAsync()
+        {
+            await Shell.Current.GoToAsync("//CalendarPage");
         }
     }
 }

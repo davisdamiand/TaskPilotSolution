@@ -6,9 +6,9 @@
     x:Class="TaskPilot.Client.TodoPage"
     Shell.NavBarIsVisible="False"
     BackgroundColor="#E5E7EB">
-    <!-- UPDATED COLOR HERE -->
-
-    <ScrollView>
+ 
+    <Grid RowDefinitions="*, Auto" BackgroundColor="#F5F5F7">
+        <ScrollView>
         <VerticalStackLayout Padding="40,30" Spacing="30">
 
             <!-- HEADER -->
@@ -122,4 +122,36 @@
             </Frame>
         </VerticalStackLayout>
     </ScrollView>
+        <ContentPresenter Grid.Row="0" />
+        <Grid Grid.Row="1" 
+          ColumnDefinitions="*,*,*" 
+          BackgroundColor="Transparent"
+          HeightRequest="60"
+          Padding="10,0,0,0">
+            <Button Grid.Column="0"
+                    WidthRequest="60" 
+                    Margin="0,0,0,15" CornerRadius="10"  
+                    HeightRequest="60"
+                    ImageSource="calendar.jpg"
+                    BackgroundColor="White" 
+                     Command="{Binding ReturnCalendarCommand}"
+                    TextColor="White"/>
+            <Button Grid.Column="1"
+                    WidthRequest="60" 
+                    Margin="0,0,0,15" CornerRadius="10"  
+                    HeightRequest="60"
+                    ImageSource="home.jpg"
+                    BackgroundColor="White" 
+                     Command="{Binding ReturnHomeCommand}"
+                    TextColor="White"/>
+            <Button Grid.Column="2"
+                    WidthRequest="60" 
+                    Margin="0,0,0,15" CornerRadius="10"  
+                    HeightRequest="60"
+                    ImageSource="profile.jpg"
+                    BackgroundColor="White" 
+                     Command="{Binding ReturnProfileCommand}"
+                    TextColor="White"/>
+        </Grid>
+    </Grid>
 </ContentPage>

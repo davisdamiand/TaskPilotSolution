@@ -4,7 +4,8 @@ using System.ComponentModel;
 using System.Net.Http.Json;
 using System.Windows.Input;
 using TaskPilot.Client.Services;
-using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 namespace TaskPilot.Client;
 
@@ -15,9 +16,23 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
     private int _remainingSeconds;
     private IDispatcherTimer _timer;
     private bool _isTimerRunning;
+    private int _secondsElapsedInSession = 0;
     // -----------------------------
 
     private const double CompletedPriorityValue = 10.0;
+
+    private TodoGetDto _selectedTodo;
+
+    public string TimerButtonColor => EnableTimer ? "#1A1D3F" : "Gray";
+
+    private bool _enableTimer;
+
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
 
     public List<TodoGetDto> allTodos { get; set; } = new();
     public ObservableCollection<TodoGetDto> listOfTodos { get; set; } = new();
@@ -27,6 +42,20 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
     public string storedID = "";
 
     private readonly TodoService _todoService;
+
+    public bool EnableTimer
+    {
+        get => _enableTimer;
+        set
+        {
+            if (_enableTimer != value)
+            {
+                _enableTimer = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(TimerButtonColor));
+            }
+        }
+    }
 
     public ICommand ViewAllProjectsCommand { get; }
 
@@ -47,10 +76,13 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
 
         ViewAllProjectsCommand = new Command(ToggleViewAllProjects);
 
+
         // --- Initialize Pomodoro Timer ---
         InitializePomodoroTimer();
         UpdateTimerDisplay();
         // ---------------------------------
+
+        EnableTimer = false;
 
         BindingContext = this;
     }
@@ -89,46 +121,82 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
     private async void OnTimerTick(object sender, EventArgs e)
     {
         _remainingSeconds--;
+        _secondsElapsedInSession++;
+
+        UpdateTimerDisplay();
 
         if (_remainingSeconds <= 0)
         {
             // Timer finished
             _timer.Stop();
             _isTimerRunning = false;
-            _remainingSeconds = 0;
+
+            await UpdateTaskTimeSpent();
+            _secondsElapsedInSession = 0; // Reset for next session
 
             // Update button text to reflect a new session is ready
-            StartStopButton.Text = "Start New Pomodoro";
+            StartStopButton.Text = "Start Pomodoro";
 
             // Display an alert for the break
             await DisplayAlertAsync("Pomodoro Finished!", "Time for a short break!", "OK");
+            UpdateTimerDisplay();
         }
 
-        UpdateTimerDisplay();
+        
     }
 
     // Connects to the button in MainPage.xaml
-    private void OnStartStopButtonClicked(object sender, EventArgs e)
+    private async void OnStartStopButtonClicked(object sender, EventArgs e)
     {
         if (_isTimerRunning)
         {
-            // Stop/Pause the timer
+            // Stop Timer
             _timer.Stop();
             _isTimerRunning = false;
-            StartStopButton.Text = "Resume Pomodoro";
+
+            await UpdateTaskTimeSpent();
+
+            _remainingSeconds = PomodoroDurationSeconds;
+            _secondsElapsedInSession = 0;
+
+            UpdateTimerDisplay();
+            StartStopButton.Text = "Start Pomodoro";
         }
         else
         {
-            // Start or resume the timer
-            if (_remainingSeconds <= 0)
-            {
-                // Reset to 25:00 if it had finished
-                _remainingSeconds = PomodoroDurationSeconds;
-            }
-
             _timer.Start();
             _isTimerRunning = true;
-            StartStopButton.Text = "Pause Pomodoro";
+            StartStopButton.Text = "Stop Pomodoro";
+        }
+    }
+
+    private async Task UpdateTaskTimeSpent()
+    {
+        //Check 
+        if (_selectedTodo == null)
+        {
+            return; // Nothing to log
+        }
+
+        int minutesToAdd = _secondsElapsedInSession / 60;
+
+        try
+        {
+            bool success = await _todoService.UpdateTimeSpentAsync(_selectedTodo.Id, minutesToAdd);
+
+
+            if (success)
+            {
+                // Update local state to reflect the change
+                _selectedTodo.TimeSpentMinutes += minutesToAdd;
+
+                Console.WriteLine($"{minutesToAdd} minute(s) successfully logged for task '{_selectedTodo.Title}'.");
+            }
+        }
+        catch (Exception ex)
+        {
+
+            await DisplayAlertAsync("Error", $"Failed to update time spent: {ex.Message}", "OK");
         }
     }
 
@@ -252,6 +320,51 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
             { "TaskToEdit", task }
         });
         }
+    }
+
+    public async void OnTodoPageClicked(object sender, EventArgs e)
+    {
+        Shell.Current.GoToAsync("//TodoPage");
+    }
+
+    private void OnItemTapped(object sender, TappedEventArgs e)
+    {
+        // Get the data context of the tapped item
+        if ((sender as BindableObject)?.BindingContext is TodoGetDto tappedDto)
+        {
+            // Check if the tapped item is the same as the currently selected one
+            if (_selectedTodo != null && _selectedTodo == tappedDto)
+            {
+                // It's the same item, so deselect it and clear the tracker.
+                tappedDto.IsSelected = false;
+                EnableTimer = false;
+                _selectedTodo = null;
+            }
+            else
+            {
+                // This is a new item.
+                // First, deselect the previous one if it exists.
+                if (_selectedTodo != null)
+                {
+                    _selectedTodo.IsSelected = false;
+                }
+
+                // Then, select the new item and update the tracker.
+                tappedDto.IsSelected = true;
+                EnableTimer = true;
+                _selectedTodo = tappedDto;
+            }
+        }
+    }
+
+    public async void OnProfilePageClicked(object sender, EventArgs e)
+    {
+        Shell.Current.GoToAsync("//ProfilePage");
+    }
+
+    public async void OnCalendarPageClicked(object sender, EventArgs e)
+    {
+        Shell.Current.GoToAsync("//CalendarPage");
     }
 
 }

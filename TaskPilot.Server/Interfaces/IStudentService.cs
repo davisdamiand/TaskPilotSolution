@@ -8,6 +8,8 @@ namespace TaskPilot.Server.Interfaces
 
         Task<int> ValidateStudentAsync(StudentValidationDto studentValidationDto);
 
-        Task<StudentGetDto> GetStudentByIdAsync(int id); 
+        Task<StudentGetDto> GetStudentByIdAsync(int id);
+
+        Task<bool> ResetPasswordAsync(ForgotPasswordDto forgotPasswordDto);
     }
 }
