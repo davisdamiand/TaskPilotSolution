@@ -38,7 +38,10 @@ namespace TaskPilot.Server.Services
                     DOB = studentCreateDto.DOB
                 };
 
+                // Add student to the database
                 await _context.Students.AddAsync(student);
+
+                // Save changes
                 await _context.SaveChangesAsync();
                 return student.Id;
             }

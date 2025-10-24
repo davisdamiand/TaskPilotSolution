@@ -12,7 +12,7 @@ namespace TaskPilot.Server.Controllers
     {
         private readonly ITodoService _todoService;
 
-        public TodoController(ITodoService todoService)
+        public TodoController(ITodoService todoService)T
         {
             _todoService = todoService;
         }
@@ -115,9 +115,6 @@ namespace TaskPilot.Server.Controllers
         [Route("ToggleCompletion")]
         public async Task<IActionResult> ToggleCompletion([FromBody] int id)
         {
-            // optional debug logging
-            Console.WriteLine($"ToggleCompletion called with id: {id}");
-
             var success = await _todoService.ToggleTodoCompletionAsync(id);
 
             if (!success)

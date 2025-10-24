@@ -42,20 +42,25 @@ namespace TaskPilot.Server.Services
 
         public async Task<bool> DeleteTodoAsync(int todoId)
         {
+            // Check if todo exists
             var todo = await _context.Todos.FindAsync(todoId);
             if (todo == null) return false;
 
+            // Remove todo
             _context.Todos.Remove(todo);
+            // Save changes
             await _context.SaveChangesAsync();
-
+            // Return success
             return true;
         }
 
         public async Task<bool> UpdateTodoAsync(TodoUpdateDto dto)
         {
+            // Find the todo item
             var todo = await _context.Todos.FindAsync(dto.Id);
             if (todo == null) return false;
 
+            // Update fields from the DTO to the entity
             todo.Title = dto.Title;
             todo.Description = dto.Description;
             todo.DueDateTime = dto.DueDateTime;
@@ -66,7 +71,9 @@ namespace TaskPilot.Server.Services
                 todo.PrioritySelection = CalculatePriority(todo);
             }
 
+            // Save changes
             await _context.SaveChangesAsync();
+            // Return success
             return true;
         }
 
@@ -143,6 +150,7 @@ namespace TaskPilot.Server.Services
         //but completed tasks will have a large PrioritySelection so they appear last)
         public async Task<List<TodoGetDto>> GetTodosByStudentIdAsync(int studentID)
         {
+            // Query todos for the specified student, ordered by PrioritySelection
             var listOfTodos = await _context.Todos
             .Where(s => s.StudentID == studentID)
             .OrderBy(t => t.PrioritySelection)
