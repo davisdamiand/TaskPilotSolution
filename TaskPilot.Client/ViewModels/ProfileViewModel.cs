@@ -114,7 +114,10 @@ namespace TaskPilot.Client.ViewModels
 
         public async Task LoadStatsAsync(StatsCalculateDto dto)
         {
+            // Call the service to get stats via API call
             Stats = await _profileService.GetStudentStatsAsync(dto);
+
+            // Update properties
             TotalCompletedTasks = Stats.TotalCompletedTasks;
             TotalInCompletedTasks = Stats.TotalInCompletedTasks;
             TotalPomodoroSessions = Stats.TotalPomodoroSessions;

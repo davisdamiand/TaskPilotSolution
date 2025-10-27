@@ -44,10 +44,13 @@ namespace TaskPilot.Client.Services
         // Proper error handeling 
         public async Task<bool> UpdateTodo(TodoUpdateDto todoUpdateDto)
         {
+            // 1. Get response from the API
             var response = await _httpClient.PostAsJsonAsync("api/Todo/UpdateTodo", todoUpdateDto);
 
+            //2. Check if the response is successful
             if (!response.IsSuccessStatusCode)
             {
+                // Handle structured error
                 var errorJson = await response.Content.ReadAsStringAsync();
                 var error = JsonSerializer.Deserialize<ErrorResponse>(errorJson,
                     new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
@@ -62,10 +65,13 @@ namespace TaskPilot.Client.Services
         // true the toggle changed
         public async Task<bool> ToggleCompletion(int todoID)
         {
+            // 1. Get response from the API
             var response = await _httpClient.PostAsJsonAsync("api/Todo/ToggleCompletion", todoID);
 
+            //2. Check if the response is successful
             if (!response.IsSuccessStatusCode)
             {
+                // Handle structured error
                 var errorJson = await response.Content.ReadAsStringAsync();
                 var error = JsonSerializer.Deserialize<ErrorResponse>(errorJson,
                     new JsonSerializerOptions { PropertyNameCaseInsensitive = true });

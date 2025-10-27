@@ -22,35 +22,41 @@ namespace TaskPilot.Server.Controllers
         }
 
         [HttpPost("Register")]
+        // Endpoint to register a new student with default settings
         public async Task<IActionResult> Register([FromBody] StudentCreateDto dto)
         {
+            // Validate the incoming DTO
             if (!ModelState.IsValid)
                 return BadRequest("Validation failed");
 
             try
             {
+                // Register the student and get the new student ID
                 var studentId = await _registrationService.RegisterStudentWithDefaultsAsync(dto);
                 return Ok(studentId);
             }
             catch (Exception ex)
             {
+                // Log the exception (in a real application, use a logging framework)
                 Console.WriteLine(ex.Message);
                 return BadRequest("Registration failed");
             }
         }
 
+        // Endpoint to reset a student's password
         [HttpPost("ResetPassword")]
         public async Task<IActionResult> ResetPassword([FromBody] ForgotPasswordDto forgotPasswordDto)
         {
+            // Validate the incoming DTO
             try
             {
+                // Check for any errors
                 var success = await _studentService.ResetPasswordAsync(forgotPasswordDto);
 
                 if (success)
                 {
                     return Ok(new { Message = "Password has been reset successfully." });
                 }
-
                 return BadRequest(new { Message = "Invalid email or date of birth provided." });
             }
             catch (Exception ex)
@@ -61,11 +67,14 @@ namespace TaskPilot.Server.Controllers
             }
         }
 
+        // Endpoint to validate a student's information
         [HttpPost]
         [Route("ValidateStudent")]
 
+        // Endpoint to validate a student's credentials
         public async Task<IActionResult> ValidateStudent([FromBody] StudentValidationDto studentValidationDto)
         {
+            // Validate the incoming DTO
             try
             {
                 // Check for any errors
@@ -85,7 +94,7 @@ namespace TaskPilot.Server.Controllers
                     });
 
                 }
-
+                // Validate the student and get their ID
                 var id = await _studentService.ValidateStudentAsync(studentValidationDto);
 
                 if (id <= 0)
@@ -103,7 +112,8 @@ namespace TaskPilot.Server.Controllers
                 Console.WriteLine(ex.Message);
                 return BadRequest(new ErrorResponse
                 {
-                    Message = "Authenticating student failed"});
+                    Message = "Authenticating student failed"
+                });
             }
         }
 

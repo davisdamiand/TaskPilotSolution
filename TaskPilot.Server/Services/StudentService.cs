@@ -53,22 +53,24 @@ namespace TaskPilot.Server.Services
             }
             
         }
-
+        // Validate student credentials and return their ID if valid
         public async Task<int> ValidateStudentAsync(StudentValidationDto studentValidationDto)
         {
+            // Find the student by formatted email
             var student = await _context.Students.FirstOrDefaultAsync(s => s.Email == FormatEmail(studentValidationDto.Email));
             if (student == null)
             {
                 return -1; // Student not found
             }
 
+            // Verify the password
             if (PasswordHelper.VerifyPassword(student.Password, studentValidationDto.Password))
             {
                 return student.Id;
             }
 
             return -1;
-            
+
         }
 
         public async Task<bool> ResetPasswordAsync(ForgotPasswordDto forgotPasswordDto)

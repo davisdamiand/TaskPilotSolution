@@ -7,8 +7,10 @@ namespace Shared.DTOs
 {
     using System.ComponentModel.DataAnnotations;
 
+    // Prevent exposing the Server Entity Framework model to the client in full
     public class TodoCreateDto : IValidatableObject
     {
+        // Foreign key to associate the todo with a student
         [Required(ErrorMessage = "StudentId is required")]
         [Range(1, int.MaxValue, ErrorMessage = "StudentId must be a positive number")]
         public int StudentId { get; set; }

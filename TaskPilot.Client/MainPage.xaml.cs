@@ -120,9 +120,11 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
 
     private async void OnTimerTick(object sender, EventArgs e)
     {
+        // Decrement remaining time
         _remainingSeconds--;
         _secondsElapsedInSession++;
 
+        // Update the timer display
         UpdateTimerDisplay();
 
         if (_remainingSeconds <= 0)
@@ -148,22 +150,27 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
     // Connects to the button in MainPage.xaml
     private async void OnStartStopButtonClicked(object sender, EventArgs e)
     {
+        // Toggle Timer State
         if (_isTimerRunning)
         {
             // Stop Timer
             _timer.Stop();
             _isTimerRunning = false;
 
+            // Log time spent on the selected task
             await UpdateTaskTimeSpent();
 
+            // Reset Timer for next session
             _remainingSeconds = PomodoroDurationSeconds;
             _secondsElapsedInSession = 0;
 
+            // Update display
             UpdateTimerDisplay();
             StartStopButton.Text = "Start Pomodoro";
         }
         else
         {
+            // Start Timer
             _timer.Start();
             _isTimerRunning = true;
             StartStopButton.Text = "Stop Pomodoro";
@@ -226,15 +233,19 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
     {
         try
         {
+            // Call the API to get todos for the student
             var response = await _httpClient.PostAsJsonAsync("api/Todo/GetTodos", id);
 
+            // If the server returns an error, throw it so the UI can display it.
             if (response.IsSuccessStatusCode)
             {
+                // Deserialize the list of todos
                 var todos = await response.Content.ReadFromJsonAsync<List<TodoGetDto>>();
 
                 // Keep the full list if you need it elsewhere
                 allTodos = todos ?? new List<TodoGetDto>();
 
+                // Assign ToggleCompleteCommand for each todo
                 foreach (var todo in allTodos)
                 {
                     todo.ToggleCompleteCommand = new Command(async () => await ToggleTodoCompletion(todo));
@@ -249,7 +260,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
         catch (Exception)
         {
 
-            //Do nothing
+            await DisplayAlertAsync("Error", "Failed to load tasks. Please try again later.", "OK");
         }
     }
 
