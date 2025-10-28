@@ -5,7 +5,7 @@ using TaskPilot.Server.Interfaces;
 using Shared.DTOs;
 namespace TaskPilot.Server.Services
 {
-    public class StudentService: IStudentService
+    public class StudentService : IStudentService
     {
         private readonly TaskPilotContext _context;
 
@@ -51,7 +51,7 @@ namespace TaskPilot.Server.Services
                 Console.WriteLine(ex.Message);
                 throw;
             }
-            
+
         }
         // Validate student credentials and return their ID if valid
         public async Task<int> ValidateStudentAsync(StudentValidationDto studentValidationDto)
@@ -111,6 +111,6 @@ namespace TaskPilot.Server.Services
                 Surname = student.Surname
             };
         }
-
     }
+
 }

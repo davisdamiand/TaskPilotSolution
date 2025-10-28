@@ -11,5 +11,6 @@ namespace TaskPilot.Server.Interfaces
         Task<StudentGetDto> GetStudentByIdAsync(int id);
 
         Task<bool> ResetPasswordAsync(ForgotPasswordDto forgotPasswordDto);
+
     }
 }

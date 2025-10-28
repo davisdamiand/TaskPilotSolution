@@ -65,7 +65,7 @@ namespace TaskPilot.Server.Services
             todo.Description = dto.Description;
             todo.DueDateTime = dto.DueDateTime;
             todo.PriorityLevel = dto.PriorityLevel;
-            // Recompute priority selection when the todo is edited — don't override completed tasks
+    
             if (!todo.IsCompleted)
             {
                 todo.PrioritySelection = CalculatePriority(todo);
@@ -101,6 +101,7 @@ namespace TaskPilot.Server.Services
                 if (student == null)
                     throw new InvalidOperationException($"There is no student with the {todoCreateDto.StudentId} in the database");
 
+                // create new todo object
                 var newTodo = new Todo
                 {
                     StudentID = student.Id,
@@ -110,9 +111,13 @@ namespace TaskPilot.Server.Services
                     PriorityLevel = todoCreateDto.PriorityLevel,
                 };
 
+                // calculate priority selection
                 newTodo.PrioritySelection = CalculatePriority(newTodo);
 
+                // add todo to database
                 await _context.Todos.AddAsync(newTodo);
+
+                // save changes to database
                 await _context.SaveChangesAsync();
 
                 return newTodo.Id;
