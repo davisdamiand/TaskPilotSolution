@@ -154,21 +154,21 @@ public class TodoViewModel : INotifyPropertyChanged, IQueryAttributable
     private async Task ReturnHomeAsync()
     {
         ResetFields();
-        await Shell.Current.GoToAsync("//MainPage");
+        await Shell.Current.GoToAsync("///LandingPage");
     }
 
     // Navigate to the Calendar Page
     private async Task ReturnCalendarAsync()
     {
         ResetFields();
-        await Shell.Current.GoToAsync("//CalendarPage");
+        await Shell.Current.GoToAsync("///CalendarPage");
     }
 
     // Navigate to the Profile  Page
     private async Task ReturnProfileAsync()
     {
         ResetFields();
-        await Shell.Current.GoToAsync("//ProfilePage");
+        await Shell.Current.GoToAsync("///ProfilePage");
     }
 
     private async Task DeleteAsync()

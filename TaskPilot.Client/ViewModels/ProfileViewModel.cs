@@ -134,17 +134,17 @@ namespace TaskPilot.Client.ViewModels
 
         private async Task ReturnHomePageAsync()
         {
-            await Shell.Current.GoToAsync("//MainPage");
+            await Shell.Current.GoToAsync("///LandingPage");
         }
 
         private async Task ReturnTodoPageAsync()
         {
-            await Shell.Current.GoToAsync("//TodoPage");
+            await Shell.Current.GoToAsync("///TodoPage");
         }
 
         private async Task ReturnCalendarPageAsync()
         {
-            await Shell.Current.GoToAsync("//CalendarPage");
+            await Shell.Current.GoToAsync("///CalendarPage");
         }
     }
 }

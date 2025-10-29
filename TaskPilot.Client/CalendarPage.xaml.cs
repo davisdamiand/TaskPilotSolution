@@ -84,7 +84,7 @@ namespace TaskPilot.Client
         //Navigate to the Main Page
         public async void OnHomePageClicked(object sender, EventArgs e)
         {
-            await Shell.Current.GoToAsync("//MainPage");
+            await Shell.Current.GoToAsync("///LandingPage");
         }
 
         private async Task LoadTasksAndDisplay()

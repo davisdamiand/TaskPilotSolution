@@ -81,7 +81,7 @@ public partial class LoginPage : ContentPage
                 Preferences.Set("UserID", id.ToString());
 
                 // Navigate to the main application shell
-                Application.Current.MainPage = MauiProgram.Services.GetService<AppShell>();
+                await Shell.Current.GoToAsync("///LandingPage");
             }
             else
             {
