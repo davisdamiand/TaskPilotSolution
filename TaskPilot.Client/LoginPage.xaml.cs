@@ -24,7 +24,7 @@ public partial class LoginPage : ContentPage
     {
         var serviceProvider = this.Handler.MauiContext.Services;
         var forgotPasswordPage = serviceProvider.GetService<ForgotPasswordPage>();
-        Application.Current.MainPage = forgotPasswordPage;
+        await Shell.Current.GoToAsync("///ForgotPasswordPage");
     }
 
     private async void OnLoginClicked(object sender, EventArgs e)
@@ -53,7 +53,7 @@ public partial class LoginPage : ContentPage
     private async void OnSignUpClicked(object sender, EventArgs e)
     {
         var registerPage = _serviceProvider.GetService<RegisterPage>();
-        Application.Current.MainPage = registerPage;
+        await Shell.Current.GoToAsync("///RegisterPage");
     }
 
     private async Task ValidateStudent(StudentValidationDto studentValidationDto)

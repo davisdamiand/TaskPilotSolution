@@ -187,7 +187,7 @@ public class TodoViewModel : INotifyPropertyChanged, IQueryAttributable
 
             // Reset fields and navigate back to main page
             ResetFields();
-            await Shell.Current.GoToAsync("//MainPage");
+            await Shell.Current.GoToAsync("//LandingPage");
         }
         catch (Exception ex)
         {
@@ -237,7 +237,7 @@ public class TodoViewModel : INotifyPropertyChanged, IQueryAttributable
             }
 
             ResetFields();
-            await Shell.Current.GoToAsync("//MainPage");
+            await Shell.Current.GoToAsync("//LandingPage");
         }
         catch (Exception ex)
         {

@@ -129,7 +129,7 @@ namespace TaskPilot.Client.ViewModels
             //Clear all local data
             Preferences.Clear();
             var loginPage = MauiProgram.Services.GetService<LoginPage>();
-            Application.Current.MainPage = loginPage;
+            await Shell.Current.GoToAsync("///LoginPage");
         }
 
         private async Task ReturnHomePageAsync()

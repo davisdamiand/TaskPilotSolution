@@ -16,13 +16,13 @@ public partial class ProfilePage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        var storedId = Preferences.Get("UserID", 0);
+        var storedId = Preferences.Get("UserID",Id.ToString());
 
 
         //Send today's date to calculate streaks
         var dto = new StatsCalculateDto
         {
-            StudentID = storedId,
+            StudentID = int.Parse(storedId),
             LastAccessedDay = DateOnly.FromDateTime(DateTime.Now)
         };
 

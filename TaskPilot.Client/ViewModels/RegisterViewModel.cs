@@ -79,7 +79,7 @@ public class RegisterViewModel : INotifyPropertyChanged
             Preferences.Set("StudentSurname", Surname);
 
             // Navigate to the main application shell
-            Application.Current.MainPage = MauiProgram.Services.GetService<AppShell>();
+            await Shell.Current.GoToAsync("///LandingPage");
         }
         catch (Exception ex)
         {

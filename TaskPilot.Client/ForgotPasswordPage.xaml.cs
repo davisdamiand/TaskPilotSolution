@@ -91,7 +91,7 @@ namespace TaskPilot.Client
             var loginPage = serviceProvider.GetService<LoginPage>();
             // clear any stored preferences if needed
             Preferences.Clear();
-            App.Current.MainPage = new NavigationPage(loginPage);
+            Shell.Current.GoToAsync("///LoginPage");
         }
     }
 }

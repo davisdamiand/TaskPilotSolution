@@ -16,7 +16,7 @@ namespace Shared.DTOs
         public int StudentId { get; set; }
 
         [Required(ErrorMessage = "Task name is required")]
-        [StringLength(20, MinimumLength = 3, ErrorMessage = "Task name must be between 3 and 20 characters")]
+        [StringLength(30, ErrorMessage = "Task name must be between 3 and 30 characters")]
         public string Name { get; set; }
 
         [StringLength(50, ErrorMessage = "Description cannot exceed 50 characters")]

@@ -260,7 +260,7 @@ public partial class LandingPage : ContentPage, INotifyPropertyChanged
         catch (Exception)
         {
 
-            await DisplayAlertAsync("Error", "Failed to load tasks. Please try again later.", "OK");
+            // default template
         }
     }
 
