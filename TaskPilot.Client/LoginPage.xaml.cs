@@ -24,7 +24,7 @@ public partial class LoginPage : ContentPage
     {
         var serviceProvider = this.Handler.MauiContext.Services;
         var forgotPasswordPage = serviceProvider.GetService<ForgotPasswordPage>();
-        Application.Current.MainPage = forgotPasswordPage;
+        await Shell.Current.GoToAsync("///ForgotPasswordPage");
     }
 
     private async void OnLoginClicked(object sender, EventArgs e)
@@ -33,12 +33,15 @@ public partial class LoginPage : ContentPage
         string email = EntryEmail.Text?.Trim();
         string password = EntryPassword.Text?.Trim();
 
+
+        // Create DTO
         var loginStudent = new StudentValidationDto
         {
             Email = email,
             Password = password
         };
 
+        // Disable the button to prevent multiple clicks while processing
         ButtonSignUp.IsEnabled = false;
 
         await ValidateStudent(loginStudent);
@@ -50,27 +53,35 @@ public partial class LoginPage : ContentPage
     private async void OnSignUpClicked(object sender, EventArgs e)
     {
         var registerPage = _serviceProvider.GetService<RegisterPage>();
-        Application.Current.MainPage = registerPage;
+        await Shell.Current.GoToAsync("///RegisterPage");
     }
 
     private async Task ValidateStudent(StudentValidationDto studentValidationDto)
     {
         try
         {
+            //Get response from the api
             var response = await _httpClient.PostAsJsonAsync("api/Student/ValidateStudent", studentValidationDto);
 
+            //Check if the response is successful
             if (response.IsSuccessStatusCode)
             {
+                // Read the student ID from the response
                 var id = await response.Content.ReadFromJsonAsync<int>();
 
+                //Check for invalid ID
                 if (id < 0)
                 {
                     ShowError("Invalid email or password");
                     return;
                 }
+
+                // Store the student ID in preferences
                 await GetStudentInformation(id);
                 Preferences.Set("UserID", id.ToString());
-                Application.Current.MainPage = MauiProgram.Services.GetService<AppShell>();
+
+                // Navigate to the main application shell
+                await Shell.Current.GoToAsync("///LandingPage");
             }
             else
             {
@@ -110,13 +121,17 @@ public partial class LoginPage : ContentPage
     {
         try
         {
+            //Get response from the api
             var response = await _httpClient.PostAsJsonAsync("api/Student/GetStudentById", id);
 
+            //Check if the response is successful
             if (response.IsSuccessStatusCode)
             {
+                // Read the student information from the response
                 var student = await response.Content.ReadFromJsonAsync<StudentGetDto>();
                 if (student != null)
                 {
+                    // Store the student information in preferences
                     Preferences.Set("StudentName", student.Name);
                     Preferences.Set("StudentSurname", student.Surname);
                 }

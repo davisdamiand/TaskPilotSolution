@@ -154,35 +154,40 @@ public class TodoViewModel : INotifyPropertyChanged, IQueryAttributable
     private async Task ReturnHomeAsync()
     {
         ResetFields();
-        await Shell.Current.GoToAsync("//MainPage");
+        await Shell.Current.GoToAsync("///LandingPage");
     }
 
     // Navigate to the Calendar Page
     private async Task ReturnCalendarAsync()
     {
         ResetFields();
-        await Shell.Current.GoToAsync("//CalendarPage");
+        await Shell.Current.GoToAsync("///CalendarPage");
     }
 
     // Navigate to the Profile  Page
     private async Task ReturnProfileAsync()
     {
         ResetFields();
-        await Shell.Current.GoToAsync("//ProfilePage");
+        await Shell.Current.GoToAsync("///ProfilePage");
     }
 
     private async Task DeleteAsync()
     {
+        // Only proceed if in edit mode and ID is available
         if (!_isEditMode || !_todoId.HasValue)
             return;
+        // Confirm deletion with the user
         var confirm = await Application.Current.MainPage.DisplayAlertAsync("Confirm Delete", "Are you sure you want to delete this todo?", "Yes", "No");
         if (!confirm)
             return;
         try
         {
+            // Call the service to delete the todo via API
             await _todoService.DeleteTodoAsync(_todoId.Value);
+
+            // Reset fields and navigate back to main page
             ResetFields();
-            await Shell.Current.GoToAsync("//MainPage");
+            await Shell.Current.GoToAsync("//LandingPage");
         }
         catch (Exception ex)
         {
@@ -192,14 +197,18 @@ public class TodoViewModel : INotifyPropertyChanged, IQueryAttributable
 
     private async Task SaveAsync()
     {
+        // Validate inputs
         var storedID = Preferences.Get("UserID", null);
+        // Ensure UserID is available
         if (!int.TryParse(storedID, out var studentID))
             throw new InvalidOperationException("Invalid UserID");
 
         try
         {
+            // Differentiate between edit and create
             if (_isEditMode && _todoId.HasValue)
             {
+                // Prepare the update DTO
                 var updateDto = new TodoUpdateDto
                 {
                     Id = _todoId.Value,
@@ -209,10 +218,12 @@ public class TodoViewModel : INotifyPropertyChanged, IQueryAttributable
                     DueDateTime = DueDateTime,
                     PriorityLevel = int.TryParse(Priority, out var p) ? p : 5
                 };
+                // Call the update method that contain the API call
                 await _todoService.UpdateTodo(updateDto);
             }
             else
             {
+                //Create new todo
                 var newTodo = new TodoCreateDto
                 {
                     StudentId = studentID,
@@ -221,11 +232,12 @@ public class TodoViewModel : INotifyPropertyChanged, IQueryAttributable
                     DueDateTime = DueDateTime,
                     PriorityLevel = int.TryParse(Priority, out var p) ? p : 5
                 };
+                // Call the create method that contain the API call
                 await _todoService.CreateTodoAsync(newTodo);
             }
 
             ResetFields();
-            await Shell.Current.GoToAsync("//MainPage");
+            await Shell.Current.GoToAsync("//LandingPage");
         }
         catch (Exception ex)
         {

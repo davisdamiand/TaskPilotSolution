@@ -54,11 +54,13 @@ public class RegisterViewModel : INotifyPropertyChanged
 
     private async Task RegisterAsync()
     {
+        // Prevent multiple registrations at the same time
         if (IsBusy) return;
         IsBusy = true;
 
         try
         {
+            // Create the student DTO
             var student = new StudentCreateDto
             {
                 Name = Name,
@@ -68,21 +70,26 @@ public class RegisterViewModel : INotifyPropertyChanged
                 DOB = DateOnly.FromDateTime(DOB)
             };
 
+            // Call the service to register the student
             var id = await _studentService.RegisterStudentWithDefaultsAsync(student);
 
+            // Store user info in Preferences
             Preferences.Set("UserID", id.ToString());
             Preferences.Set("StudentName", Name);
             Preferences.Set("StudentSurname", Surname);
 
-            Application.Current.MainPage = MauiProgram.Services.GetService<AppShell>();
+            // Navigate to the main application shell
+            await Shell.Current.GoToAsync("///LandingPage");
         }
         catch (Exception ex)
         {
+            // Show error message to user
             await Application.Current.MainPage.DisplayAlertAsync("Error", "Registration failed. Please try again.", "OK");
             // log ex somewhere
         }
         finally
         {
+            // Reset busy state
             IsBusy = false;
         }
     }

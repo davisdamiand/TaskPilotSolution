@@ -15,14 +15,17 @@ namespace TaskPilot.Client.Services
 
         public async Task<int> RegisterStudentWithDefaultsAsync(StudentCreateDto dto)
         {
+            // Call the API to register the student
             var response = await _httpClient.PostAsJsonAsync("api/Student/Register", dto);
 
+            // If the server returns an error, throw it so the UI can display it.
             if (!response.IsSuccessStatusCode)
             {
+                // Log the error
                 var error = await response.Content.ReadAsStringAsync();
                 throw new Exception(error);
             }
-
+            // Return the newly created student's ID
             return await response.Content.ReadFromJsonAsync<int>();
         }
 

@@ -7,14 +7,16 @@ namespace Shared.DTOs
 {
     using System.ComponentModel.DataAnnotations;
 
+    // Prevent exposing the Server Entity Framework model to the client in full
     public class TodoCreateDto : IValidatableObject
     {
+        // Foreign key to associate the todo with a student
         [Required(ErrorMessage = "StudentId is required")]
         [Range(1, int.MaxValue, ErrorMessage = "StudentId must be a positive number")]
         public int StudentId { get; set; }
 
         [Required(ErrorMessage = "Task name is required")]
-        [StringLength(20, MinimumLength = 3, ErrorMessage = "Task name must be between 3 and 20 characters")]
+        [StringLength(30, ErrorMessage = "Task name must be between 3 and 30 characters")]
         public string Name { get; set; }
 
         [StringLength(50, ErrorMessage = "Description cannot exceed 50 characters")]

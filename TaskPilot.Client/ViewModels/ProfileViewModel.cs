@@ -114,7 +114,10 @@ namespace TaskPilot.Client.ViewModels
 
         public async Task LoadStatsAsync(StatsCalculateDto dto)
         {
+            // Call the service to get stats via API call
             Stats = await _profileService.GetStudentStatsAsync(dto);
+
+            // Update properties
             TotalCompletedTasks = Stats.TotalCompletedTasks;
             TotalInCompletedTasks = Stats.TotalInCompletedTasks;
             TotalPomodoroSessions = Stats.TotalPomodoroSessions;
@@ -126,22 +129,22 @@ namespace TaskPilot.Client.ViewModels
             //Clear all local data
             Preferences.Clear();
             var loginPage = MauiProgram.Services.GetService<LoginPage>();
-            Application.Current.MainPage = loginPage;
+            await Shell.Current.GoToAsync("///LoginPage");
         }
 
         private async Task ReturnHomePageAsync()
         {
-            await Shell.Current.GoToAsync("//MainPage");
+            await Shell.Current.GoToAsync("///LandingPage");
         }
 
         private async Task ReturnTodoPageAsync()
         {
-            await Shell.Current.GoToAsync("//TodoPage");
+            await Shell.Current.GoToAsync("///TodoPage");
         }
 
         private async Task ReturnCalendarPageAsync()
         {
-            await Shell.Current.GoToAsync("//CalendarPage");
+            await Shell.Current.GoToAsync("///CalendarPage");
         }
     }
 }

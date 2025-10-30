@@ -8,6 +8,7 @@ namespace Shared.DTOs
     // Prevent exposing the Server Entity Framework model to the client in full
     public class StudentCreateDto
     {
+        // Data Annotations for validation
         [Required(ErrorMessage = "Name is required")]
         [StringLength(50, ErrorMessage = "Name cannot exceed 50 characters")]
         public string Name { get; set; }
@@ -28,6 +29,7 @@ namespace Shared.DTOs
         [CustomValidation(typeof(StudentCreateDto), nameof(ValidateDOB))]
         public DateOnly DOB { get; set; }
 
+        // Custom validation method for DOB
         public static ValidationResult ValidateDOB(DateOnly dob, ValidationContext context)
         {
             var today = DateOnly.FromDateTime(DateTime.Today);

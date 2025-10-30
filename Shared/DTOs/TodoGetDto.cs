@@ -27,7 +27,7 @@ namespace Shared.DTOs
         public ICommand ToggleCompleteCommand { get; set; }
 
         public int PriorityLevel { get; set; }
-
+        // Track time spent on the task in minutes
         public int TimeSpentMinutes
         {
             get => _timeSpentMinutes;

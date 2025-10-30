@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Shared.DTOs
 {
+    // Prevent exposing the Server Entity Framework model to the client in full
     public class StudentValidationDto
     {
         

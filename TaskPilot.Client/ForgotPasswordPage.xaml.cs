@@ -20,8 +20,10 @@ namespace TaskPilot.Client
 
         private async void OnResetPasswordClicked(object sender, EventArgs e)
         {
+            // Clear previous error messages
             ErrorLabel.IsVisible = false;
 
+            // --- Gather Input ---
             string email = EntryEmail.Text?.Trim();
             string newPass = EntryNewPassword.Text;
             string confirmPass = EntryConfirmPassword.Text;
@@ -36,6 +38,7 @@ namespace TaskPilot.Client
                 return;
             }
 
+            // Check if the date of birth is valid
             if (newPass != confirmPass)
             {
                 ErrorLabel.Text = "Passwords do not match.";
@@ -47,6 +50,7 @@ namespace TaskPilot.Client
             // --- API Call ---
             try
             {
+                // Create DTO
                 var dto = new ForgotPasswordDto
                 {
                     Email = email,
@@ -54,6 +58,7 @@ namespace TaskPilot.Client
                     NewPassword = newPass
                 };
 
+                // Call the service to reset the password
                 bool success = await _studentService.ResetPasswordAsync(dto);
 
                 if (success)
@@ -86,7 +91,7 @@ namespace TaskPilot.Client
             var loginPage = serviceProvider.GetService<LoginPage>();
             // clear any stored preferences if needed
             Preferences.Clear();
-            App.Current.MainPage = new NavigationPage(loginPage);
+            Shell.Current.GoToAsync("///LoginPage");
         }
     }
 }
