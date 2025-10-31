@@ -31,14 +31,20 @@ namespace TaskPilot.Client
             DateOnly dob = DateOnly.FromDateTime(selectedDate);
 
             // --- Input Validation ---
-            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(newPass))
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(newPass) || string.IsNullOrWhiteSpace(confirmPass))
             {
                 ErrorLabel.Text = "Please fill in all fields.";
                 ErrorLabel.IsVisible = true;
                 return;
             }
 
-            // Check if the date of birth is valid
+            if (newPass.Length < 8)
+            {
+                ErrorLabel.Text = "Password must be at least 8 characters long.";
+                ErrorLabel.IsVisible = true;
+                return;
+            }
+
             if (newPass != confirmPass)
             {
                 ErrorLabel.Text = "Passwords do not match.";
@@ -59,19 +65,29 @@ namespace TaskPilot.Client
                 };
 
                 // Call the service to reset the password
-                bool success = await _studentService.ResetPasswordAsync(dto);
+                var result = await _studentService.ResetPasswordAsync(dto);
 
-                if (success)
+                if (result.Success)
                 {
                     await DisplayAlertAsync("Success", "Your password has been reset successfully.", "OK");
                     // Navigate on success
                     await LoginPage();
                 }
+                else
+                {
+                    // Show the error message from the result
+                    ErrorLabel.Text = string.IsNullOrWhiteSpace(result.ErrorMessage)
+                        ? "Email or date of birth is incorrect, or the account does not exist."
+                        : result.ErrorMessage;
+                    ErrorLabel.IsVisible = true;
+                }
             }
             catch (Exception ex)
             {
-                // Display the error from the server
-                ErrorLabel.Text = ex.Message;
+                // Display the error from the server, or a user-friendly fallback
+                ErrorLabel.Text = string.IsNullOrWhiteSpace(ex.Message)
+                    ? "An unexpected error occurred. Please try again."
+                    : ex.Message;
                 ErrorLabel.IsVisible = true;
             }
         }

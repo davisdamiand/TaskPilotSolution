@@ -38,18 +38,9 @@ public class RegisterViewModel : INotifyPropertyChanged
     public ICommand RegisterCommand { get; }
     public ICommand BackToLoginCommand { get; }
 
-    private Task ReturnToLogin()
+    private async Task ReturnToLogin()
     {
-        MainThread.BeginInvokeOnMainThread(() =>
-        {
-            var loginPage = MauiProgram.Services.GetService<LoginPage>();
-            if (loginPage != null)
-            {
-                App.Current.MainPage = new NavigationPage(loginPage);
-            }
-        });
-
-        return Task.CompletedTask;
+        await Shell.Current.GoToAsync("///LoginPage");
     }
 
     private async Task RegisterAsync()

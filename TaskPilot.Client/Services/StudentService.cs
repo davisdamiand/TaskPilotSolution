@@ -29,18 +29,39 @@ namespace TaskPilot.Client.Services
             return await response.Content.ReadFromJsonAsync<int>();
         }
 
-        public async Task<bool> ResetPasswordAsync(ForgotPasswordDto forgotPasswordDto)
+        public class PasswordResetResult
+        {
+            public bool Success { get; set; }
+            public string ErrorMessage { get; set; }
+        }
+
+        public async Task<PasswordResetResult> ResetPasswordAsync(ForgotPasswordDto forgotPasswordDto)
         {
             var response = await _httpClient.PostAsJsonAsync("api/Student/ResetPassword", forgotPasswordDto);
 
             if (response.IsSuccessStatusCode)
             {
-                return true;
+                return new PasswordResetResult { Success = true };
             }
 
-            // If the server returns an error, throw it so the UI can display it.
-            var errorContent = await response.Content.ReadFromJsonAsync<ErrorResponse>();
-            throw new Exception(errorContent?.Message ?? "An unknown error occurred.");
+            // Try to read the error message from the response
+            string errorMessage = "An unknown error occurred.";
+            try
+            {
+                var errorContent = await response.Content.ReadFromJsonAsync<ErrorResponse>();
+                if (!string.IsNullOrWhiteSpace(errorContent?.Message))
+                    errorMessage = errorContent.Message;
+            }
+            catch
+            {
+                // Optionally log or handle deserialization errors
+            }
+
+            return new PasswordResetResult
+            {
+                Success = false,
+                ErrorMessage = errorMessage
+            };
         }
     }
 }

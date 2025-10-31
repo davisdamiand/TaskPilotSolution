@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using TaskPilot.Server.Models;
 using TaskPilot.Server.Interfaces;
 using Shared.DTOs;
+using Shared.Security;
+
 namespace TaskPilot.Server.Services
 {
     public class StudentService : IStudentService
@@ -77,22 +79,22 @@ namespace TaskPilot.Server.Services
         {
             var formattedEmail = FormatEmail(forgotPasswordDto.Email);
 
-            // Find the student matching BOTH email and DOB for security
             var student = await _context.Students.FirstOrDefaultAsync(s =>
                 s.Email == formattedEmail &&
                 s.DOB == forgotPasswordDto.DOB);
 
-            // If no student is found, the details were incorrect
             if (student == null)
             {
-                return false;
+                // Check if email exists at all
+                bool emailExists = await _context.Students.AnyAsync(s => s.Email == formattedEmail);
+                // Instead of throwing, return false or use a result object
+                throw new Exception(emailExists
+                    ? "Date of birth does not match our records."
+                    : "No account found with this email address.");
             }
 
-            // If found, update the password with the new hashed password
             student.Password = PasswordHelper.HashPassword(forgotPasswordDto.NewPassword);
-
             await _context.SaveChangesAsync();
-
             return true;
         }
 

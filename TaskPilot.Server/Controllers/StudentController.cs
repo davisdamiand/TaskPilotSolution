@@ -47,23 +47,35 @@ namespace TaskPilot.Server.Controllers
         [HttpPost("ResetPassword")]
         public async Task<IActionResult> ResetPassword([FromBody] ForgotPasswordDto forgotPasswordDto)
         {
-            // Validate the incoming DTO
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState
+                    .Where(x => x.Value.Errors.Count > 0)
+                    .ToDictionary(
+                        kvp => kvp.Key,
+                        kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                    );
+                return BadRequest(new ErrorResponse
+                {
+                    Message = "Validation failed",
+                    Errors = errors
+                });
+            }
+
             try
             {
-                // Check for any errors
                 var success = await _studentService.ResetPasswordAsync(forgotPasswordDto);
 
                 if (success)
                 {
                     return Ok(new { Message = "Password has been reset successfully." });
                 }
-                return BadRequest(new { Message = "Invalid email or date of birth provided." });
+                // Should not reach here, but just in case
+                return BadRequest(new ErrorResponse { Message = "Unknown error." });
             }
             catch (Exception ex)
             {
-                // Log the exception
-                Console.WriteLine(ex.Message);
-                return StatusCode(500, "An internal server error occurred.");
+                return BadRequest(new ErrorResponse { Message = ex.Message });
             }
         }
 
