@@ -41,6 +41,76 @@
                 </VerticalStackLayout>
             </Frame>
 
+
+            <Label 
+                Text="Your Position!"
+                HorizontalTextAlignment="Center"
+                FontSize="20"
+                FontAttributes="Bold"
+                TextColor="Black"/>  
+
+
+            <Border 
+                StrokeThickness="3"
+                Stroke="#1F2937"
+                StrokeShape="RoundRectangle 6">
+                <CollectionView ItemsSource="{Binding LeagueStudents}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Padding="10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="28" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="28" />
+                                </Grid.ColumnDefinitions>
+
+                                <!--Display Student Rank-->
+                                    <Border Stroke="Transparent"
+                                            StrokeShape="RoundRectangle 15"
+                                            StrokeThickness="2">
+                                        <Label 
+                                            Text="{Binding LeagueRank}" 
+                                            FontAttributes="Bold"
+                                            HorizontalTextAlignment="Center"
+                                            Grid.Column="0"
+                                            TextColor="Black" 
+                                            FontSize="18" />
+
+                                        <Border.Triggers>
+                                            <DataTrigger TargetType="Border"
+                                                         Binding="{Binding IsCurrentStudent}"
+                                                         Value="True">
+                                                <Setter Property="BackgroundColor" Value="#D1E7FF"/>
+                                                <Setter Property="Stroke" Value="#1F2937"/>
+                                            </DataTrigger>
+                                        </Border.Triggers>
+                                    </Border>
+
+                                    <!-- Display Student Name -->
+                                <Label  
+                                    Text="{Binding StudentName}" 
+                                    Grid.Column="1"
+                                    FontAttributes="Bold"
+                                    TextColor="Black"
+                                    HorizontalTextAlignment="Center"
+                                    FontSize="18" />
+
+                                <!-- Display Student Time Spent -->
+                                <Label  
+                                    Grid.Column="2" 
+                                    Text="{Binding TimeSpentMinutes}" 
+                                    FontSize="16"
+                                    HorizontalTextAlignment="End"
+                                    TextColor="Black" />
+                            </Grid>
+                        </DataTemplate>
+
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Border>
+
+                
+            
             <!-- Activity Stats Grid -->
             <Label Text="Activity Stats"
                    FontSize="22"

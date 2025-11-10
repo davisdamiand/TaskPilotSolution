@@ -149,5 +149,58 @@ namespace TaskPilot.Server.Services
             return stats;
 
         }
+
+        public async Task<List<StudentLeague>> SendLeagueStudentsAsync(int currentStudentID)
+        {
+            try
+            {
+                //Order the students by the total times spent in the todos
+
+                //Not ordered just populating
+                var AllStudentsWithTime = await _context.Students.Select(
+                    s => new StudentLeague
+                    {
+                        StudentName = s.Name,
+                        TimeSpentMinutes = _context.Todos
+                            .Where(t => t.StudentID == s.Id)
+                            .Sum(t => t.TimeSpentMinutes),
+                        IsCurrentStudent = s.Id == currentStudentID
+                    }
+                ).ToListAsync();
+
+                // Orderby
+                var AllStudentsLeague = AllStudentsWithTime.OrderByDescending(s => s.TimeSpentMinutes).ToList();
+
+                //Build leage
+                for (int i = 0; i < AllStudentsLeague.Count; i++)
+                {
+                    AllStudentsLeague[i].LeagueRank = i+1;
+                }
+
+
+                // Only the students around the current student
+                //two students above current student
+                //two students below current student
+
+                List<StudentLeague> CurrentStudentLeague = new List<StudentLeague>();
+
+                var CurrentStudentIndex = AllStudentsLeague.FindIndex(s => s.IsCurrentStudent == true);
+
+                if (CurrentStudentIndex > - 1)
+                {
+                    int startBound = Math.Max(CurrentStudentIndex - 2, 0);
+                    int endBound = Math.Min(CurrentStudentIndex + 2, AllStudentsWithTime.Count - 1);
+
+                   CurrentStudentLeague = AllStudentsLeague.Skip(startBound).Take(endBound - startBound + 1).ToList();
+                }
+
+                return CurrentStudentLeague;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+        }
     }
 }

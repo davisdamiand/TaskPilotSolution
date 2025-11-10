@@ -7,5 +7,7 @@ namespace TaskPilot.Server.Interfaces
 
         Task<StatsSendDto> SendStatsAsync(StatsCalculateDto statsCalculateDto);
 
+        Task<List<StudentLeague>> SendLeagueStudentsAsync(int currentStudentID);
+
     }
 }

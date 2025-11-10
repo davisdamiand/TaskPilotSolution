@@ -27,6 +27,7 @@ public partial class ProfilePage : ContentPage
         };
 
         await ViewModel.LoadStatsAsync(dto);
+        await ViewModel.LoadStudentsLeage(int.Parse(storedId));
     }
 
 }

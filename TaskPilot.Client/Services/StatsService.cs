@@ -22,5 +22,6 @@ namespace TaskPilot.Client.Services
                 throw new Exception(await response.Content.ReadAsStringAsync());
             return await response.Content.ReadFromJsonAsync<int>();
         }
+
     }
 }

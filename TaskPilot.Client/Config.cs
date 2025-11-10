@@ -10,9 +10,10 @@ namespace TaskPilot
         {
             get
             {
-               
 
-               
+
+               // return "https://taskpilot-asp-api-a0edfzeqctaubyf8.southafricanorth-01.azurewebsites.net/";
+
                return "https://localhost:7192/";
             }
         }
