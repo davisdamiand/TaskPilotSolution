@@ -56,6 +56,14 @@ public partial class LandingPage : ContentPage, INotifyPropertyChanged
             }
         }
     }
+    public bool IsNavigationEnabled => !_isTimerRunning;
+
+    private void OnPropertyChangedForTimerState()
+    {
+        OnPropertyChanged(nameof(IsNavigationEnabled));
+        OnPropertyChanged(nameof(EnableTimer));
+        OnPropertyChanged(nameof(TimerButtonColor));
+    }
 
     public ICommand ViewAllProjectsCommand { get; }
 
@@ -150,30 +158,23 @@ public partial class LandingPage : ContentPage, INotifyPropertyChanged
     // Connects to the button in MainPage.xaml
     private async void OnStartStopButtonClicked(object sender, EventArgs e)
     {
-        // Toggle Timer State
         if (_isTimerRunning)
         {
-            // Stop Timer
             _timer.Stop();
             _isTimerRunning = false;
-
-            // Log time spent on the selected task
             await UpdateTaskTimeSpent();
-
-            // Reset Timer for next session
             _remainingSeconds = PomodoroDurationSeconds;
             _secondsElapsedInSession = 0;
-
-            // Update display
             UpdateTimerDisplay();
             StartStopButton.Text = "Start Pomodoro";
+            OnPropertyChangedForTimerState();
         }
         else
         {
-            // Start Timer
             _timer.Start();
             _isTimerRunning = true;
             StartStopButton.Text = "Stop Pomodoro";
+            OnPropertyChangedForTimerState();
         }
     }
 
@@ -341,27 +342,28 @@ public partial class LandingPage : ContentPage, INotifyPropertyChanged
 
     private void OnItemTapped(object sender, TappedEventArgs e)
     {
-        // Get the data context of the tapped item
         if ((sender as BindableObject)?.BindingContext is TodoGetDto tappedDto)
         {
-            // Check if the tapped item is the same as the currently selected one
+            // Prevent changing selection while timer is running and a todo is already selected
+            if (_isTimerRunning && _selectedTodo != null && _selectedTodo != tappedDto)
+            {
+                return; // Ignore selection change
+            }
+
             if (_selectedTodo != null && _selectedTodo == tappedDto)
             {
-                // It's the same item, so deselect it and clear the tracker.
+                if (_isTimerRunning)
+                    return; // Prevent deselection while timer is running
+
                 tappedDto.IsSelected = false;
                 EnableTimer = false;
                 _selectedTodo = null;
             }
             else
             {
-                // This is a new item.
-                // First, deselect the previous one if it exists.
                 if (_selectedTodo != null)
-                {
                     _selectedTodo.IsSelected = false;
-                }
 
-                // Then, select the new item and update the tracker.
                 tappedDto.IsSelected = true;
                 EnableTimer = true;
                 _selectedTodo = tappedDto;

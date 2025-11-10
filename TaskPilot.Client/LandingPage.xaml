@@ -224,6 +224,7 @@
                     ImageSource="todo.jpg"
                     BackgroundColor="White" 
                     Clicked="OnTodoPageClicked"
+                    IsEnabled="{Binding IsNavigationEnabled}"
                     TextColor="White"/>
             <Button Grid.Column="1" 
                     WidthRequest="60" 
@@ -233,6 +234,7 @@
                     Clicked="OnCalendarPageClicked"
                     BackgroundColor="White"
                     ImageSource="calendar.jpg"
+                    IsEnabled="{Binding IsNavigationEnabled}"
                     TextColor="White"/>
             <Button Grid.Column="2" 
                     WidthRequest="60" 
@@ -243,6 +245,7 @@
                     FontSize="26" 
                     BackgroundColor="White"
                     Clicked="OnProfilePageClicked"
+                    IsEnabled="{Binding IsNavigationEnabled}"
                     TextColor="White"/>
         </Grid>
     </Grid>
