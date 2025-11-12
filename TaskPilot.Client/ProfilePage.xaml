@@ -14,32 +14,55 @@
                    BackgroundColor="White" 
                    HasShadow="True"
                    Padding="25">
-                <VerticalStackLayout Spacing="15">
+                
+                   <Grid RowDefinitions="Auto,Auto"
+                         ColumnDefinitions="Auto,*,Auto"
+                         ColumnSpacing="20"
+                         RowSpacing="10">
 
-                    <!-- Profile Picture -->
-                    <Frame CornerRadius="60" 
-                           WidthRequest="120" 
-                           HeightRequest="120"
-                           HorizontalOptions="Center"
-                           Padding="0"
-                           HasShadow="True"
-                           BackgroundColor="#5B7CB8">
-                        <Image Source="user_avatar.png" 
-                               Aspect="AspectFill"
+                        <!-- Left Arrow Button -->
+                        <Button Grid.Row="0" Grid.Column="0"
+                                Text="←"
+                                FontSize="40"
+                                BackgroundColor="Transparent"
+                                TextColor="#1F2937"
+                                Command="{Binding PrevAvatarCommand}" />
+
+                        <!-- Profile Picture -->
+                        <Frame Grid.Row="0" Grid.Column="1"
+                                CornerRadius="60"
+                                WidthRequest="120"
+                                HeightRequest="120"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center"
+                                Padding="0"
+                                HasShadow="True"
+                                BackgroundColor="#5B7CB8">
+
+                                 <Image Source="{Binding AvatarImageSource}"
+                                       Aspect="AspectFill"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"/>
+                        </Frame>
+
+                        <!-- Right Arrow Button -->
+                        <Button Grid.Row="0" Grid.Column="2"
+                                Text="→"
+                                FontSize="40"
+                                BackgroundColor="Transparent"
+                                TextColor="#1F2937"
+                                Command="{Binding NextAvatarCommand}" >
+                        </Button>
+
+                        <!-- Name Label -->
+                        <Label Grid.Row="1" Grid.ColumnSpan="3"
+                               Text="{Binding FullName}"
+                               FontSize="28"
+                               FontAttributes="Bold"
                                HorizontalOptions="Center"
-                               VerticalOptions="Center"/>
-                    </Frame>
-
-                    <!-- Name -->
-                    <Label Text="{Binding FullName }"
-                           x:Name="LabelFullName"
-                           FontSize="28"
-                           FontAttributes="Bold"
-                           HorizontalOptions="Center"
-                           TextColor="#1F2937"/>
-
-                </VerticalStackLayout>
-            </Frame>
+                               TextColor="#1F2937"/>
+                    </Grid>
+                </Frame>
 
 
             <Label 

@@ -100,6 +100,47 @@ namespace TaskPilot.Client.ViewModels
             }
         }
 
+        // --- Avatar Cycling Logic ---
+        private readonly string[] _avatars = new[]
+        {
+            "avatar1.jpeg",
+            "avatar2.jpeg",
+            "avatar3.jpeg",
+            "avatar4.jpeg",
+            "avatar5.jpeg"
+        };
+
+        private int _avatarIndex;
+        public int AvatarIndex
+        {
+            get => _avatarIndex;
+            set
+            {
+                if (_avatarIndex != value)
+                {
+                    _avatarIndex = value;
+                    Preferences.Set("AvatarIndex", _avatarIndex);
+                    OnPropertyChanged(nameof(AvatarImageSource));
+                }
+            }
+        }
+
+        public string AvatarImageSource => _avatars[AvatarIndex];
+
+        public ICommand NextAvatarCommand { get; }
+        public ICommand PrevAvatarCommand { get; }
+
+        public void NextAvatar()
+        {
+            AvatarIndex = (AvatarIndex + 1) % _avatars.Length;
+        }
+
+        public void PrevAvatar()
+        {
+            AvatarIndex = (AvatarIndex - 1 + _avatars.Length) % _avatars.Length;
+        }
+        // ---------------------------
+
         public ProfileViewModel(ProfileService profileService)
         {
             _profileService = profileService;
@@ -111,6 +152,12 @@ namespace TaskPilot.Client.ViewModels
             ReturnTodoPageCommand = new Command(async () => await ReturnTodoPageAsync());
             ReturnCalendarPageCommand = new Command(async () => await ReturnCalendarPageAsync());
 
+            // Initialize avatar index from preferences
+            _avatarIndex = Preferences.Get("AvatarIndex", 0);
+
+            // Initialize avatar commands
+            NextAvatarCommand = new Command(NextAvatar);
+            PrevAvatarCommand = new Command(PrevAvatar);
         }
 
         public async Task LoadStatsAsync(StatsCalculateDto dto)

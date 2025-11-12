@@ -63,12 +63,46 @@ public partial class LandingPage : ContentPage, INotifyPropertyChanged
         OnPropertyChanged(nameof(IsNavigationEnabled));
         OnPropertyChanged(nameof(EnableTimer));
         OnPropertyChanged(nameof(TimerButtonColor));
+
+        // Swap images based on navigation state
+        if (IsNavigationEnabled)
+        {
+            TodoImageSource = "todo.jpg";
+            CalendarImageSource = "calendar.jpg";
+            ProfileImageSource = "profile.jpg";
+        }
+        else
+        {
+            TodoImageSource = "todo_gray.png";
+            CalendarImageSource = "calendar_gray.png";
+            ProfileImageSource = "profile_gray.png";
+        }
     }
 
     public ICommand ViewAllProjectsCommand { get; }
 
     // Guard to prevent concurrent toggle requests
     private bool _isToggleInProgress;
+
+    private string _todoImageSource = "todo.jpg";
+    private string _calendarImageSource = "calendar.jpg";
+    private string _profileImageSource = "profile.jpg";
+
+    public string TodoImageSource
+    {
+        get => _todoImageSource;
+        set { _todoImageSource = value; OnPropertyChanged(); }
+    }
+    public string CalendarImageSource
+    {
+        get => _calendarImageSource;
+        set { _calendarImageSource = value; OnPropertyChanged(); }
+    }
+    public string ProfileImageSource
+    {
+        get => _profileImageSource;
+        set { _profileImageSource = value; OnPropertyChanged(); }
+    }
 
     public LandingPage()
     {
@@ -116,10 +150,27 @@ public partial class LandingPage : ContentPage, INotifyPropertyChanged
     }
 
     // --- Pomodoro Timer Methods ---
+    private enum PomodoroState
+    {
+        Work,
+        ShortBreak,
+        LongBreak
+    }
+
+    private PomodoroState _currentState = PomodoroState.Work;
+    private int _pomodoroCount = 0; // Number of completed work sessions in this cycle
+    private int _workSecondsAccumulated = 0; // Total seconds spent in work sessions since last reset
+
+    private const int ShortBreakSeconds = 5 * 60;
+    private const int LongBreakSeconds = 15 * 60;
+
     private void InitializePomodoroTimer()
     {
         _remainingSeconds = PomodoroDurationSeconds;
         _isTimerRunning = false;
+        _currentState = PomodoroState.Work;
+        _pomodoroCount = 0;
+        _workSecondsAccumulated = 0;
 
         _timer = Dispatcher.CreateTimer();
         _timer.Interval = TimeSpan.FromSeconds(1);
@@ -128,31 +179,51 @@ public partial class LandingPage : ContentPage, INotifyPropertyChanged
 
     private async void OnTimerTick(object sender, EventArgs e)
     {
-        // Decrement remaining time
         _remainingSeconds--;
         _secondsElapsedInSession++;
 
-        // Update the timer display
         UpdateTimerDisplay();
 
         if (_remainingSeconds <= 0)
         {
-            // Timer finished
             _timer.Stop();
             _isTimerRunning = false;
 
-            await UpdateTaskTimeSpent();
-            _secondsElapsedInSession = 0; // Reset for next session
+            if (_currentState == PomodoroState.Work)
+            {
+                // Accumulate work session time
+                _workSecondsAccumulated += PomodoroDurationSeconds;
+                _pomodoroCount++;
 
-            // Update button text to reflect a new session is ready
+                // Add time to todo immediately if you want, or only on stop (see below)
+                // await UpdateTaskTimeSpent(PomodoroDurationSeconds / 60);
+
+                if (_pomodoroCount % 4 == 0)
+                {
+                    // Long break after 4 work sessions
+                    _currentState = PomodoroState.LongBreak;
+                    _remainingSeconds = LongBreakSeconds;
+                    await DisplayAlertAsync("Long Break", "Take a 15 minute break!", "OK");
+                }
+                else
+                {
+                    // Short break
+                    _currentState = PomodoroState.ShortBreak;
+                    _remainingSeconds = ShortBreakSeconds;
+                    await DisplayAlertAsync("Short Break", "Take a 5 minute break!", "OK");
+                }
+            }
+            else // Break finished
+            {
+                _currentState = PomodoroState.Work;
+                _remainingSeconds = PomodoroDurationSeconds;
+                await DisplayAlertAsync("Work Session", "Back to work!", "OK");
+            }
+
+            _secondsElapsedInSession = 0;
             StartStopButton.Text = "Start Pomodoro";
-
-            // Display an alert for the break
-            await DisplayAlertAsync("Pomodoro Finished!", "Time for a short break!", "OK");
             UpdateTimerDisplay();
         }
-
-        
     }
 
     // Connects to the button in MainPage.xaml
@@ -160,11 +231,26 @@ public partial class LandingPage : ContentPage, INotifyPropertyChanged
     {
         if (_isTimerRunning)
         {
+            // Stopping mid-session or during a break: add all accumulated work time to the todo
             _timer.Stop();
             _isTimerRunning = false;
-            await UpdateTaskTimeSpent();
+
+            // If currently in a work session, add the elapsed time in this session
+            if (_currentState == PomodoroState.Work)
+            {
+                _workSecondsAccumulated += _secondsElapsedInSession;
+            }
+
+            // Add all accumulated work time to the todo
+            await UpdateTaskTimeSpent(_workSecondsAccumulated / 60);
+
+            // Reset all state
             _remainingSeconds = PomodoroDurationSeconds;
             _secondsElapsedInSession = 0;
+            _workSecondsAccumulated = 0;
+            _pomodoroCount = 0;
+            _currentState = PomodoroState.Work;
+
             UpdateTimerDisplay();
             StartStopButton.Text = "Start Pomodoro";
             OnPropertyChangedForTimerState();
@@ -178,32 +264,24 @@ public partial class LandingPage : ContentPage, INotifyPropertyChanged
         }
     }
 
-    private async Task UpdateTaskTimeSpent()
+    // Update to accept minutes as parameter
+    private async Task UpdateTaskTimeSpent(int minutesToAdd)
     {
-        //Check 
-        if (_selectedTodo == null)
-        {
-            return; // Nothing to log
-        }
-
-        int minutesToAdd = _secondsElapsedInSession / 60;
+        if (_selectedTodo == null || minutesToAdd <= 0)
+            return;
 
         try
         {
             bool success = await _todoService.UpdateTimeSpentAsync(_selectedTodo.Id, minutesToAdd);
 
-
             if (success)
             {
-                // Update local state to reflect the change
                 _selectedTodo.TimeSpentMinutes += minutesToAdd;
-
                 Console.WriteLine($"{minutesToAdd} minute(s) successfully logged for task '{_selectedTodo.Title}'.");
             }
         }
         catch (Exception ex)
         {
-
             await DisplayAlertAsync("Error", $"Failed to update time spent: {ex.Message}", "OK");
         }
     }
@@ -335,6 +413,18 @@ public partial class LandingPage : ContentPage, INotifyPropertyChanged
         }
     }
 
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        if (_selectedTodo != null)
+        {
+            _selectedTodo.IsSelected = false;
+
+            _selectedTodo = null;
+        }
+        EnableTimer = false;
+    }
+
     public async void OnTodoPageClicked(object sender, EventArgs e)
     {
         Shell.Current.GoToAsync("//TodoPage");
@@ -380,5 +470,4 @@ public partial class LandingPage : ContentPage, INotifyPropertyChanged
     {
         Shell.Current.GoToAsync("//CalendarPage");
     }
-
 }
