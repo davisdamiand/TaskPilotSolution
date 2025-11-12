@@ -195,9 +195,6 @@ public partial class LandingPage : ContentPage, INotifyPropertyChanged
                 _workSecondsAccumulated += PomodoroDurationSeconds;
                 _pomodoroCount++;
 
-                // Add time to todo immediately if you want, or only on stop (see below)
-                // await UpdateTaskTimeSpent(PomodoroDurationSeconds / 60);
-
                 if (_pomodoroCount % 4 == 0)
                 {
                     // Long break after 4 work sessions
@@ -221,8 +218,13 @@ public partial class LandingPage : ContentPage, INotifyPropertyChanged
             }
 
             _secondsElapsedInSession = 0;
-            StartStopButton.Text = "Start Pomodoro";
+            StartStopButton.Text = "Stop Pomodoro"; // Keep as "Stop" since timer can continue
             UpdateTimerDisplay();
+
+            // Automatically start the next session (work or break)
+            _timer.Start();
+            _isTimerRunning = true;
+            OnPropertyChangedForTimerState();
         }
     }
 
@@ -276,8 +278,14 @@ public partial class LandingPage : ContentPage, INotifyPropertyChanged
 
             if (success)
             {
-                _selectedTodo.TimeSpentMinutes += minutesToAdd;
-                Console.WriteLine($"{minutesToAdd} minute(s) successfully logged for task '{_selectedTodo.Title}'.");
+                if (int.TryParse(storedID, out var id))
+                {
+                    await GetTodos(id); // reload from server
+                }
+            }
+            else
+            {
+                await DisplayAlertAsync("Error", "Failed to update time spent.", "OK");
             }
         }
         catch (Exception ex)
@@ -327,7 +335,8 @@ public partial class LandingPage : ContentPage, INotifyPropertyChanged
                 // Assign ToggleCompleteCommand for each todo
                 foreach (var todo in allTodos)
                 {
-                    todo.ToggleCompleteCommand = new Command(async () => await ToggleTodoCompletion(todo));
+                    todo.PropertyChanged -= Todo_PropertyChanged; // Prevent double subscription
+                    todo.PropertyChanged += Todo_PropertyChanged;
                 }
 
                 // Now update the UI Based on the flag state (view all) or (view top 4)
@@ -356,25 +365,16 @@ public partial class LandingPage : ContentPage, INotifyPropertyChanged
 
         try
         {
-            // local update so UI + ViewAll state are immediately consistent
-            todo.IsCompleted = true;
-            todo.PrioritySelection = CompletedPriorityValue;
-
-            // 1. Call your service to update the database
+            // Only update UI after backend confirms
             bool success = await _todoService.ToggleCompletion(todo.Id);
 
-            // 2. If the server confirms, re-sync from server to ensure UI reflects server state
             if (success)
             {
-                if (int.TryParse(storedID, out var id))
-                {
-                    await GetTodos(id); // server approach: reload the todo list
-                }
-                else
-                {
-                    // fallback: update local state if storedID is missing
-                    await DisplayAlertAsync("Error", "Failed to mark task as completed.", "OK");
-                }
+                
+            }
+            else
+            {
+                await DisplayAlertAsync("Error", "Failed to mark task as completed.", "OK");
             }
         }
         catch (Exception ex)
@@ -469,5 +469,23 @@ public partial class LandingPage : ContentPage, INotifyPropertyChanged
     public async void OnCalendarPageClicked(object sender, EventArgs e)
     {
         Shell.Current.GoToAsync("//CalendarPage");
+    }
+
+    private async void Todo_PropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(TodoGetDto.IsCompleted) && sender is TodoGetDto todo)
+        {
+            // Call your backend to update completion status
+            await ToggleTodoCompletion(todo);
+
+            if (int.TryParse(storedID, out var id))
+            {
+                await GetTodos(id); // reload from server
+            }
+            else
+            {
+                UpdateDisplayedTodos();
+            }
+        }
     }
 }

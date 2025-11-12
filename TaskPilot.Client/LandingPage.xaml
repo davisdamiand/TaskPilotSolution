@@ -145,10 +145,9 @@
                                     <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12" Padding="15,10">
 
                                         <CheckBox Grid.Column="0"
-                                              IsChecked="{Binding IsCompleted}"
-                                              Command="{Binding ToggleCompleteCommand}"
-                                              Color="#5A67D8"
-                                              VerticalOptions="Center" />
+                                                IsChecked="{Binding IsCompleted}"
+                                                Color="#5A67D8"
+                                                VerticalOptions="Center" />
 
                                         <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
                                             <Label Text="{Binding Title}" FontSize="16">
