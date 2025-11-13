@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 /TaskPilot.Server/appsettings.json
 /TaskPilot.Server/appsettings.json
+/TaskPilot.Client/Config.cs
