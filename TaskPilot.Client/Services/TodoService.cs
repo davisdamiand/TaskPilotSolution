@@ -24,7 +24,14 @@ namespace TaskPilot.Client.Services
 
             //2. Check if the response is successful
             if (!response.IsSuccessStatusCode)
-                throw new Exception(await response.Content.ReadAsStringAsync());
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+
+                var errorResponse = JsonSerializer.Deserialize<ErrorResponse>(errorContent,
+                   new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                throw new ValidationException(errorResponse);
+            }
 
             //3. Read the result from the response
             return await response.Content.ReadFromJsonAsync<int>();
@@ -35,7 +42,13 @@ namespace TaskPilot.Client.Services
             var response = await _httpClient.PostAsJsonAsync("api/Todo/GetTodos", studentID);
 
             if (!response.IsSuccessStatusCode)
-                throw new Exception(await response.Content.ReadAsStringAsync());
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                var errorResponse = JsonSerializer.Deserialize<ErrorResponse>(errorContent,
+                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                throw new ValidationException(errorResponse);
+            }
             //order by prioritySelection
             var todos = await response.Content.ReadFromJsonAsync<List<TodoGetDto>>();
             return todos.OrderBy(t => t.PrioritySelection).ToList();
@@ -56,7 +69,7 @@ namespace TaskPilot.Client.Services
                     new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
                 // You can now surface structured error info
-                throw new ApplicationException(error?.Message ?? "Unknown error");
+                throw new ValidationException(error);
             }
 
             return true;

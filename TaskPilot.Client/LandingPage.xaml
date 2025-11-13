@@ -147,7 +147,8 @@
                                         <CheckBox Grid.Column="0"
                                                 IsChecked="{Binding IsCompleted}"
                                                 Color="#5A67D8"
-                                                VerticalOptions="Center" />
+                                                VerticalOptions="Center"
+                                                IsEnabled="{Binding BindingContext.IsNavigationEnabled, Source={x:Reference TodosCollection}}" />
 
                                         <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
                                             <Label Text="{Binding Title}" FontSize="16">
@@ -198,7 +199,8 @@
                                         BackgroundColor="Transparent"
                                         TextColor="#999"
                                         FontSize="20"
-                                        Padding="0"/>
+                                        Padding="0"
+                                        IsEnabled="{Binding BindingContext.IsNavigationEnabled, Source={x:Reference TodosCollection}}" />
                                     </Grid>
                                 </Border>
                             </DataTemplate>
