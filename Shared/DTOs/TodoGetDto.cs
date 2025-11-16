@@ -83,17 +83,11 @@ namespace Shared.DTOs
             get => _isCompleted;
             set
             {
-                if (_isCompleted == value) return;
-
-                // Only allow marking as completed (true). Ignore attempts to unmark.
-                if (!value && _isCompleted)
+                if (_isCompleted != value)
                 {
-                    // Ignore un-check requests to avoid toggle loops and UI issues.
-                    return;
+                    _isCompleted = value;
+                    OnPropertyChanged();
                 }
-
-                _isCompleted = value;
-                OnPropertyChanged(); // This tells the UI to refresh!
             }
         }
 

@@ -145,10 +145,10 @@
                                     <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12" Padding="15,10">
 
                                         <CheckBox Grid.Column="0"
-                                              IsChecked="{Binding IsCompleted}"
-                                              Command="{Binding ToggleCompleteCommand}"
-                                              Color="#5A67D8"
-                                              VerticalOptions="Center" />
+                                                IsChecked="{Binding IsCompleted}"
+                                                Color="#5A67D8"
+                                                VerticalOptions="Center"
+                                                IsEnabled="{Binding BindingContext.IsNavigationEnabled, Source={x:Reference TodosCollection}}" />
 
                                         <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
                                             <Label Text="{Binding Title}" FontSize="16">
@@ -199,7 +199,8 @@
                                         BackgroundColor="Transparent"
                                         TextColor="#999"
                                         FontSize="20"
-                                        Padding="0"/>
+                                        Padding="0"
+                                        IsEnabled="{Binding BindingContext.IsNavigationEnabled, Source={x:Reference TodosCollection}}" />
                                     </Grid>
                                 </Border>
                             </DataTemplate>
@@ -221,9 +222,10 @@
                     WidthRequest="60" 
                     Margin="0,0,0,15" CornerRadius="10"  
                     HeightRequest="60"
-                    ImageSource="todo.jpg"
+                    ImageSource="{Binding TodoImageSource}"
                     BackgroundColor="White" 
                     Clicked="OnTodoPageClicked"
+                    IsEnabled="{Binding IsNavigationEnabled}"
                     TextColor="White"/>
             <Button Grid.Column="1" 
                     WidthRequest="60" 
@@ -232,17 +234,19 @@
                     HeightRequest="60" 
                     Clicked="OnCalendarPageClicked"
                     BackgroundColor="White"
-                    ImageSource="calendar.jpg"
+                    ImageSource="{Binding CalendarImageSource}"
+                    IsEnabled="{Binding IsNavigationEnabled}"
                     TextColor="White"/>
             <Button Grid.Column="2" 
                     WidthRequest="60" 
                     Margin="0,0,0,15" 
                     CornerRadius="10"  
                     HeightRequest="60" 
-                    ImageSource="profile.jpg"
+                    ImageSource="{Binding ProfileImageSource}"
                     FontSize="26" 
                     BackgroundColor="White"
                     Clicked="OnProfilePageClicked"
+                    IsEnabled="{Binding IsNavigationEnabled}"
                     TextColor="White"/>
         </Grid>
     </Grid>

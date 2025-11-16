@@ -29,9 +29,6 @@
         ContentTemplate="{DataTemplate local:TodoPage}"
         Route="TodoPage" />
     <ShellContent
-        ContentTemplate="{DataTemplate local:StatsPage}"
-        Route="StatsPage" />
-    <ShellContent
         ContentTemplate="{DataTemplate local:LandingPage}"
         Route="LandingPage" />
 </Shell>

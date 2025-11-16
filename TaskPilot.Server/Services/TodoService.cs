@@ -11,7 +11,9 @@ namespace TaskPilot.Server.Services
 
         // value used to push completed tasks to the end of ordered lists
         private const double CompletedPriorityValue = 10;
-        
+
+        private const double PriorityTieBreakerWeight = 0.01;
+
         public TodoService (TaskPilotContext context)
         {
             _context = context;
@@ -134,21 +136,18 @@ namespace TaskPilot.Server.Services
 
         public double CalculatePriority(Todo todo)
         {
-            // Base score from user
-            double score = todo.PriorityLevel;
+            // Calculate exact days until due (negative means overdue)
+            double daysUntilDue = (todo.DueDateTime - DateTime.Now).TotalDays;
 
-            // Days until due
-            var dueDateTime = todo.DueDateTime;
-            double daysUntilDue = (dueDateTime - DateTime.Now).TotalDays;
-
-            // Adjust based on due date
-            if (daysUntilDue <= 1) score -= 1.0;
-            else if (daysUntilDue <= 3) score -= 0.5;
-
+            // Use a very small fraction (1e-8) for priority to ensure exact time always dominates
+            // Maximum priority difference (4 levels * 1e-8 = 4e-8) is smaller than 1 second (≈1.157e-8 days)
+            double priorityAdjustment = todo.PriorityLevel * PriorityTieBreakerWeight;
             // Store the calculated value
-            todo.PrioritySelection = score;
+            double finalScore = daysUntilDue + priorityAdjustment;
 
-            return score;
+            todo.PrioritySelection = finalScore;
+
+            return finalScore;
         }
 
         //Get all the todos belonging to a specific user (completed tasks are returned too,

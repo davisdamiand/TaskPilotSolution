@@ -40,5 +40,13 @@ namespace TaskPilot.Client.Services
                 return new StatsSendDto();
             }
         }
+
+        public async Task<List<StudentLeague>> GetLeagueStudentsAsync(int currentStudentID)
+        {
+            var response = await _httpClient.PostAsJsonAsync("api/Stats/GetLeague", currentStudentID);
+            if (!response.IsSuccessStatusCode)
+                throw new Exception(await response.Content.ReadAsStringAsync());
+            return await response.Content.ReadFromJsonAsync<List<StudentLeague>>();
+        }
     }
 }

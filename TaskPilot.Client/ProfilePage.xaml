@@ -14,33 +14,126 @@
                    BackgroundColor="White" 
                    HasShadow="True"
                    Padding="25">
-                <VerticalStackLayout Spacing="15">
+                
+                   <Grid RowDefinitions="Auto,Auto"
+                         ColumnDefinitions="Auto,*,Auto"
+                         ColumnSpacing="20"
+                         RowSpacing="10">
 
-                    <!-- Profile Picture -->
-                    <Frame CornerRadius="60" 
-                           WidthRequest="120" 
-                           HeightRequest="120"
-                           HorizontalOptions="Center"
-                           Padding="0"
-                           HasShadow="True"
-                           BackgroundColor="#5B7CB8">
-                        <Image Source="user_avatar.png" 
-                               Aspect="AspectFill"
+                        <!-- Left Arrow Button -->
+                        <Button Grid.Row="0" Grid.Column="0"
+                                Text="←"
+                                FontSize="40"
+                                BackgroundColor="Transparent"
+                                TextColor="#1F2937"
+                                Command="{Binding PrevAvatarCommand}" />
+
+                        <!-- Profile Picture -->
+                        <Frame Grid.Row="0" Grid.Column="1"
+                                CornerRadius="60"
+                                WidthRequest="120"
+                                HeightRequest="120"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center"
+                                Padding="0"
+                                HasShadow="True"
+                                BackgroundColor="#5B7CB8">
+
+                                 <Image Source="{Binding AvatarImageSource}"
+                                       Aspect="AspectFill"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"/>
+                        </Frame>
+
+                        <!-- Right Arrow Button -->
+                        <Button Grid.Row="0" Grid.Column="2"
+                                Text="→"
+                                FontSize="40"
+                                BackgroundColor="Transparent"
+                                TextColor="#1F2937"
+                                Command="{Binding NextAvatarCommand}" >
+                        </Button>
+
+                        <!-- Name Label -->
+                        <Label Grid.Row="1" Grid.ColumnSpan="3"
+                               Text="{Binding FullName}"
+                               FontSize="28"
+                               FontAttributes="Bold"
                                HorizontalOptions="Center"
-                               VerticalOptions="Center"/>
-                    </Frame>
+                               TextColor="#1F2937"/>
+                    </Grid>
+                </Frame>
 
-                    <!-- Name -->
-                    <Label Text="{Binding FullName }"
-                           x:Name="LabelFullName"
-                           FontSize="28"
-                           FontAttributes="Bold"
-                           HorizontalOptions="Center"
-                           TextColor="#1F2937"/>
 
-                </VerticalStackLayout>
-            </Frame>
+            <Label 
+                Text="Your Position!"
+                HorizontalTextAlignment="Center"
+                FontSize="20"
+                FontAttributes="Bold"
+                TextColor="Black"/>  
 
+
+            <Border 
+                StrokeThickness="3"
+                Stroke="#1F2937"
+                StrokeShape="RoundRectangle 6">
+                <CollectionView ItemsSource="{Binding LeagueStudents}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Padding="10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="28" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="28" />
+                                </Grid.ColumnDefinitions>
+
+                                <!--Display Student Rank-->
+                                    <Border Stroke="Transparent"
+                                            StrokeShape="RoundRectangle 15"
+                                            StrokeThickness="2">
+                                        <Label 
+                                            Text="{Binding LeagueRank}" 
+                                            FontAttributes="Bold"
+                                            HorizontalTextAlignment="Center"
+                                            Grid.Column="0"
+                                            TextColor="Black" 
+                                            FontSize="18" />
+
+                                        <Border.Triggers>
+                                            <DataTrigger TargetType="Border"
+                                                         Binding="{Binding IsCurrentStudent}"
+                                                         Value="True">
+                                                <Setter Property="BackgroundColor" Value="#D1E7FF"/>
+                                                <Setter Property="Stroke" Value="#1F2937"/>
+                                            </DataTrigger>
+                                        </Border.Triggers>
+                                    </Border>
+
+                                    <!-- Display Student Name -->
+                                <Label  
+                                    Text="{Binding StudentName}" 
+                                    Grid.Column="1"
+                                    FontAttributes="Bold"
+                                    TextColor="Black"
+                                    HorizontalTextAlignment="Center"
+                                    FontSize="18" />
+
+                                <!-- Display Student Time Spent -->
+                                <Label  
+                                    Grid.Column="2" 
+                                    Text="{Binding TimeSpentMinutes}" 
+                                    FontSize="16"
+                                    HorizontalTextAlignment="End"
+                                    TextColor="Black" />
+                            </Grid>
+                        </DataTemplate>
+
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Border>
+
+                
+            
             <!-- Activity Stats Grid -->
             <Label Text="Activity Stats"
                    FontSize="22"

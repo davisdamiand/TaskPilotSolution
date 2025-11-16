@@ -83,5 +83,39 @@ namespace TaskPilot.Server.Controllers
                 throw;
             }
         }
+
+        [HttpPost]
+        [Route("GetLeague")]
+        public async Task<IActionResult> GetLeague([FromBody] int currentStudentID)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    var errors = ModelState
+                        .SelectMany(x => x.Value.Errors)
+                        .Select(x => x.ErrorMessage)
+                        .ToList();
+
+                    Console.WriteLine(new { errors = errors });
+                    return BadRequest("Technical difficulties");
+                }
+
+                // Await the service call
+                var CurrentLeague = await _statsService.SendLeagueStudentsAsync(currentStudentID);
+
+                if (CurrentLeague == null || !CurrentLeague.Any())
+                {
+                    return BadRequest("Failed to get leaderboard");
+                }
+
+                return Ok(CurrentLeague);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest("Failed to get leaderboard");
+            }
+        }
     }
 }

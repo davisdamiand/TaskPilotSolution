@@ -1,6 +1,7 @@
 ﻿using Shared.DTOs;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Windows.Input;
 using TaskPilot.Client.Services;
 
@@ -36,7 +37,16 @@ public class TodoViewModel : INotifyPropertyChanged, IQueryAttributable
     public string Name
     {
         get => _name;
-        set { _name = value; OnPropertyChanged(); }
+        set
+        {
+            if (_name != value)
+            {
+                _name = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(CanSave));
+                (SaveCommand as Command)?.ChangeCanExecute();
+            }
+        }
     }
 
     public string Description
@@ -102,6 +112,8 @@ public class TodoViewModel : INotifyPropertyChanged, IQueryAttributable
         }
     }
 
+    public bool CanSave => !string.IsNullOrWhiteSpace(Name);
+
     public ICommand SaveCommand { get; }
     public ICommand DeleteCommand { get; }
 
@@ -114,7 +126,7 @@ public class TodoViewModel : INotifyPropertyChanged, IQueryAttributable
     {
         _todoService = todoService;
         _dueDateTime = DateTime.Now.AddDays(1).Date.AddHours(17);
-        SaveCommand = new Command(async () => await SaveAsync());
+        SaveCommand = new Command(async () => await SaveAsync(), () => CanSave);
         DeleteCommand = new Command(async () => await DeleteAsync());
         ReturnHomeCommand = new Command(async () => await ReturnHomeAsync());
         ReturnCalendarCommand = new Command(async () => await ReturnCalendarAsync());
@@ -201,7 +213,11 @@ public class TodoViewModel : INotifyPropertyChanged, IQueryAttributable
         var storedID = Preferences.Get("UserID", null);
         // Ensure UserID is available
         if (!int.TryParse(storedID, out var studentID))
-            throw new InvalidOperationException("Invalid UserID");
+        {
+            await Application.Current.MainPage.DisplayAlertAsync("Error", "User session is invalid. Please log in again.", "OK");
+            return;
+        }
+            
 
         try
         {
@@ -239,9 +255,26 @@ public class TodoViewModel : INotifyPropertyChanged, IQueryAttributable
             ResetFields();
             await Shell.Current.GoToAsync("//LandingPage");
         }
+        catch (ValidationException vex)
+        {
+            var errorMessages = new StringBuilder();
+            errorMessages.AppendLine("Please correct the following issues:");
+
+            if (vex.Errors?.Errors != null)
+            {
+                foreach (var error in vex.Errors.Errors)
+                {
+                    // error.Key is the field (e.g., "Name"), error.Value is the list of messages
+                    errorMessages.AppendLine($"- {string.Join("\n- ", error.Value)}");
+                }
+            }
+
+            await Application.Current.MainPage.DisplayAlertAsync("Validation Failed", errorMessages.ToString(), "OK");
+        }
         catch (Exception ex)
         {
-            await Application.Current.MainPage.DisplayAlertAsync("Error", ex.Message, "OK");
+            await Application.Current.MainPage.DisplayAlertAsync("Error", $"An unexpected error occurred: {ex.Message}", "OK");
+
         }
     }
 
