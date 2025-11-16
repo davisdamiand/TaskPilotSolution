@@ -10,7 +10,7 @@ namespace TaskPilot.Server.Services
         private readonly TaskPilotContext _context;
 
         // value used to push completed tasks to the end of ordered lists
-        private const double CompletedPriorityValue = 10;
+        private const double CompletedPriorityValue = 50;
 
         private const double PriorityTieBreakerWeight = 0.01;
 
@@ -72,9 +72,13 @@ namespace TaskPilot.Server.Services
             {
                 todo.PrioritySelection = CalculatePriority(todo);
             }
+            else
+            {
+                todo.PrioritySelection = CompletedPriorityValue;
+            }
 
-            // Save changes
-            await _context.SaveChangesAsync();
+                // Save changes
+                await _context.SaveChangesAsync();
             // Return success
             return true;
         }
